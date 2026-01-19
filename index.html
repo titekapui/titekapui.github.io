@@ -1,0 +1,314 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TITEK APUI | Ali Akbar Dev</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { --primary: #ff4d4d; --bg: #0b0b0b; --panel-bg: rgba(15, 15, 15, 0.96); --accent: #ffcc00; }
+        body { margin: 0; padding: 0; background: var(--bg); font-family: 'Inter', sans-serif; overflow: hidden; color: white; }
+        #map { height: 100vh; width: 100%; z-index: 1; }
+        
+        /* Panel Utama */
+        .panel {
+            position: absolute; top: 15px; left: 15px; z-index: 1000;
+            background: var(--panel-bg); padding: 22px;
+            border-radius: 20px; width: 300px; border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.8); backdrop-filter: blur(15px);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* Animasi halus */
+        }
+
+        /* Tombol Toggle Menu (Default Hidden di PC) */
+        .btn-toggle {
+            display: none; /* Hilang di PC */
+            position: absolute; top: 15px; left: 15px; z-index: 1001;
+            background: var(--panel-bg); border: 1px solid var(--primary);
+            color: white; width: 45px; height: 45px; border-radius: 12px;
+            align-items: center; justify-content: center; cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+
+        .brand-header { border-bottom: 2px solid var(--primary); margin-bottom: 18px; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: flex-start; }
+        .brand-header h2 { margin:0; color: #fff; font-size: 24px; letter-spacing: 2px; font-weight: 900; }
+
+        .btn-info {
+             background: #1a1a1a; border: 1px solid var(--primary);
+             color: var(--primary); border-radius: 50%; width: 35px; height: 35px;
+             cursor: pointer; animation: glow-pulse 1.5s infinite ease-in-out;
+             display: flex; align-items: center; justify-content: center;
+        }
+        @keyframes glow-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.6); }
+            50% { box-shadow: 0 0 15px 5px rgba(255, 77, 77, 0.3); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0); }
+        }
+
+        .stats {
+             background: radial-gradient(circle at center, rgba(255, 77, 77, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+            padding: 20px; border-radius: 15px; text-align: center; border: 1px solid rgba(255, 77, 77, 0.2);
+            margin: 15px 0;
+        }
+        #fire-count { font-size: 42px; color: var(--primary); font-weight: 900; text-shadow: 0 0 20px rgba(255, 77, 77, 0.5); }
+        
+        .leaflet-popup-content-wrapper {
+             background: rgba(10, 10, 10, 0.95) !important;
+             color: white !important;
+             border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+            border-radius: 15px !important;
+            padding: 5px;
+        }
+        .leaflet-popup-tip { background: rgba(10, 10, 10, 0.95) !important; }
+
+        .popup-header {
+             background: linear-gradient(90deg, rgba(255, 77, 77, 0.2), transparent);
+             padding: 8px 12px; border-radius: 10px; margin-bottom: 10px;
+             border-left: 3px solid var(--primary);
+        }
+
+        .btn-locate {
+            position: absolute; bottom: 30px; right: 20px; z-index: 1000;
+            background: rgba(255, 255, 255, 0.9); color: #333; border: none; width: 50px; height: 50px;
+            border-radius: 50%; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: flex; align-items: center; justify-content: center; font-size: 20px;
+        }
+
+        .lang-btn { flex: 1; padding: 8px; border: 1px solid #333; background: #1a1a1a; color: #fff; border-radius: 8px; cursor: pointer; font-size: 11px; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .lang-btn.active { background: var(--primary); border-color: var(--primary); box-shadow: 0 0 10px rgba(255, 77, 77, 0.4); }
+        
+        select { background: #1a1a1a; color: white; border: 1px solid #333; width: 100%; padding: 12px; border-radius: 10px; margin: 5px 0 15px 0; }
+        .btn-main { background: var(--primary); color: white; border: none; cursor: pointer; font-weight: 800; width: 100%; padding: 14px; border-radius: 10px; transition: 0.3s; }
+        .btn-main:hover { filter: brightness(1.2); transform: translateY(-2px); }
+
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); }
+        .modal-content { background: #0f0f0f; margin: 5% auto; padding: 40px; border: 1px solid #333; width: 85%; max-width: 700px; border-radius: 25px; color: #fff; }
+        .signature-name { font-family: 'Dancing Script', cursive; font-size: 45px; color: #fff; }
+
+        .glow-marker { filter: drop-shadow(0 0 5px var(--primary)); }
+        .user-marker { filter: drop-shadow(0 0 8px #00aaff); animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+
+        /* --- MOBILE RESPONSIVE TWEAKS --- */
+        @media (max-width: 600px) {
+            /* Munculkan tombol toggle */
+            .btn-toggle { display: flex; }
+
+            .panel {
+                width: auto;
+                left: 10px; right: 10px; top: 70px; /* Turunkan sedikit agar tidak menabrak tombol toggle */
+                padding: 15px;
+                max-height: 70vh; 
+                overflow-y: auto;
+                scrollbar-width: none;
+            }
+            
+            /* Class untuk menyembunyikan panel di Mobile */
+            .panel.closed {
+                transform: translateX(-120%);
+                opacity: 0;
+                pointer-events: none;
+            }
+
+            .panel::-webkit-scrollbar { display: none; }
+            
+            .brand-header h2 { font-size: 20px; }
+            #fire-count { font-size: 32px; }
+            .stats { padding: 10px; margin: 10px 0; }
+            .btn-locate { width: 45px; height: 45px; bottom: 20px; right: 15px; }
+            
+            .modal-content { width: 90%; margin: 20% auto; padding: 25px; }
+            .signature-name { font-size: 35px; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="wpModal" class="modal">
+    <div class="modal-content">
+        <span style="float:right; cursor:pointer; font-size:24px;" onclick="closeWP()">&times;</span>
+        <h2 style="color:var(--primary)">TEKNOLOGI TITEK APUI</h2>
+        <p style="color:#aaa; line-height:1.6">Sistem intelijen geospasial yang memproses radiasi termal dari sensor satelit MODIS dan VIIRS untuk mendeteksi anomali suhu permukaan bumi secara real-time.</p>
+        <div style="text-align:right; margin-top:40px;">
+            <div style="font-size:10px; color:var(--primary); font-weight:900;">CREATED BY</div>
+            <div style="font-weight:900;">COT MESJID, SAMATIGA</div>
+            <div class="signature-name">Ali Akbar</div>
+        </div>
+    </div>
+</div>
+
+<button class="btn-locate" onclick="locateMe()"><i class="fas fa-crosshairs"></i></button>
+
+<button class="btn-toggle" onclick="toggleMobilePanel()">
+    <i class="fas fa-bars"></i>
+</button>
+
+<div class="panel" id="mainPanel">
+    <div class="brand-header">
+        <div><span style="font-size:9px; color:var(--primary); font-weight:900;">ENGINEERED BY ALI AKBAR</span><h2>TITEK APUI</h2></div>
+        <button class="btn-info" onclick="openWP()"><i class="fas fa-microchip"></i></button>
+    </div>
+
+    <div style="display:flex; gap:5px; margin-bottom:15px;">
+        <button class="lang-btn active" id="btn-ace" onclick="setLang('ace')"><img src="https://flagcdn.com/w40/tr.png" width="16"> ACE</button>
+        <button class="lang-btn" id="btn-id" onclick="setLang('id')"><img src="https://flagcdn.com/w40/id.png" width="16"> ID</button>
+        <button class="lang-btn" id="btn-en" onclick="setLang('en')"><img src="https://flagcdn.com/w40/us.png" width="16"> EN</button>
+    </div>
+    
+    <label style="font-size:10px; color:#666; font-weight:900;">WILAYAH PANTAUAN</label>
+    <select id="region-select" onchange="updateData(true)">
+        <option value="aceh">Aceh</option>
+        <option value="indonesia">Indonesia</option>
+        <option value="dunia">Global</option>
+    </select>
+
+    <label style="font-size:10px; color:#666; font-weight:900;">SENSOR SATELIT</label>
+    <select id="sat-source" onchange="updateData(true)">
+        <option value="viirs_snpp">VIIRS SNPP (High Res)</option>
+        <option value="modis">MODIS (Standard)</option>
+        <option value="noaa20">NOAA-20 (VIIRS C2)</option>
+        <option value="noaa21">NOAA-21 (VIIRS C2)</option>
+    </select>
+
+    <div class="stats">
+        <div id="fire-count">0</div>
+        <div id="lbl-hotspot" style="font-size:10px; font-weight:900; color:#888;">HOTSPOT TERDETEKSI</div>
+    </div>
+    
+    <p id="status" style="font-size:11px; text-align:center; color:#555; margin:10px 0;">Syncing...</p>
+    <button class="btn-main" onclick="updateData(true)"><i class="fas fa-sync-alt"></i> REFRESH</button>
+</div>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+
+<script>
+    const gasApiUrl = "https://script.google.com/macros/s/AKfycbzZs31kL9CefrJCCE5h6fqluhNwVnSkCfIZ-kc5K62mn85Du1WJpC3BWWZOXzn81C3S/exec";
+    
+    // Konfigurasi URL Satelit
+    const satSources = {
+        modis: "https://firms2.modaps.eosdis.nasa.gov/data/active_fire/modis-c6.1/csv/MODIS_C6_1_Global_24h.csv",
+        viirs_snpp: "https://firms2.modaps.eosdis.nasa.gov/data/active_fire/suomi-npp-viirs-c2/csv/SUOMI_VIIRS_C2_Global_24h.csv",
+        noaa20: "https://firms2.modaps.eosdis.nasa.gov/data/active_fire/noaa-20-viirs-c2/csv/J1_VIIRS_C2_Global_24h.csv",
+        noaa21: "https://firms2.modaps.eosdis.nasa.gov/data/active_fire/noaa-21-viirs-c2/csv/J2_VIIRS_C2_Global_24h.csv"
+    };
+
+    let currentLang = 'ace';
+    let fireLayer = L.layerGroup();
+    let userMarker = null;
+
+    const translations = {
+        ace: { hotspot: "TITEK APUI TEUDETEKSI", detail: "🔥 DETIL TITEK APUI", temp: "Suum", energy: "Energi", me: "Lokasi Lôn", load: "Mita Alamat...", time: "Waktèe", date: "Teudeteksi" },
+        id: { hotspot: "TITIK API TERDETEKSI", detail: "🔥 DETAIL HOTSPOT", temp: "Suhu", energy: "Energi (FRP)", me: "Lokasi Saya", load: "Cari Lokasi...", time: "Waktu Terdeteksi", date: "Tanggal" },
+        en: { hotspot: "HOTSPOTS DETECTED", detail: "🔥 HOTSPOT DETAIL", temp: "Temp", energy: "Energy", me: "My Location", load: "Locating...", time: "Time Detected", date: "Date" }
+    };
+
+    const darkMap = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png');
+    const satelliteMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}');
+    const lightMap = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png');
+
+    const map = L.map('map', { zoomControl: false, layers: [darkMap] }).setView([4.3, 96.8], 7);
+    L.control.layers({ "Gelap": darkMap, "Satelit": satelliteMap, "Terang": lightMap }, null, { position: 'topright' }).addTo(map);
+    fireLayer.addTo(map);
+
+    function openWP() { document.getElementById('wpModal').style.display = "block"; }
+    function closeWP() { document.getElementById('wpModal').style.display = "none"; }
+    
+    // FUNGSI BARU UNTUK TOGGLE PANEL HP
+    function toggleMobilePanel() {
+        const panel = document.getElementById('mainPanel');
+        panel.classList.toggle('closed');
+    }
+
+    function locateMe() { map.locate({setView: true, maxZoom: 12}); }
+    map.on('locationfound', (e) => {
+        if (userMarker) map.removeLayer(userMarker);
+        userMarker = L.circleMarker(e.latlng, {radius: 10, fillColor: "#00aaff", color: "#fff", weight: 2, fillOpacity: 1, className: 'user-marker'})
+            .addTo(map).bindPopup(translations[currentLang].me).openPopup();
+    });
+
+    function setLang(lang) {
+        currentLang = lang;
+        document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById('btn-' + lang).classList.add('active');
+        document.getElementById('lbl-hotspot').innerText = translations[lang].hotspot;
+        fireLayer.eachLayer(layer => {
+            if (layer.getPopup()) layer.setPopupContent(generatePopupContent(layer.options.fireData, layer.options.fireId));
+        });
+    }
+
+    function generatePopupContent(d, id) {
+        const t = translations[currentLang];
+        let tempC = ((d.bright_ti4 || d.bright_t31 || 300) - 273.15).toFixed(1);
+        let acqTime = d.acq_time ? d.acq_time.toString().padStart(4, '0').replace(/(..)(..)/, '$1:$2') : '--:--';
+        let acqDate = d.acq_date || '';
+        
+        return `<div style="min-width: 180px;">
+            <div class="popup-header">
+                <b style="color:var(--primary); font-size:12px;">${t.detail}</b><br>
+                <small id="loc-${id}" style="color:var(--accent);">${t.load}</small>
+            </div>
+            <table style="width:100%; font-size:11px; border-spacing: 0 4px;">
+                <tr><td style="color:#888;">${t.date}</td><td align="right"><b>${acqDate}       ${acqTime} WIB</b></td></tr>
+                
+                <tr><td style="color:#888;">${t.temp}</td><td align="right"><b>${tempC} °C</b></td></tr>
+                <tr><td style="color:#888;">${t.energy}</td><td align="right"><b>${d.frp || 0} MW</b></td></tr>
+                <tr><td style="color:#888;">Koord</td><td align="right" style="font-family:monospace;">${d.latitude.toFixed(3)}, ${d.longitude.toFixed(3)}</td></tr>
+            </table>
+        </div>`;
+    }
+
+    async function updateData(shouldFly) {
+        const sat = document.getElementById('sat-source').value;
+        const wilayah = document.getElementById('region-select').value;
+        document.getElementById('status').innerText = "Syncing Satellites...";
+        
+        try {
+            const response = await fetch(`${gasApiUrl}?sat=${sat}&wilayah=${wilayah}`);
+            const csvData = await response.text();
+            fireLayer.clearLayers();
+            
+            Papa.parse(csvData, {
+                header: true, skipEmptyLines: true, dynamicTyping: true,
+                complete: function(res) {
+                    let total = 0;
+                    res.data.forEach((d, i) => {
+                        if (d.latitude && d.longitude) {
+                            const fid = "f-"+i;
+                            const m = L.circleMarker([d.latitude, d.longitude], {
+                                radius: 7, fillColor: "red", color: "white", weight: 1.5, fillOpacity: 0.9, className: 'glow-marker',
+                                fireData: d, fireId: fid
+                            });
+                            m.bindPopup(generatePopupContent(d, fid));
+                            m.on('click', () => {
+                                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${d.latitude}&lon=${d.longitude}`)
+                                .then(r => r.json()).then(data => {
+                                    const el = document.getElementById(`loc-${fid}`);
+                                    if(el) el.innerText = data.display_name;
+                                });
+                            });
+                            fireLayer.addLayer(m);
+                            total++;
+                        }
+                    });
+                    document.getElementById('fire-count').innerText = total;
+                    document.getElementById('status').innerHTML = "SYSTEM LIVE <i class='fas fa-circle' style='color:#0f0; font-size:7px'></i>";
+                    if(shouldFly) {
+                        if (wilayah === "aceh") map.flyTo([4.3, 96.8], 8);
+                        else if (wilayah === "indonesia") map.flyTo([0.78, 113.9], 5);
+                    }
+                }
+            });
+        } catch (e) { document.getElementById('status').innerText = "Connection Failed"; }
+    }
+    window.onload = () => updateData(false);
+</script>
+</body>
+</html>
