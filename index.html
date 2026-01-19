@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Titek Apui Pro + Layers | Ali Akbar Dev</title>
+    <title>Titek Apui Pro RoadMap | Ali Akbar Dev</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -38,7 +38,7 @@
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1004; display: none; }
         .overlay.show { display: block; }
 
-        /* DESKTOP MODE */
+        /* DESKTOP OVERRIDE */
         @media (min-width: 992px) {
             .menu-toggle, .close-menu { display: none !important; }
             .sidebar { 
@@ -69,7 +69,6 @@
             display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: auto;
         }
 
-        /* FLOATING BUTTONS */
         .locate-btn {
             position: absolute; bottom: 30px; right: 20px; z-index: 1000;
             background: white; width: 55px; height: 55px; border-radius: 50%;
@@ -79,7 +78,6 @@
 
         #map { height: 100vh; width: 100%; z-index: 1; background: #f0f0f0; }
 
-        /* Custom Leaflet Layer Control */
         .leaflet-control-layers { 
             border-radius: 10px !important; box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important; 
             border: none !important; margin-top: 80px !important;
@@ -163,31 +161,35 @@
 <script>
     const GAS_URL = "https://script.google.com/macros/s/AKfycbzH2joEVib8tw81ADlYiwzbe768hCeenfGcGI32GeFr3TiUnAa89Wvi8RjJG5xR5D0/exec";
     
-    // Konfigurasi Map Layers
-    const streetLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: 'OSM' });
-    const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: 'Esri' });
-    const lightLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: '@lonaliakar' });
-    const darkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { attribution: '@lonaliakar' });
+    // LAYER DEFINITION
+    // OpenStreetMap (PETA JALAN) sebagai layer utama
+    const streetLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' 
+    });
+    const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { 
+        attribution: 'Esri, DigitalGlobe, GeoEye, Earthstar Geographics, CNES/Airbus DS, USDA, USGS, AeroGRID, IGN, and the GIS User Community' 
+    });
+    const darkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { 
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>' 
+    });
 
     let currentLang = 'ace';
     let userMarker;
     const translations = {
-        ace: { title: "TITEK APUI <span>MONITOR</span>", region: "WILAYAH PANTAUAN", sat: "SENSOR SATELIT", refresh: "PEUBARÔ DATA", detail: "DETAIL LOKASI", loc: "Mita Alamat...", temp: "Suum", energy: "Energi", time: "Watèe", sat_lbl: "Satelit" },
+        ace: { title: "TITEK APUI <span>MONITOR</span>", region: "WILAYAH PANTAUAN", sat: "SENSOR SATELIT", refresh: "PEUBARÔ DATA", detail: "DETAIL LOKASI", loc: "Mita Alamat...", temp: "Suum", energy: "Energi", time: "Waktèe", sat_lbl: "Satelit" },
         id: { title: "MONITORING <span>TITIK API</span>", region: "WILAYAH PANTAUAN", sat: "SENSOR SATELIT", refresh: "PERBARUI DATA", detail: "DETAIL LOKASI", loc: "Mencari Lokasi...", temp: "Suhu", energy: "Energi", time: "Waktu", sat_lbl: "Satelit" },
         en: { title: "HOTSPOT <span>MONITORING</span>", region: "REGION", sat: "SATELLITE", refresh: "REFRESH DATA", detail: "LOCATION DETAIL", loc: "Locating...", temp: "Temp", energy: "Energy", time: "Time", sat_lbl: "Satellite" }
     };
 
-    // Initialize Map with Light Layer
+    // INIT MAP dengan Street Layer
     const map = L.map('map', { 
         zoomControl: false, 
-        layers: [lightLayer] 
+        layers: [streetLayer] 
     }).setView([4.3, 96.8], 8);
 
-    // Layer Control (Switcher)
     const baseMaps = {
-        "🗺️ Peta Terang": lightLayer,
-        "🌍 Citra Satelit": satelliteLayer,
         "🛤️ Peta Jalan": streetLayer,
+        "🌍 Citra Satelit": satelliteLayer,
         "🌑 Mode Gelap": darkLayer
     };
     L.control.layers(baseMaps, null, { position: 'topright' }).addTo(map);
@@ -242,12 +244,10 @@
                     res.data.forEach((d, i) => {
                         if (!d.latitude || !d.longitude) return;
                         
-                        // DEDUPLIKASI
                         const pointKey = `${d.latitude.toFixed(4)}|${d.longitude.toFixed(4)}`;
                         if (seenPoints.has(pointKey)) return;
                         seenPoints.add(pointKey);
 
-                        // WIB TIME
                         let timeStr = d.acq_time.toString().padStart(4, '0');
                         let dateObj = new Date(d.acq_date);
                         dateObj.setUTCHours(parseInt(timeStr.substring(0, 2)) + 7); 
