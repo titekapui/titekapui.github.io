@@ -3,102 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Titek Apui Monitor | Ali Akbar Dev</title>
-    
+    <title>TITEK API MONITOR | ALI AKBAR</title>
+
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;400;700;800&family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+
     <style>
-        :root { --bmkg-blue: #1a2a44; --primary: #e74c3c; --warning: #f1c40f; }
-        body, html { margin: 0; padding: 0; font-family: 'Inter', sans-serif; height: 100%; overflow: hidden; background: #000; }
-        
-        /* HEADER */
-        .header {
-            position: absolute; top: 0; left: 0; right: 0; height: 65px;
-            background: var(--bmkg-blue); color: white; z-index: 1001;
-            display: flex; align-items: center; justify-content: space-between; padding: 0 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        :root{
+            --bg-body:#e0e2e5;--bg-card:#f0f2f5;--bg-panel:#ffffff;
+            --text-main:#1a1a1a;--text-muted:#555;--border-color:#a0a0a0;
+            --accent:#d93000;--accent-dim:rgba(217, 48, 0, 0.1);
+            --font-tech:'JetBrains Mono',monospace;--font-head:'Oswald',sans-serif;
         }
-        .brand h1 { margin: 0; font-size: 16px; font-weight: 800; }
-        .brand span { color: var(--warning); }
-        .head-stats { background: rgba(231, 76, 60, 0.2); padding: 5px 12px; border-radius: 20px; border: 1px solid var(--primary); }
-        #count-val { color: var(--primary); font-weight: 800; font-size: 18px; }
+        body.night-mode{
+            --bg-body:#050505;--bg-card:#0f0f0f;--bg-panel:#1a1a1a;
+            --text-main:#e6e6e6;--text-muted:#666;--border-color:#333;
+            --accent:#ff3300;--accent-dim:rgba(255, 51, 0, 0.1);
+        }
+        *{box-sizing:border-box}
+        body, html { margin: 0; padding: 0; font-family: var(--font-tech); height: 100%; overflow: hidden; background: var(--bg-body); transition:background .3s; }
+
+        /* HEADER / STATUS BAR */
+        .header {
+            position: absolute; top: 0; left: 0; right: 0; height: 60px;
+            background: var(--bg-body); color: var(--text-main); z-index: 1001;
+            display: flex; align-items: center; justify-content: space-between; padding: 0 18px;
+            border-bottom: 2px solid var(--border-color); transition:.3s;
+        }
+        .brand{ display:flex; align-items:center; gap:14px; }
+        .logo-box{ font-weight:800; border:1px solid var(--accent); padding:5px 12px; letter-spacing:2px; font-size:.8rem; text-transform:uppercase; }
+        .brand h1 { margin: 0; font-size: 13px; font-weight: 700; letter-spacing:1px; text-transform:uppercase; color:var(--text-muted); }
+        .brand h1 span { color: var(--accent); font-weight:800; }
+        .head-right{ display:flex; align-items:center; gap:14px; }
+        .head-stats { border:1px solid var(--accent); border-left:6px solid var(--accent); padding: 6px 14px; background:var(--bg-card); display:flex; align-items:center; gap:8px; }
+        .head-stats-label{ font-size:.6rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; }
+        #count-val { color: var(--accent); font-weight: 800; font-size: 18px; font-family:var(--font-head); }
+        .theme-toggle{ cursor:pointer; border:1px solid var(--border-color); padding:6px 10px; font-size:.8rem; color:var(--text-muted); transition:.2s; }
+        .theme-toggle:hover{ background:var(--accent); color:#fff; border-color:var(--accent); }
+        .menu-toggle { background: none; border: 1px solid var(--border-color); color: var(--text-main); font-size: 16px; cursor: pointer; display: flex; padding:6px 10px; }
 
         /* SIDEBAR & MENU */
         .sidebar {
-            position: absolute; top: 0; left: -320px; width: 280px; height: 100%;
-            background: white; z-index: 1005; transition: 0.3s ease;
-            box-shadow: 5px 0 25px rgba(0,0,0,0.3); padding: 20px;
-            display: flex; flex-direction: column;
+            position: absolute; top: 0; left: -320px; width: 290px; height: 100%;
+            background: var(--bg-panel); z-index: 1005; transition: 0.3s ease;
+            box-shadow: 5px 0 25px rgba(0,0,0,0.3); padding: 22px;
+            display: flex; flex-direction: column; border-right:1px solid var(--border-color);
         }
         .sidebar.open { left: 0; }
-        .menu-toggle { background: none; border: none; color: white; font-size: 20px; cursor: pointer; display: flex; }
-        .close-menu { display: flex; align-self: flex-end; font-size: 24px; color: #888; cursor: pointer; }
+        .close-menu { display: flex; align-self: flex-end; font-size: 20px; color: var(--text-muted); cursor: pointer; border:1px solid var(--border-color); padding:4px 8px; }
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1004; display: none; }
         .overlay.show { display: block; }
 
         /* DESKTOP OVERRIDE */
         @media (min-width: 992px) {
             .menu-toggle, .close-menu { display: none !important; }
-            .sidebar { 
-                left: 15px !important; top: 80px; width: 310px; height: auto; 
-                border-radius: 12px; max-height: 85vh; overflow-y: auto;
-                box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            .sidebar {
+                left: 16px !important; top: 78px; width: 310px; height: auto;
+                max-height: 82vh; overflow-y: auto; border:1px solid var(--border-color);
+                box-shadow: 0 4px 20px rgba(0,0,0,0.15);
             }
             .overlay { display: none !important; }
         }
 
-        /* UI ELEMENTS */
-        .lang-container { display: flex; gap: 5px; margin: 15px 0; }
-        .lang-btn { 
-            flex: 1; padding: 10px; border: 1px solid #ddd; background: #f9f9f9; 
-            border-radius: 8px; cursor: pointer; font-size: 10px; font-weight: 800;
-            display: flex; align-items: center; justify-content: center; gap: 4px;
-        }
-        .lang-btn.active { background: var(--bmkg-blue); color: white; border-color: var(--bmkg-blue); }
-        .lang-btn img { width: 16px; border-radius: 2px; }
+        .sidebar-title{ font-family:var(--font-head); text-transform:uppercase; font-size:1rem; letter-spacing:1px; color:var(--text-main); border-bottom:2px solid var(--border-color); padding-bottom:12px; margin-bottom:18px; }
 
-        .control-group { margin-bottom: 15px; }
-        label { display: block; font-size: 10px; font-weight: 800; color: #888; margin-bottom: 5px; text-transform: uppercase; }
-        select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #eee; font-size: 13px; background: #fff; cursor: pointer; }
+        /* UI ELEMENTS */
+        .lang-container { display: flex; gap: 4px; margin: 0 0 20px 0; }
+        .lang-btn {
+            flex: 1; padding: 9px; border: 1px solid var(--border-color); background: var(--bg-card); color:var(--text-muted);
+            cursor: pointer; font-size: 10px; font-weight: 800; font-family:var(--font-tech);
+            display: flex; align-items: center; justify-content: center; gap: 4px; transition:.2s;
+        }
+        .lang-btn:hover{ border-color:var(--accent); color:var(--accent); }
+        .lang-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+        .lang-btn img { width: 15px; }
+
+        .control-group { margin-bottom: 18px; }
+        label { display: block; font-size: 10px; font-weight: 800; color: var(--accent); margin-bottom: 8px; text-transform: uppercase; letter-spacing:1px; font-family:var(--font-tech); }
+        select {
+            width: 100%; padding: 12px; border: 1px solid var(--border-color); font-size: 12px;
+            background: var(--bg-card); color:var(--text-main); cursor: pointer; font-family:var(--font-tech);
+            text-transform:uppercase; font-weight:700;
+        }
+        select:focus{ outline:none; border-color:var(--accent); }
 
         .btn-refresh {
-            width: 100%; background: var(--bmkg-blue); color: white; border: none;
-            padding: 14px; border-radius: 10px; font-weight: 700; cursor: pointer;
+            width: 100%; background: var(--accent); color: white; border: none;
+            padding: 14px; font-weight: 800; cursor: pointer; text-transform:uppercase; letter-spacing:1px;
             display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: auto;
+            font-family:var(--font-tech); font-size:.8rem; transition:.2s;
         }
+        .btn-refresh:hover{ background:var(--text-main); color:var(--bg-body); }
+
+        .sidebar-footer{ margin-top:25px; font-size:10px; color:var(--text-muted); text-align:center; border-top: 1px solid var(--border-color); padding-top: 18px; text-transform:uppercase; letter-spacing:1px; }
+        .sidebar-footer .name{ font-family:var(--font-head); font-size:16px; color:var(--text-main); margin-bottom:5px; letter-spacing:1px; }
 
         .locate-btn {
             position: absolute; bottom: 30px; right: 20px; z-index: 1000;
-            background: white; width: 55px; height: 55px; border-radius: 50%;
+            background: var(--bg-panel); width: 52px; height: 52px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer; border: none; color: var(--bmkg-blue);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer; border: 1px solid var(--accent); color: var(--accent);
         }
 
         #map { height: 100vh; width: 100%; z-index: 1; background: #f0f0f0; }
 
-        .leaflet-control-layers { 
-            border-radius: 10px !important; box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important; 
-            border: none !important; margin-top: 80px !important;
+        .leaflet-control-layers {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15) !important;
+            border: 1px solid var(--border-color) !important; border-radius:0 !important;
+            margin-top: 76px !important; font-family:var(--font-tech) !important; font-size:11px !important;
         }
 
+        .leaflet-popup-content-wrapper{ border-radius:0 !important; border:1px solid var(--border-color); font-family:var(--font-tech); }
+        .leaflet-popup-tip{ background:var(--bg-panel); }
         .popup-table { width: 100%; font-size: 11px; border-collapse: collapse; margin-top: 8px; }
-        .popup-table td { padding: 5px 0; border-bottom: 1px solid #eee; }
-        .popup-header { color: var(--primary); font-weight: 800; border-bottom: 2px solid var(--primary); padding-bottom: 4px; }
+        .popup-table td { padding: 6px 0; border-bottom: 1px dashed var(--border-color); text-transform:uppercase; }
+        .popup-header { color: var(--accent); font-weight: 800; border-bottom: 2px solid var(--accent); padding-bottom: 6px; text-transform:uppercase; letter-spacing:1px; font-size:12px; }
+
+        /* MARKER CLUSTER (disamakan dgn tema teknis merah/hitam) */
+        .marker-cluster-small, .marker-cluster-medium, .marker-cluster-large {
+            background-color: var(--accent-dim);
+        }
+        .marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {
+            background-color: var(--accent);
+            color: #fff;
+            font-family: var(--font-tech);
+            font-weight: 800;
+        }
+
+        /* LEGEND */
+        .legend-box {
+            background: var(--bg-panel); border: 1px solid var(--border-color);
+            padding: 10px 14px; font-family: var(--font-tech); font-size: 10px;
+            color: var(--text-main); box-shadow: 0 4px 15px rgba(0,0,0,0.15); line-height: 1.9;
+        }
+        .legend-title { color: var(--accent); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; font-size: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px; margin-bottom: 6px; }
+        .legend-row { display: flex; align-items: center; gap: 8px; }
+        .legend-dot { width: 12px; height: 12px; border-radius: 50%; border: 1px solid #fff; flex-shrink: 0; }
     </style>
 </head>
 <body>
 
 <div class="header">
-    <button class="menu-toggle" onclick="toggleMenu()">
-        <i class="fas fa-bars"></i>
-    </button>
     <div class="brand">
+        <button class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+        <div class="logo-box">ALI.AKBAR</div>
         <h1 id="ui-title">TITEK APUI <span>MONITOR</span></h1>
     </div>
-    <div class="head-stats">
-        <span id="count-val">0</span>
+    <div class="head-right">
+        <div class="head-stats">
+            <span class="head-stats-label">TITIK:</span>
+            <span id="count-val">0</span>
+        </div>
+        <div class="theme-toggle" onclick="toggleTheme()"><i class="fa-solid fa-circle-half-stroke"></i></div>
     </div>
 </div>
 
@@ -106,7 +166,8 @@
 
 <div class="sidebar" id="sidebarMenu">
     <i class="fas fa-times close-menu" onclick="toggleMenu()"></i>
-    
+    <div class="sidebar-title">// KONTROL PANTAUAN</div>
+
     <div class="lang-container">
         <button class="lang-btn active" id="btn-ace" onclick="setLang('ace')">
             <img src="https://flagcdn.com/w40/tr.png"> ACE
@@ -142,10 +203,10 @@
     <button class="btn-refresh" onclick="fetchData(true); if(window.innerWidth < 992) toggleMenu()">
         <i class="fas fa-sync" id="refresh-icon"></i> <span id="ui-refresh-btn">PEUBARÔ DATA</span>
     </button>
-    
-    <div style="margin-top:30px; font-size:10px; color:#999; text-align:center; border-top: 1px solid #eee; padding-top: 20px;">
-        <div style="font-family:'Dancing Script'; font-size:24px; color:var(--bmkg-blue); margin-bottom:5px;">Ali Akbar</div>
-        Samatiga, Aceh Barat
+
+    <div class="sidebar-footer">
+        <div class="name">ALI AKBAR</div>
+        SAMATIGA, ACEH BARAT
     </div>
 </div>
 
@@ -156,35 +217,44 @@
 <div id="map"></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 
 <script>
     const GAS_URL = "https://script.google.com/macros/s/AKfycbzH2joEVib8tw81ADlYiwzbe768hCeenfGcGI32GeFr3TiUnAa89Wvi8RjJG5xR5D0/exec";
-    
+
     // LAYER DEFINITION
-    // OpenStreetMap (PETA JALAN) sebagai layer utama
-    const streetLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
-        attribution: '<a href="https://tiktok.com/lonaliakbar">@lonaliakbar</a>' 
+    const streetLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '<a href="https://tiktok.com/lonaliakbar">@lonaliakbar</a>'
     });
-    const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { 
-        attribution: 'Esri, DigitalGlobe, GeoEye, Earthstar Geographics, CNES/Airbus DS, USDA, USGS, AeroGRID, IGN, and the GIS User Community' 
+    const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Esri, DigitalGlobe, GeoEye, Earthstar Geographics, CNES/Airbus DS, USDA, USGS, AeroGRID, IGN, and the GIS User Community'
     });
-    const darkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { 
-        attribution: '<a href="https://tiktok.com/lonaliakbar">@lonaliakbar</a><a href="https://carto.com/attributions">CARTO</a>' 
+    const darkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '<a href="https://tiktok.com/lonaliakbar">@lonaliakbar</a><a href="https://carto.com/attributions">CARTO</a>'
     });
 
     let currentLang = 'ace';
     let userMarker;
     const translations = {
-        ace: { title: "TITEK APUI <span>MONITOR</span>", region: "WILAYAH PANTAUAN", sat: "SENSOR SATELIT", refresh: "SEUBARÔ DATA", detail: "DEUTAIL LOKASI", loc: "Mita Alamat...", temp: "Suum", energy: "Energi", time: "Update", sat_lbl: "Sateulit" },
-        id: { title: "MONITORING <span>TITIK API</span>", region: "WILAYAH PANTAUAN", sat: "SENSOR SATELIT", refresh: "PERBARUI DATA", detail: "DETAIL LOKASI", loc: "Mencari Lokasi...", temp: "Suhu", energy: "Energi", time: "Update", sat_lbl: "Satelit" },
-        en: { title: "HOTSPOT <span>MONITORING</span>", region: "REGION", sat: "SATELLITE", refresh: "REFRESH DATA", detail: "LOCATION DETAIL", loc: "Locating...", temp: "Temp", energy: "Energy", time: "Update", sat_lbl: "Satellite" }
+        ace: { title: "TITEK APUI <span>MONITOR</span>", region: "WILAYAH PANTAUAN", sat: "SENSOR SATELIT", refresh: "SEUBARÔ DATA", detail: "DEUTAIL LOKASI", loc: "Mita Alamat...", temp: "Suum", energy: "Energi", time: "Update", sat_lbl: "Sateulit", legend: "KETERANGAN", high: "Confidence Manyang", low: "Confidence Reundah" },
+        id: { title: "MONITORING <span>TITIK API</span>", region: "WILAYAH PANTAUAN", sat: "SENSOR SATELIT", refresh: "PERBARUI DATA", detail: "DETAIL LOKASI", loc: "Mencari Lokasi...", temp: "Suhu", energy: "Energi", time: "Update", sat_lbl: "Satelit", legend: "KETERANGAN", high: "Confidence Tinggi", low: "Confidence Rendah" },
+        en: { title: "HOTSPOT <span>MONITORING</span>", region: "REGION", sat: "SATELLITE", refresh: "REFRESH DATA", detail: "LOCATION DETAIL", loc: "Locating...", temp: "Temp", energy: "Energy", time: "Update", sat_lbl: "Satellite", legend: "LEGEND", high: "High Confidence", low: "Low Confidence" }
     };
 
-    // INIT MAP dengan Street Layer
-    const map = L.map('map', { 
-        zoomControl: false, 
-        layers: [streetLayer] 
+    // --- THEME TOGGLE ---
+    function toggleTheme() {
+        document.body.classList.toggle('night-mode');
+        const isNight = document.body.classList.contains('night-mode');
+        localStorage.setItem('theme', isNight ? 'night' : 'day');
+    }
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'night') { document.body.classList.add('night-mode'); }
+
+    // INIT MAP
+    const map = L.map('map', {
+        zoomControl: false,
+        layers: [streetLayer]
     }).setView([4.3, 96.8], 8);
 
     const baseMaps = {
@@ -193,8 +263,46 @@
         "🌑 Mode Gelap": darkLayer
     };
     L.control.layers(baseMaps, null, { position: 'topright' }).addTo(map);
-    
-    let fireLayer = L.layerGroup().addTo(map);
+
+    // Marker cluster group (ganti dari layerGroup biasa)
+    let fireLayer = L.markerClusterGroup({
+        maxClusterRadius: 50,
+        spiderfyOnMaxZoom: true,
+        disableClusteringAtZoom: 12,
+        iconCreateFunction: function(cluster) {
+            const count = cluster.getChildCount();
+            let sizeClass = 'marker-cluster-small';
+            if (count >= 50) sizeClass = 'marker-cluster-large';
+            else if (count >= 10) sizeClass = 'marker-cluster-medium';
+            return L.divIcon({
+                html: `<div><span>${count}</span></div>`,
+                className: 'marker-cluster ' + sizeClass,
+                iconSize: L.point(40, 40)
+            });
+        }
+    });
+    map.addLayer(fireLayer);
+
+    // --- LEGEND CONTROL ---
+    const legendControl = L.control({ position: 'bottomleft' });
+    legendControl.onAdd = function() {
+        const div = L.DomUtil.create('div', 'legend-box');
+        div.id = 'legend-box';
+        renderLegend(div);
+        return div;
+    };
+    legendControl.addTo(map);
+
+    function renderLegend(el) {
+        const t = translations[currentLang];
+        el = el || document.getElementById('legend-box');
+        if (!el) return;
+        el.innerHTML = `
+            <div class="legend-title">${t.legend}</div>
+            <div class="legend-row"><span class="legend-dot" style="background:#e74c3c"></span> ${t.high}</div>
+            <div class="legend-row"><span class="legend-dot" style="background:#f39c12"></span> ${t.low}</div>
+        `;
+    }
 
     function toggleMenu() {
         if(window.innerWidth < 992) {
@@ -212,6 +320,7 @@
         document.getElementById('ui-region-lbl').innerText = t.region;
         document.getElementById('ui-sat-lbl').innerText = t.sat;
         document.getElementById('ui-refresh-btn').innerText = t.refresh;
+        renderLegend();
     }
 
     function locateUser() {
@@ -226,6 +335,16 @@
         }, () => { alert("Gagal akses lokasi"); icon.className = "fas fa-location-crosshairs fa-lg"; });
     }
 
+    // Skala radius marker berdasarkan FRP (Fire Radiative Power, dalam MW)
+    // FRP kecil (~0-5 MW) -> radius kecil; FRP besar (>100 MW) -> radius besar, dengan batas atas
+    function getRadiusFromFRP(frp) {
+        const val = parseFloat(frp) || 0;
+        const minR = 6, maxR = 22;
+        // skala akar (sqrt) biar area lingkaran proporsional ke FRP, bukan radiusnya langsung
+        const scaled = minR + Math.sqrt(val) * 1.6;
+        return Math.min(Math.max(scaled, minR), maxR);
+    }
+
     async function fetchData(shouldFly) {
         const sat = document.getElementById('sat-sel').value;
         const region = document.getElementById('region-sel').value;
@@ -237,20 +356,21 @@
             const csv = await response.text();
             fireLayer.clearLayers();
             const seenPoints = new Set();
+            const newMarkers = [];
 
             Papa.parse(csv, {
                 header: true, dynamicTyping: true,
                 complete: function(res) {
                     res.data.forEach((d, i) => {
                         if (!d.latitude || !d.longitude) return;
-                        
+
                         const pointKey = `${d.latitude.toFixed(4)}|${d.longitude.toFixed(4)}`;
                         if (seenPoints.has(pointKey)) return;
                         seenPoints.add(pointKey);
 
                         let timeStr = d.acq_time.toString().padStart(4, '0');
                         let dateObj = new Date(d.acq_date);
-                        dateObj.setUTCHours(parseInt(timeStr.substring(0, 2)) + 7); 
+                        dateObj.setUTCHours(parseInt(timeStr.substring(0, 2)) + 7);
                         dateObj.setUTCMinutes(parseInt(timeStr.substring(2, 4)));
                         const wibTime = dateObj.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + " WIB";
                         const wibDate = dateObj.toLocaleDateString('id-ID', { day: '2-digit', month: 'short' });
@@ -265,7 +385,8 @@
 
                         const color = d.confidence === 'h' || d.confidence > 80 ? '#e74c3c' : '#f39c12';
                         const marker = L.circleMarker([d.latitude, d.longitude], {
-                            radius: 9, fillColor: color, color: 'white', weight: 2, fillOpacity: 0.9
+                            radius: getRadiusFromFRP(d.frp),
+                            fillColor: color, color: 'white', weight: 2, fillOpacity: 0.9
                         });
 
                         const fid = "f-"+i;
@@ -292,8 +413,9 @@
                                     </table>
                                 </div>`;
                         });
-                        fireLayer.addLayer(marker);
+                        newMarkers.push(marker);
                     });
+                    fireLayer.addLayers(newMarkers);
                     document.getElementById('count-val').innerText = seenPoints.size;
                     if(shouldFly) {
                         if(region==='aceh') map.flyTo([4.3, 96.8], 8);
