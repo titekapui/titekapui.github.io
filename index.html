@@ -1,737 +1,615 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TITEK API MONITOR | ALI AKBAR</title>
-
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;400;700;800&family=Oswald:wght@400;700&display=swap" rel="stylesheet">
-
-    <style>
-        :root{
-            --bg-body:#e0e2e5;--bg-card:#f0f2f5;--bg-panel:#ffffff;
-            --text-main:#1a1a1a;--text-muted:#555;--border-color:#a0a0a0;
-            --accent:#d93000;--accent-dim:rgba(217, 48, 0, 0.1);
-            --font-tech:'JetBrains Mono',monospace;--font-head:'Oswald',sans-serif;
-        }
-        body.night-mode{
-            --bg-body:#050505;--bg-card:#0f0f0f;--bg-panel:#1a1a1a;
-            --text-main:#e6e6e6;--text-muted:#666;--border-color:#333;
-            --accent:#ff3300;--accent-dim:rgba(255, 51, 0, 0.1);
-        }
-        *{box-sizing:border-box}
-        html { scroll-behavior: smooth; }
-        body, html { margin: 0; padding: 0; font-family: var(--font-tech); background: var(--bg-body); transition:background .3s; }
-        body.map-locked { height: 100%; overflow: hidden; }
-
-        /* HEADER / STATUS BAR */
-        .header {
-            position: absolute; top: 0; left: 0; right: 0; height: 60px;
-            background: var(--bg-body); color: var(--text-main); z-index: 1001;
-            display: flex; align-items: center; justify-content: space-between; padding: 0 18px;
-            border-bottom: 2px solid var(--border-color); transition:.3s;
-        }
-        .brand{ display:flex; align-items:center; gap:14px; }
-        .logo-box{ font-weight:800; border:1px solid var(--accent); padding:5px 12px; letter-spacing:2px; font-size:.8rem; text-transform:uppercase; }
-        .brand h1 { margin: 0; font-size: 13px; font-weight: 700; letter-spacing:1px; text-transform:uppercase; color:var(--text-muted); }
-        .brand h1 span { color: var(--accent); font-weight:800; }
-        .head-right{ display:flex; align-items:center; gap:14px; }
-        .head-stats { border:1px solid var(--accent); border-left:6px solid var(--accent); padding: 6px 14px; background:var(--bg-card); display:flex; align-items:center; gap:8px; }
-        .head-stats-label{ font-size:.6rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; }
-        #count-val { color: var(--accent); font-weight: 800; font-size: 18px; font-family:var(--font-head); }
-        .theme-toggle{ cursor:pointer; border:1px solid var(--border-color); padding:6px 10px; font-size:.8rem; color:var(--text-muted); transition:.2s; }
-        .theme-toggle:hover{ background:var(--accent); color:#fff; border-color:var(--accent); }
-        .menu-toggle { background: none; border: 1px solid var(--border-color); color: var(--text-main); font-size: 16px; cursor: pointer; display: flex; padding:6px 10px; }
-
-        /* SIDEBAR & MENU */
-        .sidebar {
-            position: absolute; top: 0; left: -320px; width: 290px; height: 100%;
-            background: var(--bg-panel); z-index: 1005; transition: 0.3s ease;
-            box-shadow: 5px 0 25px rgba(0,0,0,0.3); padding: 22px;
-            display: flex; flex-direction: column; border-right:1px solid var(--border-color);
-        }
-        .sidebar.open { left: 0; }
-        .close-menu { display: flex; align-self: flex-end; font-size: 20px; color: var(--text-muted); cursor: pointer; border:1px solid var(--border-color); padding:4px 8px; }
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1004; display: none; }
-        .overlay.show { display: block; }
-
-        /* DESKTOP OVERRIDE */
-        @media (min-width: 992px) {
-            .menu-toggle, .close-menu { display: none !important; }
-            .sidebar {
-                left: 16px !important; top: 78px; width: 310px; height: auto;
-                max-height: 82vh; overflow-y: auto; border:1px solid var(--border-color);
-                box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            }
-            .overlay { display: none !important; }
-        }
-
-        .sidebar-title{ font-family:var(--font-head); text-transform:uppercase; font-size:1rem; letter-spacing:1px; color:var(--text-main); border-bottom:2px solid var(--border-color); padding-bottom:12px; margin-bottom:18px; }
-
-        /* UI ELEMENTS */
-        .lang-container { display: flex; gap: 4px; margin: 0 0 20px 0; }
-        .lang-btn {
-            flex: 1; padding: 9px; border: 1px solid var(--border-color); background: var(--bg-card); color:var(--text-muted);
-            cursor: pointer; font-size: 10px; font-weight: 800; font-family:var(--font-tech);
-            display: flex; align-items: center; justify-content: center; gap: 4px; transition:.2s;
-        }
-        .lang-btn:hover{ border-color:var(--accent); color:var(--accent); }
-        .lang-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
-        .lang-btn img { width: 15px; }
-
-        .control-group { margin-bottom: 18px; }
-        label { display: block; font-size: 10px; font-weight: 800; color: var(--accent); margin-bottom: 8px; text-transform: uppercase; letter-spacing:1px; font-family:var(--font-tech); }
-        select {
-            width: 100%; padding: 12px; border: 1px solid var(--border-color); font-size: 12px;
-            background: var(--bg-card); color:var(--text-main); cursor: pointer; font-family:var(--font-tech);
-            text-transform:uppercase; font-weight:700;
-        }
-        select:focus{ outline:none; border-color:var(--accent); }
-
-        .btn-refresh {
-            width: 100%; background: var(--accent); color: white; border: none;
-            padding: 14px; font-weight: 800; cursor: pointer; text-transform:uppercase; letter-spacing:1px;
-            display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: auto;
-            font-family:var(--font-tech); font-size:.8rem; transition:.2s;
-        }
-        .btn-refresh:hover{ background:var(--text-main); color:var(--bg-body); }
-
-        .menu-divider{ border-top: 1px dashed var(--border-color); margin: 18px 0; }
-        .menu-link{
-            display:flex; align-items:center; gap:10px; padding: 12px 4px; text-decoration:none;
-            color: var(--text-main); font-size: 11px; font-weight: 800; text-transform: uppercase;
-            letter-spacing: 1px; font-family: var(--font-tech); border: 1px solid transparent; transition:.2s;
-            background: none; cursor: pointer; width: 100%; text-align: left;
-        }
-        .menu-link i{ color: var(--accent); width: 16px; text-align: center; }
-        .menu-link:hover{ border-color: var(--border-color); background: var(--bg-card); }
-
-        .sidebar-footer{ margin-top:25px; font-size:10px; color:var(--text-muted); text-align:center; border-top: 1px solid var(--border-color); padding-top: 18px; text-transform:uppercase; letter-spacing:1px; }
-        .sidebar-footer .name{ font-family:var(--font-head); font-size:16px; color:var(--text-main); margin-bottom:5px; letter-spacing:1px; }
-
-        .locate-btn {
-            position: absolute; bottom: 30px; right: 20px; z-index: 1000;
-            background: var(--bg-panel); width: 52px; height: 52px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer; border: 1px solid var(--accent); color: var(--accent);
-        }
-
-        #map-wrap{ position: relative; height: 100vh; width: 100%; }
-        #map { height: 100%; width: 100%; z-index: 1; background: #f0f0f0; }
-
-        /* Scroll-down cue into About section */
-        .scroll-cue{
-            position:absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
-            z-index: 999; display:flex; flex-direction:column; align-items:center; gap:4px;
-            color: var(--text-main); text-decoration:none; font-family: var(--font-tech);
-            font-size: 9px; text-transform: uppercase; letter-spacing: 2px;
-            background: var(--bg-panel); border:1px solid var(--border-color); padding: 8px 14px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-        .scroll-cue i{ color: var(--accent); animation: bob 1.6s ease-in-out infinite; }
-        @keyframes bob{ 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(4px); } }
-
-        .leaflet-control-layers {
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15) !important;
-            border: 1px solid var(--border-color) !important; border-radius:0 !important;
-            margin-top: 76px !important; font-family:var(--font-tech) !important; font-size:11px !important;
-        }
-
-        .leaflet-popup-content-wrapper{ border-radius:0 !important; border:1px solid var(--border-color); font-family:var(--font-tech); }
-        .leaflet-popup-tip{ background:var(--bg-panel); }
-        .popup-table { width: 100%; font-size: 11px; border-collapse: collapse; margin-top: 8px; }
-        .popup-table td { padding: 6px 0; border-bottom: 1px dashed var(--border-color); text-transform:uppercase; }
-        .popup-header { color: var(--accent); font-weight: 800; border-bottom: 2px solid var(--accent); padding-bottom: 6px; text-transform:uppercase; letter-spacing:1px; font-size:12px; }
-
-        /* MARKER CLUSTER (disamakan dgn tema teknis merah/hitam) */
-        .marker-cluster-small, .marker-cluster-medium, .marker-cluster-large {
-            background-color: var(--accent-dim);
-        }
-        .marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {
-            background-color: var(--accent);
-            color: #fff;
-            font-family: var(--font-tech);
-            font-weight: 800;
-        }
-
-        /* LEGEND */
-        .legend-box {
-            background: var(--bg-panel); border: 1px solid var(--border-color);
-            padding: 10px 14px; font-family: var(--font-tech); font-size: 10px;
-            color: var(--text-main); box-shadow: 0 4px 15px rgba(0,0,0,0.15); line-height: 1.9;
-        }
-        .legend-title { color: var(--accent); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; font-size: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px; margin-bottom: 6px; }
-        .legend-row { display: flex; align-items: center; gap: 8px; }
-        .legend-dot { width: 12px; height: 12px; border-radius: 50%; border: 1px solid #fff; flex-shrink: 0; }
-
-        /* ERROR TOAST */
-        .error-toast{
-            position: absolute; top: 76px; left: 50%; transform: translateX(-50%) translateY(-10px);
-            z-index: 1002; background: var(--bg-panel); border: 1px solid var(--accent); border-left: 6px solid var(--accent);
-            padding: 12px 18px; font-family: var(--font-tech); font-size: 11px; color: var(--text-main);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.25); display: flex; align-items: center; gap: 10px;
-            max-width: 90%; opacity: 0; pointer-events: none; transition: opacity .25s ease, transform .25s ease;
-        }
-        .error-toast.show{ opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
-        .error-toast i{ color: var(--accent); }
-        .error-toast .close-toast{ cursor: pointer; color: var(--text-muted); margin-left: 8px; }
-        .error-toast .close-toast:hover{ color: var(--accent); }
-
-        /* ============ ABOUT SECTION (di bawah peta) ============ */
-        .about-wrap{ max-width: 980px; margin: 0 auto; padding: 0 20px; }
-
-        section.about-block{ padding: 46px 0; border-bottom: 1px solid var(--border-color); scroll-margin-top: 20px; }
-        section.about-block:last-of-type{ border-bottom:none; }
-        .about-num{ color:var(--accent); font-weight:800; font-size:.75rem; letter-spacing:2px; }
-        .about-block h3{ font-family:var(--font-head); font-size:1.5rem; text-transform:uppercase; letter-spacing:.5px; color:var(--text-main); margin: 6px 0 20px; }
-        .about-block h4{ font-size:.85rem; text-transform:uppercase; letter-spacing:1px; color:var(--accent); margin: 24px 0 10px; }
-        .about-block p{ color:var(--text-main); line-height:1.8; font-size:.92rem; margin: 0 0 16px; }
-        .about-block ul{ margin:0 0 16px; padding-left: 0; list-style:none; }
-        .about-block ul li{ position:relative; padding-left: 22px; margin-bottom:12px; color:var(--text-main); line-height:1.7; font-size:.92rem; }
-        .about-block ul li::before{ content:"\2192"; position:absolute; left:0; color:var(--accent); font-weight:800; }
-
-        .about-hero{ padding: 56px 0 36px; border-bottom: 1px solid var(--border-color); }
-        .about-hero .tag{ color:var(--accent); font-weight:800; font-size:.7rem; letter-spacing:2px; text-transform:uppercase; border:1px solid var(--accent); display:inline-block; padding:4px 10px; margin-bottom:18px; }
-        .about-hero h2{ font-family:var(--font-head); font-size: 2.4rem; margin:0 0 14px; text-transform:uppercase; letter-spacing:1px; color:var(--text-main); line-height:1.15; }
-        .about-hero p.lead{ color:var(--text-muted); font-size:1rem; line-height:1.7; max-width:720px; margin:0; }
-
-        .about-toc{ display:flex; flex-wrap:wrap; gap:8px; padding: 24px 0; border-bottom: 1px solid var(--border-color); }
-        .about-toc a{ font-size:.68rem; text-transform:uppercase; letter-spacing:.5px; color:var(--text-muted); border:1px solid var(--border-color); padding:7px 12px; text-decoration:none; transition:.2s; }
-        .about-toc a:hover{ border-color:var(--accent); color:var(--accent); }
-
-        .about-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 14px; margin-top: 8px; }
-        .about-card{ background: var(--bg-panel); border:1px solid var(--border-color); padding:16px; }
-        .about-card i{ color:var(--accent); font-size:1.1rem; margin-bottom:10px; display:block; }
-        .about-card .t{ font-weight:800; font-size:.78rem; text-transform:uppercase; letter-spacing:.5px; color:var(--text-main); margin-bottom:6px; }
-        .about-card .d{ font-size:.8rem; color:var(--text-muted); line-height:1.5; }
-
-        table.arch{ width:100%; border-collapse: collapse; margin-top: 10px; }
-        table.arch th{ background:var(--accent); color:#fff; text-align:left; padding:10px 12px; font-size:.72rem; text-transform:uppercase; letter-spacing:1px; }
-        table.arch td{ border-bottom:1px dashed var(--border-color); padding:12px; font-size:.85rem; color:var(--text-main); vertical-align:top; }
-        table.arch tr:nth-child(even) td{ background: var(--bg-card); }
-
-        .about-steps{ counter-reset: about-step; margin-top:10px; }
-        .about-step{ display:flex; gap:16px; padding: 14px 0; border-bottom:1px dashed var(--border-color); }
-        .about-step:last-child{ border-bottom:none; }
-        .about-step .idx{ counter-increment: about-step; font-family:var(--font-head); font-size:1.4rem; color:var(--accent); min-width:36px; }
-        .about-step .idx::before{ content: counter(about-step, decimal-leading-zero); }
-        .about-step .body .t{ font-weight:800; font-size:.85rem; text-transform:uppercase; color:var(--text-main); margin-bottom:4px; }
-        .about-step .body .d{ font-size:.85rem; color:var(--text-muted); line-height:1.6; }
-
-        .about-callout{ border-left:4px solid var(--accent); background:var(--accent-dim); padding: 16px 20px; font-size:.9rem; color:var(--text-main); line-height:1.7; margin: 10px 0 6px; }
-
-        .about-contact-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap:14px; margin-top: 10px; }
-        .about-contact-item{ border:1px solid var(--border-color); padding:16px; background:var(--bg-panel); }
-        .about-contact-item i{ color:var(--accent); margin-right:8px; }
-        .about-contact-item .l{ font-size:.65rem; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); margin-bottom:6px; }
-        .about-contact-item .v{ font-size:.85rem; color:var(--text-main); font-weight:700; word-break:break-word; }
-
-        .about-footer{ text-align:center; padding: 34px 0 50px; color:var(--text-muted); font-size:.7rem; text-transform:uppercase; letter-spacing:1px; border-top: 2px solid var(--border-color); }
-        .about-footer .name{ font-family:var(--font-head); font-size:1.1rem; color:var(--text-main); margin-bottom:6px; letter-spacing:1px; }
-        .back-to-map{ display:inline-flex; align-items:center; gap:8px; margin-top:16px; border:1px solid var(--border-color); padding:8px 16px; color:var(--text-muted); text-decoration:none; font-size:.68rem; text-transform:uppercase; letter-spacing:1px; transition:.2s; }
-        .back-to-map:hover{ border-color:var(--accent); color:var(--accent); }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Titek Apui Monitor | Ali Akbar</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{--bg:#f5f6f8;--panel:#fff;--text:#1a1a1a;--muted:#666;--line:#d5d8dd;--accent:#d93000}
+body.night{--bg:#111;--panel:#1c1c1c;--text:#eee;--muted:#999;--line:#333;--accent:#ff4a1c}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
+body{display:flex;flex-direction:column}
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 12px;background:var(--panel);border-bottom:1px solid var(--line);z-index:1000}
+.brand{font-weight:800;font-size:15px;margin-right:auto;display:flex;align-items:center;gap:8px}
+.brand i{color:var(--accent)}
+.count{background:var(--accent);color:#fff;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:700}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{border:0;background:var(--panel);color:var(--muted);padding:7px 11px;font-size:12px;font-weight:700;cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button img{width:16px;height:12px;object-fit:cover;border-radius:2px;vertical-align:-1px;margin-right:3px}
+.seg button.active{background:var(--accent);color:#fff}
+select,.icon-btn{height:32px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--text);font-size:12px;padding:0 8px;cursor:pointer}
+.icon-btn{width:34px;padding:0}
+.icon-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.icon-btn:hover{border-color:var(--accent);color:var(--accent)}
+.icon-btn.active:hover{color:#fff}
+#map{flex:1;min-height:0}
+.locate{position:absolute;right:14px;bottom:28px;z-index:1000;width:46px;height:46px;border-radius:50%;border:1px solid var(--accent);background:var(--panel);color:var(--accent);box-shadow:0 3px 12px rgba(0,0,0,.3);cursor:pointer}
+.legend{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:11px;line-height:1.8}
+.legend span.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
+.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:var(--panel);border-left:5px solid var(--accent);padding:10px 16px;border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,.3);z-index:2000;font-size:12px;display:none}
+.toast.show{display:block}
+.popup-h{color:var(--accent);font-weight:800;font-size:12px;border-bottom:2px solid var(--accent);padding-bottom:4px}
+.popup-t{width:100%;font-size:11px;border-collapse:collapse;margin-top:6px}
+.popup-t td{padding:4px 0;border-bottom:1px dashed #ccc}
+.marker-cluster div{background:var(--accent)!important;color:#fff;font-weight:800}
+.marker-cluster{background:rgba(217,48,0,.2)!important}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:3000;display:none;align-items:center;justify-content:center;padding:16px}
+.modal.show{display:flex}
+.modal .box{background:var(--panel);max-width:520px;width:100%;max-height:85vh;overflow:auto;border-radius:10px;padding:22px;font-size:13px;line-height:1.7}
+.modal h3{margin:0 0 10px;color:var(--accent)}
+.modal .close{float:right;cursor:pointer;font-size:18px;color:var(--muted)}
+.pulse{border-color:var(--accent)!important;animation:pulse 1s ease-out 5}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(217,48,0,.65)}100%{box-shadow:0 0 0 12px rgba(217,48,0,0)}}
+.modal .sep{border:0;border-top:1px solid var(--line);margin:14px 0}
+.credit-t{font-weight:800;font-size:15px;color:var(--accent)}
+.modal .contact{margin:6px 0 0;font-size:12px}
+.modal .contact a{color:var(--accent);text-decoration:none}
+.modal .contact a:hover{text-decoration:underline}
+.loadbar{position:relative;height:0;z-index:1100;pointer-events:none;opacity:0;transition:opacity .3s}
+.loadbar.show{opacity:1}
+.loadbar .track{position:absolute;top:0;left:0;right:0;height:4px;background:rgba(217,48,0,.15);overflow:hidden}
+.loadbar .fill{height:100%;width:0;background:var(--accent);transition:width .25s ease-out;box-shadow:0 0 8px var(--accent)}
+.loadbar .txt{position:absolute;top:12px;left:50%;transform:translateX(-50%);background:var(--panel);color:var(--text);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:999px;padding:5px 14px;font-size:12px;font-weight:700;box-shadow:0 3px 12px rgba(0,0,0,.25);white-space:nowrap}
+.loadbar .txt i{color:var(--accent);margin-right:6px}
+@media(max-width:600px){.brand span.t{display:none}}
+</style>
 </head>
-<body class="map-locked">
+<body>
 
-<div id="map-wrap">
-    <div class="header">
-        <div class="brand">
-            <button class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
-            <div class="logo-box">ALI.AKBAR</div>
-            <h1 id="ui-title">TITEK APUI <span>MONITOR</span></h1>
-        </div>
-        <div class="head-right">
-            <div class="head-stats">
-                <span class="head-stats-label">TITIK:</span>
-                <span id="count-val">0</span>
-            </div>
-            <div class="theme-toggle" onclick="toggleTheme()"><i class="fa-solid fa-circle-half-stroke"></i></div>
-        </div>
-    </div>
+<div class="bar">
+  <div class="brand"><i class="fas fa-fire"></i><span class="t" id="ui-title">TITEK APUI MONITOR</span><span class="count" id="count-val">0</span></div>
 
-    <div class="overlay" id="mapOverlay" onclick="toggleMenu()"></div>
+  <div class="seg" id="lang-seg">
+    <button data-lang="ace" class="active"><img src="https://flagcdn.com/w40/tr.png" alt=""> ACE</button>
+    <button data-lang="id"><img src="https://flagcdn.com/w40/id.png" alt=""> ID</button>
+    <button data-lang="en"><img src="https://flagcdn.com/w40/us.png" alt=""> EN</button>
+  </div>
 
-    <div class="sidebar" id="sidebarMenu">
-        <i class="fas fa-times close-menu" onclick="toggleMenu()"></i>
-        <div class="sidebar-title">// KONTROL PANTAUAN</div>
+  <div class="seg" id="map-seg">
+    <button data-map="street" class="active" title="Peta"><i class="fas fa-road"></i></button>
+    <button data-map="sat" title="Satelit"><i class="fas fa-earth-asia"></i></button>
+    <button data-map="dark" title="Gelap"><i class="fas fa-moon"></i></button>
+  </div>
 
-        <div class="lang-container">
-            <button class="lang-btn active" id="btn-ace" onclick="setLang('ace')">
-                <img src="https://flagcdn.com/w40/tr.png"> ACE
-            </button>
-            <button class="lang-btn" id="btn-id" onclick="setLang('id')">
-                <img src="https://flagcdn.com/w40/id.png"> ID
-            </button>
-            <button class="lang-btn" id="btn-en" onclick="setLang('en')">
-                <img src="https://flagcdn.com/w40/us.png"> EN
-            </button>
-        </div>
+  <button class="icon-btn" id="btn-smoke" title="Citra Asap (VIIRS True Color)"><i class="fas fa-smog"></i></button>
 
-        <div class="control-group">
-            <label id="ui-region-lbl">Wilayah Pantauan</label>
-            <select id="region-sel" onchange="fetchData(true); if(window.innerWidth < 992) toggleMenu()">
-                <option value="aceh">Aceh</option>
-                <option value="indonesia">Indonesia</option>
-                <option value="global">Global</option>
-            </select>
-        </div>
+  <select id="region-sel" title="Lokasi" autocomplete="off">
+    <option value="aceh">Aceh</option>
+    <option value="indonesia" selected>Indonesia</option>
+    <option value="global">Global</option>
+  </select>
 
-        <div class="control-group">
-            <label id="ui-sat-lbl">Sensor Satelit</label>
-            <select id="sat-sel" onchange="fetchData(true); if(window.innerWidth < 992) toggleMenu()">
-                <option value="all">Gabungan Semua Satelit</option>
-                <option value="suomi_npp">Suomi NPP (VIIRS)</option>
-                <option value="noaa20">NOAA-20 (VIIRS)</option>
-                <option value="noaa21">NOAA-21 (VIIRS)</option>
-                <option value="terra_aqua">Terra & Aqua (MODIS)</option>
-            </select>
-        </div>
+  <select id="sat-sel" title="Satelit" autocomplete="off">
+    <option value="all">Semua Satelit</option>
+    <option value="suomi_npp">Suomi NPP</option>
+    <option value="noaa20">NOAA-20</option>
+    <option value="noaa21">NOAA-21</option>
+    <option value="terra_aqua">Terra &amp; Aqua</option>
+  </select>
 
-        <button class="btn-refresh" onclick="fetchData(true); if(window.innerWidth < 992) toggleMenu()">
-            <i class="fas fa-sync" id="refresh-icon"></i> <span id="ui-refresh-btn">PEUBARÔ DATA</span>
-        </button>
-
-        <div class="menu-divider"></div>
-        <button class="menu-link" onclick="goToAbout()">
-            <i class="fas fa-circle-info"></i> Tentang Sistem
-        </button>
-
-        <div class="sidebar-footer">
-            <div class="name">ALI AKBAR</div>
-            SAMATIGA, ACEH BARAT
-        </div>
-    </div>
-
-    <button class="locate-btn" onclick="locateUser()" title="Lokasi Saya">
-        <i class="fas fa-location-crosshairs fa-lg"></i>
-    </button>
-
-    <a href="#tentang" class="scroll-cue" onclick="goToAbout(event)">
-        <span>TENTANG SISTEM</span>
-        <i class="fas fa-chevron-down"></i>
-    </a>
-
-    <div class="error-toast" id="error-toast">
-        <i class="fas fa-triangle-exclamation"></i>
-        <span id="error-toast-msg"></span>
-        <i class="fas fa-times close-toast" onclick="hideError()"></i>
-    </div>
-
-    <div id="map"></div>
+  <button class="icon-btn" id="btn-refresh" title="Refresh"><i class="fas fa-sync" id="refresh-icon"></i></button>
+  <button class="icon-btn" id="btn-theme" title="Tema"><i class="fa-solid fa-circle-half-stroke"></i></button>
+  <button class="icon-btn" id="btn-info" title="Info"><i class="fas fa-circle-info"></i></button>
 </div>
 
-<!-- ============ TENTANG SISTEM (digabung di halaman yang sama) ============ -->
-<div class="about-wrap" id="tentang">
+<div class="loadbar" id="loadbar"><div class="track"><div class="fill" id="load-fill"></div></div><div class="txt"><i class="fas fa-fire fa-beat-fade"></i><span id="load-txt"></span></div></div>
+<div id="map"></div>
+<button class="locate" id="btn-locate" title="Lokasi saya"><i class="fas fa-location-crosshairs fa-lg"></i></button>
+<div class="toast" id="toast"></div>
 
-    <div class="about-hero">
-        <div class="tag">White Paper Teknis</div>
-        <h2>Tentang Titek Apui Monitor</h2>
-        <p class="lead">Sistem pemantauan titik api berbasis data satelit NASA FIRMS untuk deteksi dini kebakaran hutan dan lahan di wilayah Aceh. Dokumen dan aplikasi ini disusun dengan bahasa yang sederhana — dapat langsung dipahami oleh masyarakat gampong dan petani penggarap lahan.</p>
-    </div>
-
-    <div class="about-toc">
-        <a href="#ringkasan">Ringkasan</a>
-        <a href="#latar-belakang">Latar Belakang</a>
-        <a href="#masalah">Rumusan Masalah</a>
-        <a href="#solusi">Solusi</a>
-        <a href="#arsitektur">Arsitektur Teknis</a>
-        <a href="#keandalan">Sumber Data</a>
-        <a href="#manfaat">Manfaat</a>
-        <a href="#roadmap">Peta Jalan</a>
-        <a href="#kolaborasi">Kolaborasi</a>
-        <a href="#kontak">Kontak</a>
-    </div>
-
-    <section class="about-block" id="ringkasan">
-        <div class="about-num">01 // RINGKASAN EKSEKUTIF</div>
-        <h3>Apa Itu Titek Apui Monitor</h3>
-        <p>Titek Apui Monitor adalah sistem pemantauan titik api (hotspot) berbasis peta digital yang menampilkan data deteksi kebakaran secara mendekati waktu nyata (near real-time) untuk wilayah Aceh. Sistem ini mengolah data resmi dari satelit milik NASA — Suomi NPP, NOAA-20, NOAA-21 (sensor VIIRS), serta Terra dan Aqua (sensor MODIS) — melalui layanan FIRMS (Fire Information for Resource Management System), lalu menyajikannya dalam antarmuka peta interaktif yang mudah diakses melalui komputer maupun ponsel.</p>
-        <p>Sistem ini dikembangkan secara mandiri setelah menyaksikan langsung dampak kebakaran lahan gambut di Cot Seumeureung, Kecamatan Samatiga, Kabupaten Aceh Barat pada awal tahun 2026. Halaman ini disusun sebagai dokumentasi menyeluruh mengenai latar belakang, arsitektur, dan manfaat sistem.</p>
-    </section>
-
-    <section class="about-block" id="latar-belakang">
-        <div class="about-num">02 // LATAR BELAKANG</div>
-        <h3>Mengapa Sistem Ini Dibuat</h3>
-        <p>Kabupaten Aceh Barat dan wilayah pesisir barat-selatan Aceh memiliki kawasan lahan gambut yang rentan terhadap kebakaran, terutama pada musim kemarau. Kebakaran lahan gambut sulit dideteksi secara visual pada tahap awal karena sering terjadi di area terpencil dan berupa pembakaran di bawah permukaan (smoldering) sebelum meluas menjadi kebakaran terbuka.</p>
-        <p>Peristiwa kebakaran lahan gambut di Cot Seumeureung menjadi titik tolak penyusunan sistem ini. Padahal, data satelit deteksi titik api dari NASA FIRMS sesungguhnya tersedia secara terbuka dan gratis, namun belum banyak dimanfaatkan secara langsung karena format data mentah (CSV) yang tidak mudah dibaca oleh pengguna non-teknis.</p>
-        <div class="about-callout">Titek Apui Monitor menjembatani kesenjangan tersebut dengan menyajikan data yang sama dalam bentuk visual peta yang sederhana, cepat, dan dapat langsung digunakan tanpa memerlukan keahlian teknis khusus.</div>
-    </section>
-
-    <section class="about-block" id="masalah">
-        <div class="about-num">03 // RUMUSAN MASALAH</div>
-        <h3>Kendala yang Ingin Dijawab</h3>
-        <ul>
-            <li>Informasi titik api dari sumber resmi (NASA FIRMS) tersedia dalam format data mentah yang sulit diakses langsung oleh masyarakat maupun aparat gampong.</li>
-            <li>Belum ada kanal pemantauan titik api yang berbahasa lokal (Aceh) dan disesuaikan dengan cakupan wilayah Aceh secara spesifik.</li>
-            <li>Deteksi dini kebakaran lahan gambut memerlukan pemantauan berkelanjutan yang sulit dilakukan secara manual oleh petugas di lapangan.</li>
-            <li>Koordinasi antar-pihak (BPBD, Dinas Kehutanan, pemerintah gampong, petani) memerlukan rujukan data lokasi yang cepat, konsisten, dan mudah dibagikan.</li>
-        </ul>
-    </section>
-
-    <section class="about-block" id="solusi">
-        <div class="about-num">04 // DESKRIPSI SOLUSI</div>
-        <h3>Fitur Utama</h3>
-        <p>Titek Apui Monitor adalah aplikasi web yang dapat diakses langsung melalui tautan tanpa instalasi. Pengguna dapat memilih cakupan wilayah, memilih sumber satelit, serta melihat detail setiap titik seperti perkiraan suhu, tingkat kepercayaan deteksi, energi kebakaran, waktu deteksi, dan perkiraan nama lokasi.</p>
-        <div class="about-grid">
-            <div class="about-card"><i class="fas fa-map-location-dot"></i><div class="t">Peta Interaktif</div><div class="d">Tampilan peta jalan, citra satelit, dan mode gelap.</div></div>
-            <div class="about-card"><i class="fas fa-satellite"></i><div class="t">Multi-Satelit</div><div class="d">Gabungan atau pilihan satelit: Suomi NPP, NOAA-20, NOAA-21, Terra & Aqua.</div></div>
-            <div class="about-card"><i class="fas fa-fire"></i><div class="t">Skala Energi</div><div class="d">Ukuran penanda menyesuaikan besar energi kebakaran (FRP).</div></div>
-            <div class="about-card"><i class="fas fa-layer-group"></i><div class="t">Clustering</div><div class="d">Titik yang padat dikelompokkan otomatis agar peta tetap terbaca.</div></div>
-            <div class="about-card"><i class="fas fa-language"></i><div class="t">Tiga Bahasa</div><div class="d">Antarmuka Bahasa Aceh, Indonesia, dan Inggris.</div></div>
-            <div class="about-card"><i class="fas fa-location-crosshairs"></i><div class="t">Lokasi Saya</div><div class="d">Melihat posisi pengguna relatif terhadap titik api terdekat.</div></div>
-        </div>
-    </section>
-
-    <section class="about-block" id="arsitektur">
-        <div class="about-num">05 // ARSITEKTUR TEKNIS</div>
-        <h3>Bagaimana Sistem Bekerja</h3>
-        <table class="arch">
-            <tr><th style="width:22%">Komponen</th><th>Deskripsi</th></tr>
-            <tr><td>Sumber Data</td><td>NASA FIRMS — data deteksi titik api dari satelit Suomi NPP, NOAA-20, NOAA-21 (VIIRS) serta Terra dan Aqua (MODIS), diperbarui berkala oleh NASA.</td></tr>
-            <tr><td>Backend</td><td>Skrip pengolah data (Google Apps Script) yang mengambil data mentah dari NASA FIRMS, menyaring data sesuai batas wilayah, lalu menyediakannya bagi antarmuka peta.</td></tr>
-            <tr><td>Frontend</td><td>Antarmuka peta berbasis web menggunakan Leaflet.js, dengan visualisasi interaktif, penanda berskala energi, legenda, pengelompokan titik, dan dukungan tiga bahasa.</td></tr>
-            <tr><td>Aksesibilitas</td><td>Aplikasi web murni, dapat diakses langsung melalui tautan di peramban tanpa instalasi maupun biaya berlangganan.</td></tr>
-        </table>
-
-        <h4>Alur Kerja Data (Data Pipeline)</h4>
-        <p>Setiap kali peta dibuka atau diperbarui, sistem menjalankan rangkaian proses berikut secara otomatis dalam hitungan detik:</p>
-        <div class="about-steps">
-            <div class="about-step"><div class="idx"></div><div class="body"><div class="t">Pengambilan Data Mentah</div><div class="d">Backend menarik berkas CSV terbaru langsung dari server NASA FIRMS sesuai satelit yang dipilih, berisi seluruh titik deteksi panas dalam 24 jam terakhir.</div></div></div>
-            <div class="about-step"><div class="idx"></div><div class="body"><div class="t">Penyaringan Spasial</div><div class="d">Dari ribuan baris data global, sistem menyaring hanya koordinat yang jatuh di dalam batas wilayah Aceh, Indonesia, atau global.</div></div></div>
-            <div class="about-step"><div class="idx"></div><div class="body"><div class="t">Deduplikasi Koordinat</div><div class="d">Titik yang terdeteksi berulang oleh sensor yang sama pada lintasan tumpang tindih disaring hingga presisi ±11 meter, agar peta tidak menampilkan penanda ganda.</div></div></div>
-            <div class="about-step"><div class="idx"></div><div class="body"><div class="t">Konversi Waktu ke WIB</div><div class="d">Waktu akuisisi citra (UTC) dikonversi otomatis ke Waktu Indonesia Barat agar sesuai waktu operasional di lapangan.</div></div></div>
-            <div class="about-step"><div class="idx"></div><div class="body"><div class="t">Estimasi Suhu Permukaan</div><div class="d">Brightness temperature dari kanal inframerah sensor dikonversi dari Kelvin ke Celsius agar mudah dipahami.</div></div></div>
-            <div class="about-step"><div class="idx"></div><div class="body"><div class="t">Visualisasi Berskala Energi</div><div class="d">Radius penanda dihitung memakai fungsi akar kuadrat terhadap nilai FRP, sehingga luas lingkaran proporsional terhadap energi kebakaran sesungguhnya.</div></div></div>
-            <div class="about-step"><div class="idx"></div><div class="body"><div class="t">Pengelompokan Dinamis</div><div class="d">Saat kepadatan titik tinggi, penanda berdekatan digabung menjadi satu simpul beranotasi jumlah, dan pecah kembali saat pengguna memperbesar peta.</div></div></div>
-            <div class="about-step"><div class="idx"></div><div class="body"><div class="t">Pengayaan Lokasi On-Demand</div><div class="d">Nama lokasi (desa/kecamatan) hanya diminta ke layanan Nominatim saat popup suatu titik dibuka, menghemat kuota layanan pihak ketiga.</div></div></div>
-        </div>
-
-        <h4>Fusi Multi-Satelit</h4>
-        <p>VIIRS pada Suomi NPP, NOAA-20, dan NOAA-21 memiliki resolusi spasial 375 meter per piksel, mampu mendeteksi titik api lebih kecil dan bergerak lebih cepat. MODIS pada Terra dan Aqua memiliki resolusi 1 kilometer namun riwayat data historis lebih panjang. Dengan opsi penggabungan maupun pemilihan satelit individual, sistem memungkinkan silang-verifikasi antar sumber — titik yang terdeteksi konsisten oleh lebih dari satu satelit memberikan tingkat keyakinan lebih tinggi.</p>
-    </section>
-
-    <section class="about-block" id="keandalan">
-        <div class="about-num">06 // KEANDALAN & SUMBER DATA</div>
-        <h3>Dari Mana Data Berasal</h3>
-        <p>Seluruh data titik api yang ditampilkan bersumber dari NASA FIRMS, layanan yang telah digunakan secara luas oleh lembaga penanggulangan bencana dan kehutanan di berbagai negara, termasuk oleh Kementerian Lingkungan Hidup dan Kehutanan Republik Indonesia serta Badan Restorasi Gambut dan Mangrove dalam pemantauan karhutla nasional. Titek Apui Monitor tidak menggantikan sumber data resmi tersebut, melainkan menghadirkannya dalam bentuk yang lebih mudah diakses khusus untuk konteks kebutuhan pemantauan di wilayah Aceh.</p>
-    </section>
-
-    <section class="about-block" id="manfaat">
-        <div class="about-num">07 // MANFAAT DAN DAMPAK</div>
-        <h3>Untuk Siapa Sistem Ini Berguna</h3>
-        <ul>
-            <li>Mempercepat identifikasi lokasi titik api di wilayah Aceh Barat dan Aceh secara umum, sebagai bahan rujukan awal sebelum verifikasi lapangan.</li>
-            <li>Mendukung koordinasi antar-pemangku kepentingan (BPBD, Dinas Kehutanan, Satpol PP dan Damkar, pemerintah gampong, kelompok masyarakat) dengan rujukan peta yang seragam.</li>
-            <li>Menjadi alat bantu edukasi dan sosialisasi kepada masyarakat gampong mengenai risiko kebakaran lahan di sekitar wilayah mereka.</li>
-            <li>Berpotensi diintegrasikan dengan sistem peringatan dini yang sudah ada, atau dijadikan rujukan pelengkap bagi siapa pun yang terlibat dalam pemantauan karhutla.</li>
-        </ul>
-    </section>
-
-    <section class="about-block" id="roadmap">
-        <div class="about-num">08 // PETA JALAN PENGEMBANGAN</div>
-        <h3>Rencana ke Depan</h3>
-        <ul>
-            <li>Notifikasi otomatis (Telegram/WhatsApp) kepada perangkat gampong ketika titik api terdeteksi di radius tertentu wilayah mereka.</li>
-            <li>Riwayat dan tren titik api harian/mingguan untuk mendukung analisis pola kebakaran musiman.</li>
-            <li>Fitur ekspor data (PDF/CSV) untuk keperluan pelaporan resmi.</li>
-            <li>Peningkatan keandalan sistem melalui mekanisme cache agar lebih tahan lonjakan akses saat musim kemarau.</li>
-        </ul>
-    </section>
-
-    <section class="about-block" id="kolaborasi">
-        <div class="about-num">09 // PELUANG KOLABORASI</div>
-        <h3>Terbuka untuk Bekerja Sama</h3>
-        <p>Sistem ini saat ini dikembangkan dan dioperasikan secara mandiri tanpa biaya kepada pengguna. Untuk keberlanjutan dan perluasan manfaat, terbuka ruang kolaborasi dengan berbagai pihak, antara lain masukan kebutuhan teknis dari pihak yang berkecimpung dalam penanggulangan bencana, kolaborasi pengembangan fitur dengan komunitas teknologi atau akademisi, serta dukungan operasional apabila sistem akan diadopsi lebih luas.</p>
-    </section>
-
-    <section class="about-block" id="kontak" style="border-bottom:none;">
-        <div class="about-num">10 // KONTAK</div>
-        <h3>Hubungi Pengembang</h3>
-        <div class="about-contact-grid">
-            <div class="about-contact-item"><div class="l"><i class="fas fa-user"></i>Nama</div><div class="v">Ali Akbar</div></div>
-            <div class="about-contact-item"><div class="l"><i class="fas fa-location-dot"></i>Lokasi</div><div class="v">Gampong Cot Mesjid, Samatiga, Aceh Barat</div></div>
-            <div class="about-contact-item"><div class="l"><i class="fas fa-envelope"></i>Email</div><div class="v">lonaliakbar@gmail.com</div></div>
-            <div class="about-contact-item"><div class="l"><i class="fab fa-whatsapp"></i>Telepon</div><div class="v">+62 852-1770-7011</div></div>
-            <div class="about-contact-item"><div class="l"><i class="fas fa-globe"></i>Web</div><div class="v">lonaliakbar.com</div></div>
-        </div>
-        <a href="#map-wrap" class="back-to-map" onclick="backToMap(event)"><i class="fas fa-arrow-up"></i> Kembali ke Peta</a>
-    </section>
+<div class="modal" id="modal">
+  <div class="box">
+    <i class="fas fa-times close" id="modal-close"></i>
+    <h3 id="about-h"></h3>
+    <p id="about-p"></p>
+    <hr class="sep">
+    <div class="credit-t" id="credit-t"></div>
+    <p id="credit-p" style="margin:6px 0"></p>
+    <p id="credit-c" style="margin:6px 0;font-weight:700"></p>
+    <p class="contact">
+      <a href="mailto:lonaliakbar@gmail.com">lonaliakbar@gmail.com</a><br>
+      <a href="tel:+6285217707011">+62 852-1770-7011</a><br>
+      <a href="https://lonaliakbar.com" target="_blank" rel="noopener">lonaliakbar.com</a>
+    </p>
+  </div>
 </div>
-
-<footer class="about-footer">
-    <div class="name">TITEK APUI MONITOR</div>
-    SAMATIGA, ACEH BARAT — © 2026
-</footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
-
 <script>
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbzM1dm-sAds_LzOsuKlgEFIDAGVeMvZ-qnELtNZxS239GddMUs-Omryk67-JQd5r9gj/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzM1dm-sAds_LzOsuKlgEFIDAGVeMvZ-qnELtNZxS239GddMUs-Omryk67-JQd5r9gj/exec";
+const $ = id => document.getElementById(id);
 
-    // LAYER DEFINITION
-    const streetLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '<a href="https://tiktok.com/lonaliakbar">@lonaliakbar</a>'
-    });
-    const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Esri, DigitalGlobe, GeoEye, Earthstar Geographics, CNES/Airbus DS, USDA, USGS, AeroGRID, IGN, and the GIS User Community'
-    });
-    const darkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        attribution: '<a href="https://tiktok.com/lonaliakbar">@lonaliakbar</a><a href="https://carto.com/attributions">CARTO</a>'
-    });
+const tr = {
+  ace:{
+    title:"MONITOR TITEK APUI",
+    tipMap:"Peuta", tipSat:"Sateulit", tipDark:"Seupot", tipSmoke:"Citra Asap VIIRS/MODIS True Color",
+    tipRegion:"Lokasi", tipSatSel:"Sateulit", allSat:"Bandum Sateulit",
+    tipRefresh:"Seubaro", tipTheme:"Tema", tipInfo:"Info", tipLocate:"Lokasi Lon",
+    legend:"Keuteurangan", high:"Confidence Manyang", low:"Confidence Reundah",
+    detail:"DEUTAIL LOKASI", loc:"Mita nan lokasi...", temp:"Suhu", sat:"Sateulit", det:"Deuteksi", energy:"Energi", time:"Update", coord:"Koordinat",
+    err:"Data gadôh troh, cuba lom.", errLoc:"Gagal akses lokasi", errSmoke:"Citra satelit belum tersedia untuk tanggal ini",
+    about:"Teuntang web nyoe",
+    aboutText:"Sistem pantau titek apui nyoe datajih dari sateulit NASA FIRMS (VIIRS & MODIS) untuk deteksi tutong uteun ngon lahan, awai phon lon peugot khusuh untuk aceh jinoe data ka leungkap realtime ban sigom donya"
+  },
+  id:{
+    title:"MONITORING TITIK API",
+    tipMap:"Peta", tipSat:"Satelit", tipDark:"Gelap", tipSmoke:"Citra Asap VIIRS/MODIS True Color",
+    tipRegion:"Lokasi", tipSatSel:"Satelit", allSat:"Semua Satelit",
+    tipRefresh:"Refresh", tipTheme:"Tema", tipInfo:"Info", tipLocate:"Lokasi saya",
+    legend:"Keterangan", high:"Confidence Tinggi", low:"Confidence Rendah",
+    detail:"DETAIL LOKASI", loc:"Mencari Lokasi...", temp:"Suhu", sat:"Satelit", det:"Deteksi", energy:"Energi", time:"Update", coord:"Koordinat",
+    err:"Gagal memuat data, coba lagi.", errLoc:"Gagal akses lokasi", errSmoke:"Citra satelit belum tersedia untuk tanggal ini",
+    about:"Tentang Sistem",
+    aboutText:"Sistem pemantauan titik api berbasis data satelit NASA FIRMS (VIIRS & MODIS) untuk deteksi dini kebakaran hutan dan lahan di Aceh. Data diperbarui berkala oleh NASA dan disajikan dalam peta interaktif yang mudah dibaca."
+  },
+  en:{
+    title:"HOTSPOT MONITORING",
+    tipMap:"Map", tipSat:"Satellite", tipDark:"Dark", tipSmoke:"Smoke imagery VIIRS/MODIS True Color",
+    tipRegion:"Location", tipSatSel:"Satellite", allSat:"All Satellites",
+    tipRefresh:"Refresh", tipTheme:"Theme", tipInfo:"Info", tipLocate:"My location",
+    legend:"Legend", high:"High Confidence", low:"Low Confidence",
+    detail:"LOCATION DETAIL", loc:"Locating...", temp:"Temp", sat:"Satellite", det:"Detections", energy:"Energy", time:"Update", coord:"Coordinates",
+    err:"Failed to load data, please retry.", errLoc:"Failed to access location", errSmoke:"Satellite imagery is not yet available for this date",
+    about:"About",
+    aboutText:"A hotspot monitoring system using NASA FIRMS satellite data (VIIRS & MODIS) for early detection of forest and land fires in Aceh. Data is refreshed periodically by NASA and shown on an easy-to-read interactive map."
+  }
+};
+const credit = {
+  ace:{t:"Geupeugöt di Gampong Cot Mesjid", p:"Titek Apui Monitor geupeugöt le Ali Akbar, Gampong Cot Mesjid, Samatiga, Aceh Barat.", c:"Na saran? Hubungi lon."},
+  id:{t:"Dibuat dari Cot Mesjid untuk Aceh", p:"Titek Apui Monitor dikembangkan oleh Ali Akbar, Gampong Cot Mesjid, Samatiga, Aceh Barat.", c:"Punya masukan? Hubungi saya."},
+  en:{t:"Made in Cot Mesjid, for Aceh", p:"Titek Apui Monitor is developed by Ali Akbar, Gampong Cot Mesjid, Samatiga, West Aceh.", c:"Have feedback? Contact me."}
+};
+let lang = 'ace', userMarker, toastTimer;
 
-    let currentLang = 'ace';
-    let userMarker;
-    let errorHideTimer = null;
-    const translations = {
-        ace: { title: "TITEK APUI <span>MONITOR</span>", region: "WILAYAH PANTAUAN", sat: "SENSOR SATELIT", refresh: "SEUBARÔ DATA", detail: "DEUTAIL LOKASI", loc: "Mita Alamat...", temp: "Suum", energy: "Energi", time: "Update", sat_lbl: "Sateulit", legend: "KETERANGAN", high: "Confidence Manyang", low: "Confidence Reundah", err: "Data gadôh troh, cuba lom." },
-        id: { title: "MONITORING <span>TITIK API</span>", region: "WILAYAH PANTAUAN", sat: "SENSOR SATELIT", refresh: "PERBARUI DATA", detail: "DETAIL LOKASI", loc: "Mencari Lokasi...", temp: "Suhu", energy: "Energi", time: "Update", sat_lbl: "Satelit", legend: "KETERANGAN", high: "Confidence Tinggi", low: "Confidence Rendah", err: "Gagal memuat data, coba lagi." },
-        en: { title: "HOTSPOT <span>MONITORING</span>", region: "REGION", sat: "SATELLITE", refresh: "REFRESH DATA", detail: "LOCATION DETAIL", loc: "Locating...", temp: "Temp", energy: "Energy", time: "Update", sat_lbl: "Satellite", legend: "LEGEND", high: "High Confidence", low: "Low Confidence", err: "Failed to load data, please retry." }
+// ---------- MAP ----------
+const layers = {
+  street: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution:'<a href="https://tiktok.com/lonaliakbar">@lonaliakbar</a> | © OpenStreetMap'}),
+  sat: L.layerGroup([
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {maxZoom:19, attribution:'Esri, Maxar, Earthstar Geographics'}),
+    // nama tempat, batas wilayah & jalan; pane khusus agar tampil di atas citra asap
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {maxNativeZoom:13, maxZoom:19, pane:'labelPane'})
+  ]),
+  dark: L.layerGroup([
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {maxNativeZoom:16, maxZoom:19, zIndex:1, attribution:'Esri, HERE, Garmin, © OpenStreetMap contributors'}),
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}', {maxNativeZoom:16, maxZoom:19, zIndex:2})
+  ])
+};
+// Batas seluruh Indonesia (Sabang sampai Merauke). fitBounds menyesuaikan zoom dengan ukuran layar,
+// jadi seluruh Indonesia selalu terlihat di HP maupun layar lebar.
+const INDONESIA_BOUNDS = L.latLngBounds([-11.5, 94.5], [6.5, 141.5]);
+const map = L.map('map', {zoomControl:false, layers:[layers.street]});
+const START_BOUNDS = L.latLngBounds([-9.5, 94.5], [6.5, 126]);   // tampilan awal: Sumatera sampai Sulawesi
+map.fitBounds(START_BOUNDS, {maxZoom:6});
+L.control.zoom({position:'topright'}).addTo(map);
+map.createPane('labelPane');
+map.getPane('labelPane').style.zIndex = 350;   // di atas citra asap (300), di bawah titik api (400)
+map.getPane('labelPane').style.pointerEvents = 'none';
+
+let currentBase = 'street';
+function setBase(name){
+  map.removeLayer(layers[currentBase]);
+  layers[name].addTo(map);
+  currentBase = name;
+  document.querySelectorAll('#map-seg button').forEach(b => b.classList.toggle('active', b.dataset.map === name));
+}
+
+const fireLayer = L.markerClusterGroup({
+  maxClusterRadius:50, disableClusteringAtZoom:12, spiderfyOnMaxZoom:false, showCoverageOnHover:false,
+  iconCreateFunction:c => L.divIcon({html:`<div><span>${c.getChildCount()}</span></div>`, className:'marker-cluster', iconSize:L.point(40,40)})
+});
+map.addLayer(fireLayer);
+
+// Titik api di dalam Aceh TIDAK di-cluster: sekecil apa pun selalu tampil satu per satu di semua level zoom.
+// Wilayah lain tetap memakai cluster.
+const acehLayer = L.layerGroup().addTo(map);
+// Poligon perkiraan batas Provinsi Aceh [lintang, bujur] (daratan + pulau-pulau besar)
+const ACEH_POLYS = [
+  [[6.10,95.30],[5.95,94.85],[5.50,94.85],[4.65,95.35],[4.00,96.10],[3.40,96.70],[2.85,97.35],[2.25,97.80],[2.05,98.05],[2.55,98.30],[3.20,98.30],[3.70,98.25],[4.00,98.20],[4.30,98.20],[4.55,98.05],[4.90,97.65],[5.30,97.15],[5.65,96.60],[5.85,95.95]],
+  [[2.10,95.50],[3.05,95.55],[3.05,96.50],[2.10,96.50]],   // Simeulue
+  [[1.95,97.00],[2.55,97.00],[2.55,97.70],[1.95,97.70]]    // Kep. Banyak
+];
+function pointInPoly(lat, lon, poly){
+  let inside = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const [yi, xi] = poly[i], [yj, xj] = poly[j];
+    if (((yi > lat) !== (yj > lat)) && (lon < (xj - xi) * (lat - yi) / (yj - yi) + xi)) inside = !inside;
+  }
+  return inside;
+}
+const inAceh = (lat, lon) => ACEH_POLYS.some(p => pointInPoly(lat, lon, p));
+
+const legend = L.control({position:'bottomleft'});
+legend.onAdd = () => { const d = L.DomUtil.create('div','legend'); d.id='legend'; return d; };
+legend.addTo(map);
+function renderLegend(){
+  const t = tr[lang];
+  $('legend').innerHTML = `<b>${t.legend}</b><br><span class="dot" style="background:#e74c3c"></span>${t.high}<br><span class="dot" style="background:#f39c12"></span>${t.low}`;
+}
+
+
+// ---------- LAYER ASAP: NASA GIBS True Color (VIIRS + MODIS) ----------
+// Area hitam di citra = celah antar-lintasan satelit (tidak ada data hari itu).
+// Solusi: piksel hitam dibuat transparan, lalu beberapa satelit ditumpuk agar celah saling menutupi.
+const smokeDate = new Date(Date.now() - 24*3600*1000).toISOString().slice(0,10);
+map.createPane('smokePane');
+const smokePane = map.getPane('smokePane');
+smokePane.style.zIndex = 300;      // di atas peta dasar, di bawah titik api
+smokePane.style.opacity = 0.7;     // transparansi diatur pada pane agar tumpukan tidak menebal
+smokePane.style.pointerEvents = 'none';
+
+const GibsTransparent = L.TileLayer.extend({
+  createTile(coords, done){
+    const size = this.getTileSize();
+    const tile = document.createElement('canvas');
+    tile.width = size.x; tile.height = size.y;
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      const ctx = tile.getContext('2d', {willReadFrequently:true});
+      ctx.drawImage(img, 0, 0, size.x, size.y);
+      try {
+        const id = ctx.getImageData(0, 0, size.x, size.y), p = id.data;
+        for (let i = 0; i < p.length; i += 4) {
+          const m = Math.max(p[i], p[i+1], p[i+2]);
+          if (m < 14) p[i+3] = 0;                                   // hitam = tidak ada data
+          else if (m < 30) p[i+3] = Math.round((m - 14) / 16 * 255); // tepi dihaluskan
+        }
+        ctx.putImageData(id, 0, 0);
+      } catch(e) { /* CORS gagal: tile tampil apa adanya */ }
+      done(null, tile);
     };
+    img.onerror = () => done(new Error('tile'), tile);
+    img.src = this.getTileUrl(coords);
+    return tile;
+  }
+});
+function gibsLayer(layerName){
+  return new GibsTransparent(
+    `https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/${layerName}/default/${smokeDate}/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg`,
+    {maxNativeZoom:9, maxZoom:19, pane:'smokePane', attribution:'NASA GIBS'}
+  );
+}
+const snppLayer = gibsLayer('VIIRS_SNPP_CorrectedReflectance_TrueColor');
+// urutan: yang paling atas = resolusi terbaik (VIIRS), yang bawah menambal celah
+const smokeLayer = L.layerGroup([
+  gibsLayer('MODIS_Terra_CorrectedReflectance_TrueColor'),
+  gibsLayer('VIIRS_NOAA20_CorrectedReflectance_TrueColor'),
+  snppLayer
+]);
+$('btn-smoke').onclick = () => {
+  const on = !map.hasLayer(smokeLayer);
+  if (on) smokeLayer.addTo(map); else map.removeLayer(smokeLayer);
+  $('btn-smoke').classList.toggle('active', on);
+};
+let smokeWarned = false;
+snppLayer.on('tileerror', () => {
+  if (!smokeWarned) { smokeWarned = true; showError(tr[lang].errSmoke); }
+});
 
-    // --- ERROR TOAST ---
-    function showError(msg) {
-        const toast = document.getElementById('error-toast');
-        const msgEl = document.getElementById('error-toast-msg');
-        msgEl.innerText = msg || translations[currentLang].err;
-        toast.classList.add('show');
-        if (errorHideTimer) clearTimeout(errorHideTimer);
-        errorHideTimer = setTimeout(hideError, 6000);
+// ---------- AUTO GANTI KE MODE INDONESIA SAAT KELUAR ACEH/SUMUT ----------
+const AUTO_TEXT = {
+  ace: "Peta di luwa Aceh & Sumatera Utara. Beralih u mode Indonesia.",
+  id:  "Peta di luar Aceh & Sumatera Utara. Beralih ke mode Indonesia.",
+  en:  "Map is outside Aceh & North Sumatra. Switched to Indonesia mode."
+};
+const ACEH_SUMUT_BOUNDS = L.latLngBounds([0.3, 94.8], [6.2, 100.5]);
+let autoTimer, pulseTimer;
+
+function pulseRegion(){
+  const sel = $('region-sel');
+  sel.classList.add('pulse');
+  clearTimeout(pulseTimer);
+  pulseTimer = setTimeout(() => sel.classList.remove('pulse'), 5000);
+}
+map.on('moveend', () => {
+  clearTimeout(autoTimer);
+  if ($('region-sel').value !== 'aceh') return;
+  if (ACEH_SUMUT_BOUNDS.contains(map.getCenter())) return;
+  // jeda 1 detik supaya geseran tidak sengaja tidak langsung memuat ulang data
+  autoTimer = setTimeout(() => {
+    if ($('region-sel').value !== 'aceh') return;
+    if (ACEH_SUMUT_BOUNDS.contains(map.getCenter())) return;
+    $('region-sel').value = 'indonesia';
+    showError(AUTO_TEXT[lang]);
+    pulseRegion();
+    fetchData(false); // tanpa flyTo, posisi peta tetap
+  }, 1000);
+});
+$('region-sel').addEventListener('change', () => {
+  clearTimeout(autoTimer);
+  clearTimeout(pulseTimer);
+  $('region-sel').classList.remove('pulse');
+});
+
+// ---------- UI ----------
+function applyTips(){
+  const t = tr[lang];
+  const tip = (sel, k) => { const el = document.querySelector(sel); if (el) el.title = t[k]; };
+  tip('#map-seg [data-map="street"]', 'tipMap');
+  tip('#map-seg [data-map="sat"]', 'tipSat');
+  tip('#map-seg [data-map="dark"]', 'tipDark');
+  tip('#region-sel', 'tipRegion');
+  tip('#sat-sel', 'tipSatSel');
+  tip('#btn-refresh', 'tipRefresh');
+  tip('#btn-theme', 'tipTheme');
+  tip('#btn-info', 'tipInfo');
+  tip('#btn-locate', 'tipLocate');
+  $('btn-smoke').title = t.tipSmoke + ' (' + smokeDate + ')';
+  document.querySelector('#sat-sel option[value="all"]').textContent = t.allSat;
+}
+function setLang(l){
+  lang = l;
+  document.querySelectorAll('#lang-seg button').forEach(b => b.classList.toggle('active', b.dataset.lang === l));
+  $('ui-title').innerText = tr[l].title;
+  $('about-h').innerText = tr[l].about;
+  $('about-p').innerText = tr[l].aboutText;
+  $('credit-t').innerText = credit[l].t;
+  $('credit-p').innerText = credit[l].p;
+  $('credit-c').innerText = credit[l].c;
+  applyTips();
+  renderLegend();
+}
+function showError(msg){
+  const t = $('toast'); t.innerText = msg || tr[lang].err; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 5000);
+}
+function toggleTheme(){
+  document.body.classList.toggle('night');
+  try { localStorage.setItem('theme', document.body.classList.contains('night') ? 'night' : 'day'); } catch(e){}
+}
+try { if (localStorage.getItem('theme') === 'night') document.body.classList.add('night'); } catch(e){}
+
+document.querySelectorAll('#lang-seg button').forEach(b => b.onclick = () => setLang(b.dataset.lang));
+document.querySelectorAll('#map-seg button').forEach(b => b.onclick = () => setBase(b.dataset.map));
+$('region-sel').onchange = () => fetchData(true);
+$('sat-sel').onchange = () => fetchData(false);
+$('btn-refresh').onclick = () => fetchData(false, true);
+$('btn-theme').onclick = toggleTheme;
+$('btn-info').onclick = () => $('modal').classList.add('show');
+$('modal-close').onclick = () => $('modal').classList.remove('show');
+$('modal').onclick = e => { if (e.target.id === 'modal') $('modal').classList.remove('show'); };
+
+$('btn-locate').onclick = () => {
+  const icon = $('btn-locate').firstElementChild;
+  icon.className = "fas fa-spinner fa-spin";
+  navigator.geolocation.getCurrentPosition(pos => {
+    const {latitude, longitude} = pos.coords;
+    if (userMarker) map.removeLayer(userMarker);
+    userMarker = L.circleMarker([latitude, longitude], {radius:10, fillColor:'#4285F4', color:'#fff', weight:3, fillOpacity:1}).addTo(map);
+    map.flyTo([latitude, longitude], 14);
+    icon.className = "fas fa-location-crosshairs fa-lg";
+  }, () => { showError(tr[lang].errLoc); icon.className = "fas fa-location-crosshairs fa-lg"; });
+};
+
+// ---------- LOADING BAR ----------
+const LOAD_TXT = {
+  dl:   {ace:'Muat data titek apui...', id:'Mengunduh data titik api...', en:'Downloading hotspot data...'},
+  draw: {ace:'Peugah titek di peta...', id:'Menampilkan titik di peta...', en:'Drawing hotspots on the map...'},
+  upd:  {ace:'Seubaro Data',        id:'Memperbarui data...',         en:'Updating data...'}
+};
+let lbCount = 0, lbVal = 0, lbTimer, lbHide;
+function setLoadText(k){ $('load-txt').innerText = LOAD_TXT[k][lang]; }
+function setLoadVal(v){ lbVal = v; $('load-fill').style.width = v + '%'; }
+function loadStart(k){
+  setLoadText(k || 'dl');
+  lbCount++;
+  if (lbCount > 1) return;
+  clearTimeout(lbHide);
+  $('loadbar').classList.add('show');
+  setLoadVal(8);
+  clearInterval(lbTimer);
+  // bar merayap pelan mendekati 90%, lalu penuh saat semua selesai (ukuran data tidak diketahui di awal)
+  lbTimer = setInterval(() => setLoadVal(lbVal + (90 - lbVal) * 0.05), 250);
+}
+function loadDone(){
+  lbCount = Math.max(0, lbCount - 1);
+  if (lbCount > 0) return;
+  clearInterval(lbTimer);
+  setLoadVal(100);
+  lbHide = setTimeout(() => { $('loadbar').classList.remove('show'); setTimeout(() => setLoadVal(0), 300); }, 400);
+}
+
+// ---------- DATA ----------
+function radiusFromFRP(frp){
+  const v = parseFloat(frp) || 0;
+  return Math.min(Math.max(6 + Math.sqrt(v) * 1.6, 6), 22);
+}
+
+// Semua data wilayah dimuat sekali di awal dan disimpan di memori.
+// Ganti lokasi / satelit hanya menyaring data yang sudah ada, tanpa memuat ulang dari API.
+const REGIONS = ['aceh', 'indonesia', 'global'];
+const SAT_NAME = {suomi_npp:'Suomi NPP', noaa20:'NOAA-20', noaa21:'NOAA-21', terra_aqua:'Terra/Aqua (MODIS)'};
+const SAT_MATCH = {suomi_npp:['N'], noaa20:['1','J1','N20'], noaa21:['2','J2','N21'], terra_aqua:['T','A']};
+const store = {};   // wilayah -> Promise<{rows} | {error}>
+let renderToken = 0;
+
+// ---- Cache IndexedDB: data terakhir disimpan di perangkat, jadi kunjungan berikutnya langsung tampil ----
+const CACHE_MAX_AGE = 6 * 3600 * 1000;   // cache lebih tua dari 6 jam tidak dipakai
+const IDB = new Promise(res => {
+  try {
+    const q = indexedDB.open('titekapui', 1);
+    q.onupgradeneeded = () => q.result.createObjectStore('raw');
+    q.onsuccess = () => res(q.result);
+    q.onerror = () => res(null);
+  } catch(e) { res(null); }
+});
+async function cacheGet(k){
+  const db = await IDB; if (!db) return null;
+  return new Promise(res => {
+    try {
+      const r = db.transaction('raw').objectStore('raw').get(k);
+      r.onsuccess = () => { const v = r.result; res(v && Date.now() - v.t < CACHE_MAX_AGE ? v.raw : null); };
+      r.onerror = () => res(null);
+    } catch(e) { res(null); }
+  });
+}
+async function cacheSet(k, raw){
+  const db = await IDB; if (!db) return;
+  try { db.transaction('raw', 'readwrite').objectStore('raw').put({t: Date.now(), raw}, k); } catch(e) {}
+}
+function parseRaw(raw){
+  const t = raw.trim();
+  if (t.startsWith('{')) {
+    try { const e = JSON.parse(t); if (e && e.error) return {error: e.message}; } catch(_){}
+  }
+  const res = Papa.parse(raw, {header:true, dynamicTyping:true, skipEmptyLines:true});
+  return {rows: res.data};
+}
+// ambil dari server (dan simpan ke cache bila berhasil), tanpa menyentuh store
+function fetchRegion(r){
+  return (async () => {
+    const raw = await (await fetch(`${GAS_URL}?sat=all&wilayah=${r}`)).text();
+    const out = parseRaw(raw);
+    if (out.rows && out.rows.length) cacheSet(r, raw);
+    return out;
+  })().catch(e => { console.error(e); return {error: null}; });
+}
+function loadRegion(r){ return store[r] = fetchRegion(r); }
+
+// partial = true: tampilkan data Aceh saja dulu (cepat), sebelum data wilayah terpilih selesai dimuat
+async function fetchData(fly, force, partial){
+  const sat = $('sat-sel').value;
+  const selRegion = $('region-sel').value;
+  const region = partial ? 'aceh' : selRegion;
+  const token = ++renderToken;
+  const icon = $('refresh-icon');
+  icon.classList.add('fa-spin');
+  loadStart('dl');
+  try {
+    if (force) {
+      // refresh manual: muat ulang wilayah aktif dulu, lalu sisanya di latar belakang
+      const first = region === 'aceh' ? [loadRegion('aceh')] : [loadRegion('aceh'), loadRegion(region)];
+      Promise.all(first).then(() => REGIONS.filter(r => r !== 'aceh' && r !== region).forEach(loadRegion));
     }
-    function hideError() {
-        document.getElementById('error-toast').classList.remove('show');
-        if (errorHideTimer) { clearTimeout(errorHideTimer); errorHideTimer = null; }
+    // Data Aceh selalu ikut ditampilkan, apa pun lokasi yang dipilih,
+    // supaya titik api di Aceh tidak hilang saat peta di-zoom out / pindah ke mode Indonesia atau Global.
+    const [acehData, regionData] = await Promise.all([
+      store.aceh || loadRegion('aceh'),
+      region === 'aceh' ? null : (store[region] || loadRegion(region))
+    ]);
+    if (token !== renderToken) return; // sudah ada permintaan yang lebih baru
+    setLoadText('draw');
+    await new Promise(r => requestAnimationFrame(() => setTimeout(r, 0)));   // beri waktu browser menggambar teks status
+    if (token !== renderToken) return;
+    const sources = region === 'aceh' ? [acehData] : [acehData, regionData];
+    const failed = sources.filter(src => src.rows === undefined);
+    if (failed.length === sources.length) {
+      showError(failed[0].error || undefined);
+      fireLayer.clearLayers(); acehLayer.clearLayers(); $('count-val').innerText = 0;
+      return;
     }
+    const rowsAll = sources.flatMap(src => src.rows || []);
 
-    // --- THEME TOGGLE ---
-    function toggleTheme() {
-        document.body.classList.toggle('night-mode');
-        const isNight = document.body.classList.contains('night-mode');
-        localStorage.setItem('theme', isNight ? 'night' : 'day');
-    }
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'night') { document.body.classList.add('night-mode'); }
+    const allow = SAT_MATCH[sat];
+    fireLayer.clearLayers(); acehLayer.clearLayers();
+    const seen = new Set(), markers = [];
 
-    // --- NAVIGASI: peta terkunci (fullscreen) di awal, lepas kunci saat scroll ke Tentang ---
-    function goToAbout(e) {
-        if (e && e.preventDefault) e.preventDefault();
-        document.body.classList.remove('map-locked');
-        document.getElementById('tentang').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        if (window.innerWidth < 992) {
-            const sb = document.getElementById('sidebarMenu');
-            if (sb.classList.contains('open')) toggleMenu();
-        }
-    }
-    function backToMap(e) {
-        if (e && e.preventDefault) e.preventDefault();
-        document.getElementById('map-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        setTimeout(() => { document.body.classList.add('map-locked'); map.invalidateSize(); }, 450);
-    }
+    rowsAll.forEach((d, i) => {
+      if (typeof d.latitude !== 'number' || typeof d.longitude !== 'number') return; // lewati baris komentar/rusak
+      // Format baru backend: kolom "satelit" berisi daftar gabungan, mis. "suomi_npp+noaa20"
+      // Format lama: kolom "satellite" berisi kode satu huruf (T/A/N/1/2)
+      const satKeys = d.satelit ? String(d.satelit).split('+') : null;
+      const s = String(d.satellite);
+      if (sat !== 'all') {
+        if (satKeys) { if (!satKeys.includes(sat)) return; }
+        else if (allow && !allow.includes(s)) return;
+      }
+      const key = `${d.latitude.toFixed(4)}|${d.longitude.toFixed(4)}`;
+      if (seen.has(key)) return;
+      seen.add(key);
 
-    // INIT MAP
-    const map = L.map('map', {
-        zoomControl: false,
-        layers: [streetLayer]
-    }).setView([4.3, 96.8], 8);
+      const ts = String(d.acq_time).padStart(4, '0');
+      const dt = new Date(d.acq_date);
+      dt.setUTCHours(parseInt(ts.slice(0,2)) + 7);
+      dt.setUTCMinutes(parseInt(ts.slice(2,4)));
+      const wibTime = dt.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'}) + " WIB";
+      const wibDate = dt.toLocaleDateString('id-ID', {day:'2-digit', month:'short'});
 
-    const baseMaps = {
-        "🛤️ Peta Jalan": streetLayer,
-        "🌍 Citra Satelit": satelliteLayer,
-        "🌑 Mode Gelap": darkLayer
-    };
-    L.control.layers(baseMaps, null, { position: 'topright' }).addTo(map);
+      let satName = "VIIRS";
+      if (satKeys) satName = satKeys.map(k => SAT_NAME[k] || k).join(' + ');
+      else if (s === 'T') satName = "Terra (MODIS)";
+      else if (s === 'A') satName = "Aqua (MODIS)";
+      else if (s === 'N') satName = "Suomi NPP";
+      else if (s === '1' || s === 'J1') satName = "NOAA-20";
+      else if (s === '2' || s === 'J2') satName = "NOAA-21";
 
-    // Marker cluster group (ganti dari layerGroup biasa)
-    let fireLayer = L.markerClusterGroup({
-        maxClusterRadius: 50,
-        spiderfyOnMaxZoom: true,
-        disableClusteringAtZoom: 12,
-        iconCreateFunction: function(cluster) {
-            const count = cluster.getChildCount();
-            let sizeClass = 'marker-cluster-small';
-            if (count >= 50) sizeClass = 'marker-cluster-large';
-            else if (count >= 10) sizeClass = 'marker-cluster-medium';
-            return L.divIcon({
-                html: `<div><span>${count}</span></div>`,
-                className: 'marker-cluster ' + sizeClass,
-                iconSize: L.point(40, 40)
-            });
-        }
+      const color = d.confidence === 'h' || d.confidence > 80 ? '#e74c3c' : '#f39c12';
+      const m = L.circleMarker([d.latitude, d.longitude], {radius:radiusFromFRP(d.frp), fillColor:color, color:'#fff', weight:2, fillOpacity:0.9});
+      const tb = d.bright_ti4 || d.bright_t31;
+      const det = d.jumlah_deteksi;
+
+      m.bindPopup(() => {
+        const t = tr[lang], id = "loc-" + i;
+        const tempRow = tb ? `<tr><td>${t.temp}</td><td align="right">${(tb - 273.15).toFixed(1)} °C</td></tr>` : '';
+        const detRow = det ? `<tr><td>${t.det}</td><td align="right">${det}×</td></tr>` : '';
+        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${d.latitude}&lon=${d.longitude}`)
+          .then(r => r.json()).then(j => { const el = $(id); if (el && j.display_name) el.innerText = j.display_name; })
+          .catch(() => {});
+        return `<div style="min-width:200px">
+          <div class="popup-h">${t.detail}</div>
+          <div id="${id}" style="font-size:10px;color:#777;margin:6px 0">${t.loc}</div>
+          <table class="popup-t">
+            <tr><td>${t.sat}</td><td align="right"><b>${satName}</b></td></tr>
+            ${tempRow}
+            ${detRow}
+            <tr><td>${t.energy}</td><td align="right">${d.frp} MW</td></tr>
+            <tr><td>${t.time}</td><td align="right">${wibDate}, ${wibTime}</td></tr>
+            <tr><td>${t.coord}</td><td align="right">${d.latitude.toFixed(3)}, ${d.longitude.toFixed(3)}</td></tr>
+          </table></div>`;
+      });
+      if (inAceh(d.latitude, d.longitude)) acehLayer.addLayer(m); else markers.push(m);
     });
-    map.addLayer(fireLayer);
 
-    // --- LEGEND CONTROL ---
-    const legendControl = L.control({ position: 'bottomleft' });
-    legendControl.onAdd = function() {
-        const div = L.DomUtil.create('div', 'legend-box');
-        div.id = 'legend-box';
-        renderLegend(div);
-        return div;
-    };
-    legendControl.addTo(map);
-
-    function renderLegend(el) {
-        const t = translations[currentLang];
-        el = el || document.getElementById('legend-box');
-        if (!el) return;
-        el.innerHTML = `
-            <div class="legend-title">${t.legend}</div>
-            <div class="legend-row"><span class="legend-dot" style="background:#e74c3c"></span> ${t.high}</div>
-            <div class="legend-row"><span class="legend-dot" style="background:#f39c12"></span> ${t.low}</div>
-        `;
+    fireLayer.addLayers(markers);
+    $('count-val').innerText = seen.size;
+    if (failed.length) showError(failed[0].error || undefined);
+    if (fly) {
+      if (region === 'aceh') map.flyTo([4.3, 96.8], 8);
+      else if (region === 'indonesia') map.flyToBounds(INDONESIA_BOUNDS, {maxZoom:6});
+      else map.flyTo([10, 100], 3);
     }
+  } catch(e) {
+    console.error(e); showError();
+  } finally {
+    if (token === renderToken) icon.classList.remove('fa-spin');
+    loadDone();
+  }
+}
 
-    function toggleMenu() {
-        if(window.innerWidth < 992) {
-            document.getElementById('sidebarMenu').classList.toggle('open');
-            document.getElementById('mapOverlay').classList.toggle('show');
-        }
-    }
+window.onload = async () => {
+  setLang('ace');
+  $('region-sel').value = 'indonesia';   // jaga-jaga jika browser mengembalikan pilihan lama
 
-    function setLang(lang) {
-        currentLang = lang;
-        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById('btn-'+lang).classList.add('active');
-        const t = translations[lang];
-        document.getElementById('ui-title').innerHTML = t.title;
-        document.getElementById('ui-region-lbl').innerText = t.region;
-        document.getElementById('ui-sat-lbl').innerText = t.sat;
-        document.getElementById('ui-refresh-btn').innerText = t.refresh;
-        renderLegend();
-    }
+  // 1) cek cache di perangkat, 2) mulai ambil data segar dari server bersamaan
+  const [ca, ci] = await Promise.all([cacheGet('aceh'), cacheGet('indonesia')]);
+  const pa = fetchRegion('aceh'), pi = fetchRegion('indonesia');
+  store.aceh = ca ? Promise.resolve(parseRaw(ca)) : pa;
+  store.indonesia = ci ? Promise.resolve(parseRaw(ci)) : pi;
 
-    function locateUser() {
-        const icon = document.querySelector('.locate-btn i');
-        icon.className = "fas fa-spinner fa-spin";
-        navigator.geolocation.getCurrentPosition((pos) => {
-            const { latitude, longitude } = pos.coords;
-            if (userMarker) map.removeLayer(userMarker);
-            userMarker = L.circleMarker([latitude, longitude], { radius: 10, fillColor: '#4285F4', color: 'white', weight: 3, fillOpacity: 1 }).addTo(map);
-            map.flyTo([latitude, longitude], 14);
-            icon.className = "fas fa-location-crosshairs fa-lg";
-        }, () => { alert("Gagal akses lokasi"); icon.className = "fas fa-location-crosshairs fa-lg"; });
-    }
-
-    // Skala radius marker berdasarkan FRP (Fire Radiative Power, dalam MW)
-    // FRP kecil (~0-5 MW) -> radius kecil; FRP besar (>100 MW) -> radius besar, dengan batas atas
-    function getRadiusFromFRP(frp) {
-        const val = parseFloat(frp) || 0;
-        const minR = 6, maxR = 22;
-        // skala akar (sqrt) biar area lingkaran proporsional ke FRP, bukan radiusnya langsung
-        const scaled = minR + Math.sqrt(val) * 1.6;
-        return Math.min(Math.max(scaled, minR), maxR);
-    }
-
-    async function fetchData(shouldFly) {
-        const sat = document.getElementById('sat-sel').value;
-        const region = document.getElementById('region-sel').value;
-        const icon = document.getElementById('refresh-icon');
-        icon.classList.add('fa-spin');
-
-        try {
-            const response = await fetch(`${GAS_URL}?sat=${sat}&wilayah=${region}`);
-            const raw = await response.text();
-
-            // Backend mengirim JSON ({error:true, message:...}) saat gagal ambil data
-            // dari NASA FIRMS — deteksi ini dulu sebelum diperlakukan sebagai CSV.
-            const trimmed = raw.trim();
-            if (trimmed.startsWith('{')) {
-                let parsedErr = null;
-                try { parsedErr = JSON.parse(trimmed); } catch (jsonErr) { /* bukan JSON valid, lanjut sbg CSV gagal */ }
-                if (parsedErr && parsedErr.error) {
-                    showError(parsedErr.message || translations[currentLang].err);
-                    fireLayer.clearLayers();
-                    document.getElementById('count-val').innerText = 0;
-                    return;
-                }
-            }
-
-            const csv = raw;
-            fireLayer.clearLayers();
-            const seenPoints = new Set();
-            const newMarkers = [];
-
-            Papa.parse(csv, {
-                header: true, dynamicTyping: true,
-                complete: function(res) {
-                    res.data.forEach((d, i) => {
-                        if (!d.latitude || !d.longitude) return;
-
-                        const pointKey = `${d.latitude.toFixed(4)}|${d.longitude.toFixed(4)}`;
-                        if (seenPoints.has(pointKey)) return;
-                        seenPoints.add(pointKey);
-
-                        let timeStr = d.acq_time.toString().padStart(4, '0');
-                        let dateObj = new Date(d.acq_date);
-                        dateObj.setUTCHours(parseInt(timeStr.substring(0, 2)) + 7);
-                        dateObj.setUTCMinutes(parseInt(timeStr.substring(2, 4)));
-                        const wibTime = dateObj.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + " WIB";
-                        const wibDate = dateObj.toLocaleDateString('id-ID', { day: '2-digit', month: 'short' });
-
-                        let satName = "VIIRS";
-                        const s = d.satellite;
-                        if (s === 'T') satName = "Terra (MODIS)";
-                        else if (s === 'A') satName = "Aqua (MODIS)";
-                        else if (s === 'N') satName = "Suomi NPP";
-                        else if (s === '1' || s === 'J1') satName = "NOAA-20";
-                        else if (s === '2' || s === 'J2') satName = "NOAA-21";
-
-                        const color = d.confidence === 'h' || d.confidence > 80 ? '#e74c3c' : '#f39c12';
-                        const marker = L.circleMarker([d.latitude, d.longitude], {
-                            radius: getRadiusFromFRP(d.frp),
-                            fillColor: color, color: 'white', weight: 2, fillOpacity: 0.9
-                        });
-
-                        const fid = "f-"+i;
-                        const t = translations[currentLang];
-                        const tempC = ((d.bright_ti4 || d.bright_t31) - 273.15).toFixed(1);
-
-                        marker.bindPopup(() => {
-                            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${d.latitude}&lon=${d.longitude}`)
-                            .then(r => r.json()).then(data => {
-                                const el = document.getElementById(`loc-${fid}`);
-                                if(el) el.innerText = data.display_name;
-                            });
-
-                            return `
-                                <div style="min-width:210px">
-                                    <div class="popup-header">${t.detail}</div>
-                                    <div id="loc-${fid}" style="font-size:10px; color:#777; margin:8px 0; line-height:1.3;">${t.loc}</div>
-                                    <table class="popup-table">
-                                        <tr><td>${t.sat_lbl}</td><td align="right"><b>${satName}</b></td></tr>
-                                        <tr><td>${t.temp}</td><td align="right">${tempC} °C</td></tr>
-                                        <tr><td>${t.energy}</td><td align="right">${d.frp} MW</td></tr>
-                                        <tr><td>${t.time}</td><td align="right">${wibDate}, ${wibTime}</td></tr>
-                                        <tr><td>Koordinat</td><td align="right">${d.latitude.toFixed(3)}, ${d.longitude.toFixed(3)}</td></tr>
-                                    </table>
-                                </div>`;
-                        });
-                        newMarkers.push(marker);
-                    });
-                    fireLayer.addLayers(newMarkers);
-                    document.getElementById('count-val').innerText = seenPoints.size;
-                    if(shouldFly) {
-                        if(region==='aceh') map.flyTo([4.3, 96.8], 8);
-                        else if(region==='indonesia') map.flyTo([0.78, 113.9], 5);
-                    }
-                }
-            });
-        } catch (e) {
-            console.error(e);
-            showError(translations[currentLang].err);
-        }
-        finally { icon.classList.remove('fa-spin'); }
-    }
-
-    window.onload = () => { setLang('ace'); fetchData(false); };
+  if (ca || ci) {
+    // ada cache: langsung tampil, lalu diperbarui diam-diam setelah data segar tiba
+    loadStart('upd');   // bar tetap tampil selama data segar diunduh di latar belakang
+    fetchData(false);
+    const swap = (r, p) => p.then(res => { if (res.rows) { store[r] = p; return true; } return false; });
+    Promise.all([swap('aceh', pa), swap('indonesia', pi)]).then(ok => {
+      (ok.some(Boolean) ? fetchData(false) : Promise.resolve()).finally(loadDone);
+      loadRegion('global');
+    });
+  } else {
+    // kunjungan pertama: Aceh tampil begitu siap, lalu Indonesia
+    loadStart('dl');    // bar tetap tampil sampai data Indonesia selesai digambar
+    fetchData(false, false, true);
+    pi.then(() => fetchData(false)).finally(() => { loadDone(); loadRegion('global'); });
+  }
+};
 </script>
 </body>
 </html>
