@@ -1,0 +1,51 @@
+name: Ambil titik api Himawari
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"   # tiap 30 menit (waktu UTC); GitHub bisa menunda beberapa menit
+  workflow_dispatch:          # tombol "Run workflow" untuk uji manual
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fetch-himawari
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Unduh dan gabungkan data
+        env:
+          FTP_USER: ${{ secrets.FTP_USER }}
+          FTP_PASS: ${{ secrets.FTP_PASS }}
+          # Opsional: ubah lewat Settings > Secrets and variables > Actions > Variables
+          FTP_BASE: ${{ vars.FTP_BASE || '/pub/himawari/L2/WLF' }}
+          HOURS: ${{ vars.HOURS || '24' }}
+          BBOX: ${{ vars.BBOX || '94,-12,142,7' }}
+        run: python himawari/fetch_himawari.py
+
+      - name: Simpan jika ada perubahan
+        run: |
+          if [ -n "$(git status --porcelain himawari/hotspots.geojson)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add himawari/hotspots.geojson
+            git commit -m "Perbarui titik api Himawari"
+            # Repo ini juga dipakai untuk hal lain: jika ada push lain di sela-sela, gabungkan lalu coba lagi
+            for i in 1 2 3; do
+              git pull --rebase && git push && exit 0
+              sleep 5
+            done
+            echo "Gagal push setelah 3 percobaan" && exit 1
+          else
+            echo "Tidak ada perubahan."
+          fi
