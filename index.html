@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Titek Apui Monitor | Ali Akbar</title>
+<meta name="description" content="Pantau titik api (hotspot) near real-time dari satelit NASA FIRMS untuk Aceh dan Indonesia.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Titek Apui Monitor">
+<meta property="og:title" content="Titek Apui Monitor – Pantau Titik Api Real-time">
+<meta property="og:description" content="Peta titik api dari satelit NASA FIRMS (VIIRS & MODIS) untuk Aceh dan Indonesia.">
+<meta property="og:image" content="https://DOMAIN-KAMU/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://DOMAIN-KAMU/og.jpg">
 <link rel="preconnect" href="https://script.google.com">
 <link rel="preconnect" href="https://script.googleusercontent.com" crossorigin>
 <link rel="preconnect" href="https://flagcdn.com">
@@ -83,6 +93,11 @@ select,.icon-btn{height:32px;border:1px solid var(--line);border-radius:8px;back
 .dl-menu .dl-go:disabled{opacity:.5;cursor:not-allowed}
 .dl-menu .dl-go i{color:#fff}
 .pin-icon{color:var(--accent);font-size:30px;text-shadow:0 1px 3px rgba(0,0,0,.5);text-align:center}
+.share-row{display:flex;gap:6px;margin-top:8px;padding-top:8px;border-top:1px dashed #ccc}
+.share-row button{width:32px;height:32px;border:0;border-radius:50%;color:#fff;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
+.share-row button:hover{filter:brightness(1.15);transform:scale(1.08)}
+.sh-shot{background:#555}.sh-wa{background:#25D366}.sh-tg{background:#229ED9}
+.sh-fb{background:#1877F2}.sh-x{background:#111}.sh-cp{background:#888}
 @media(prefers-reduced-motion:reduce){.pulse{animation:none}}
 @media(max-width:600px){.brand span.t{display:none}}
 </style>
@@ -218,15 +233,15 @@ let lang = 'ace', userMarker, toastTimer;
 
 // ---------- MAP ----------
 const layers = {
-  street: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution:'<a href="https://tiktok.com/lonaliakbar">@lonaliakbar</a> | © OpenStreetMap'}),
+  street: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {crossOrigin:true, attribution:'<a href="https://tiktok.com/lonaliakbar">@lonaliakbar</a> | © OpenStreetMap'}),
   sat: L.layerGroup([
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {maxZoom:19, attribution:'Esri, Maxar, Earthstar Geographics'}),
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {crossOrigin:true, maxZoom:19, attribution:'Esri, Maxar, Earthstar Geographics'}),
     // nama tempat, batas wilayah & jalan; pane khusus agar tampil di atas citra asap
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {maxNativeZoom:13, maxZoom:19, pane:'labelPane'})
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {crossOrigin:true, maxNativeZoom:13, maxZoom:19, pane:'labelPane'})
   ]),
   dark: L.layerGroup([
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {maxNativeZoom:16, maxZoom:19, zIndex:1, attribution:'Esri, HERE, Garmin, © OpenStreetMap contributors'}),
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}', {maxNativeZoom:16, maxZoom:19, zIndex:2})
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {crossOrigin:true, maxNativeZoom:16, maxZoom:19, zIndex:1, attribution:'Esri, HERE, Garmin, © OpenStreetMap contributors'}),
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}', {crossOrigin:true, maxNativeZoom:16, maxZoom:19, zIndex:2})
   ])
 };
 // Batas seluruh Indonesia (Sabang sampai Merauke). fitBounds menyesuaikan zoom dengan ukuran layar,
@@ -482,6 +497,73 @@ function clearPin(){
   syncUrl();
 }
 map.on('contextmenu', e => setPin(e.latlng.lat, e.latlng.lng, true));
+
+// ---------- POPUP: otomatis ke tengah layar ----------
+L.Popup.mergeOptions({autoPan:false});   // matikan autopan bawaan, diganti centering sendiri
+let openPopup = null, currentShare = null;
+
+function centerOnPopup(){
+  if (!openPopup || !openPopup._container) return;
+  const h = openPopup._container.offsetHeight + 20;            // tinggi popup + ujung panah
+  const p = map.project(openPopup.getLatLng());
+  p.y -= h / 2;                                                 // titik api + popup jadi satu kesatuan di tengah
+  map.panTo(map.unproject(p), {animate:true, duration:0.5});
+}
+map.on('popupopen',  e => { openPopup = e.popup; centerOnPopup(); });
+map.on('popupclose', () => { openPopup = null; });
+
+// ---------- BAGIKAN & SCREENSHOT ----------
+const pointUrl = (lat, lon) =>
+  `${location.origin}${location.pathname}?maps=${lat.toFixed(5)},${lon.toFixed(5)},15&pin=${lat.toFixed(5)},${lon.toFixed(5)}&lang=${lang}`;
+
+let h2cPromise;
+function ensureH2C(){
+  if (typeof html2canvas !== 'undefined') return Promise.resolve();
+  return h2cPromise || (h2cPromise = new Promise((ok, fail) => {
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+    s.onload = ok; s.onerror = () => { h2cPromise = null; fail(new Error('html2canvas')); };
+    document.head.appendChild(s);
+  }));
+}
+async function shotMap(){
+  try {
+    await ensureH2C();
+    const canvas = await html2canvas($('map'), {
+      useCORS:true, logging:false, scale: Math.min(window.devicePixelRatio || 1, 2),
+      onclone: doc => doc.querySelectorAll('.share-row,.leaflet-control-zoom,.leaflet-popup-close-button')
+                         .forEach(el => el.style.display = 'none')
+    });
+    canvas.toBlob(async blob => {
+      const name = `titik-api_${Date.now()}.png`;
+      const file = new File([blob], name, {type:'image/png'});
+      if (/Mobi|Android/i.test(navigator.userAgent) && navigator.canShare && navigator.canShare({files:[file]})) {
+        try { await navigator.share({files:[file], title:document.title}); return; }
+        catch(e) { if (e.name === 'AbortError') return; }
+      }
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob); a.download = name;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    }, 'image/png');
+  } catch(e) { console.error(e); showError('Gagal membuat screenshot.'); }
+}
+function shareTo(kind){
+  if (kind === 'shot') return shotMap();
+  if (!currentShare) return;
+  const {lat, lon, txt} = currentShare, url = pointUrl(lat, lon);
+  const T = encodeURIComponent(txt), U = encodeURIComponent(url);
+  const go = {
+    wa: `https://wa.me/?text=${encodeURIComponent(txt + '\n' + url)}`,
+    tg: `https://t.me/share/url?url=${U}&text=${T}`,
+    fb: `https://www.facebook.com/sharer/sharer.php?u=${U}`,
+    x:  `https://twitter.com/intent/tweet?text=${T}&url=${U}`
+  }[kind];
+  if (go) { window.open(go, '_blank', 'noopener'); return; }
+  navigator.clipboard.writeText(txt + '\n' + url)
+    .then(() => showError(tr[lang].shareCopied))
+    .catch(() => prompt('Salin tautan:', url));
+}
 
 function buildShareUrl(){
   const c = map.getCenter(), parts = [`maps=${c.lat.toFixed(5)},${c.lng.toFixed(5)},${map.getZoom()}`];
@@ -870,12 +952,16 @@ async function fetchData(fly, force, partial){
         // kabupaten & provinsi dari server (Google Script + Spreadsheet); kosong bila sel belum diproses server
         const admTxt = [d.kabupaten, d.provinsi].filter(Boolean).join(', ');
         const admRow = admTxt ? `<tr><td>${t.adm}</td><td align="right">${xmlEsc(admTxt)}</td></tr>` : '';
+        currentShare = {
+          lat: d.latitude, lon: d.longitude,
+          txt: `🔥 Titik api${admTxt ? ' di ' + admTxt : ''}\n📍 ${d.latitude.toFixed(4)}, ${d.longitude.toFixed(4)}\n🕑 ${wibDate}, ${wibTime}\n🛰️ ${satName} • ${(+d.frp || 0).toFixed(1)} MW`
+        };
         // Nama lokasi: titik di laut tidak punya alamat, jadi tampilkan teks "di laut" (bukan loading terus)
         fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${d.latitude}&lon=${d.longitude}`)
           .then(r => r.json())
-          .then(j => { const el = $(id); if (el) el.innerText = j.display_name || t.noLoc; })
-          .catch(() => { const el = $(id); if (el) el.innerText = t.noLoc; });
-        return `<div style="min-width:200px">
+          .then(j => { const el = $(id); if (el) el.innerText = j.display_name || t.noLoc; centerOnPopup(); })
+          .catch(() => { const el = $(id); if (el) el.innerText = t.noLoc; centerOnPopup(); });
+        return `<div style="min-width:235px">
           <div class="popup-h">${t.detail}</div>
           <div id="${id}" style="font-size:10px;color:#777;margin:6px 0">${t.loc}</div>
           <table class="popup-t">
@@ -887,7 +973,16 @@ async function fetchData(fly, force, partial){
             <tr><td>${t.time}</td><td align="right">${wibDate}, ${wibTime}</td></tr>
             <tr><td>${t.coord}</td><td align="right">${d.latitude.toFixed(3)}, ${d.longitude.toFixed(3)}</td></tr>
             <tr><td colspan="2" style="padding-top:8px;border-bottom:0"><a href="https://www.google.com/maps?q=${d.latitude},${d.longitude}" target="_blank" rel="noopener" style="color:#d93000;font-weight:700;text-decoration:none">📍 Google Maps</a><br><a href="#" onclick="zoomTo(${d.latitude},${d.longitude});return false" style="color:#d93000;font-weight:700;text-decoration:none;display:inline-block;margin-top:4px">🔍 ${t.zoomHere}</a></td></tr>
-          </table></div>`;
+          </table>
+          <div class="share-row">
+            <button class="sh-shot" title="Screenshot" onclick="shareTo('shot')"><i class="fas fa-camera"></i></button>
+            <button class="sh-wa" title="WhatsApp" onclick="shareTo('wa')"><i class="fa-brands fa-whatsapp"></i></button>
+            <button class="sh-tg" title="Telegram" onclick="shareTo('tg')"><i class="fa-brands fa-telegram"></i></button>
+            <button class="sh-fb" title="Facebook" onclick="shareTo('fb')"><i class="fa-brands fa-facebook-f"></i></button>
+            <button class="sh-x" title="X / Twitter" onclick="shareTo('x')"><i class="fa-brands fa-twitter"></i></button>
+            <button class="sh-cp" title="Salin tautan" onclick="shareTo('cp')"><i class="fas fa-link"></i></button>
+          </div>
+          </div>`;
       });
       exportRows.push({
         'No': 0,
