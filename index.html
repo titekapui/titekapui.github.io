@@ -6,6 +6,7 @@
 <title>Titek Apui Monitor | Ali Akbar</title>
 <link rel="preconnect" href="https://script.google.com">
 <link rel="preconnect" href="https://script.googleusercontent.com" crossorigin>
+<link rel="preconnect" href="https://flagcdn.com">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
@@ -25,12 +26,19 @@ body{display:flex;flex-direction:column}
 .seg button+button{border-left:1px solid var(--line)}
 .seg button img{width:16px;height:12px;object-fit:cover;border-radius:2px;vertical-align:-1px;margin-right:3px}
 .seg button.active{background:var(--accent);color:#fff}
+#lang-seg button{padding:7px 10px}
+#lang-seg button img{width:20px;height:15px;margin:0;vertical-align:middle;border-radius:2px;opacity:.55;transition:opacity .15s}
+#lang-seg button:hover img,#lang-seg button.active img{opacity:1}
 select,.icon-btn{height:32px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--text);font-size:12px;padding:0 8px;cursor:pointer}
 .icon-btn{width:34px;padding:0}
 .icon-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
 .icon-btn:hover{border-color:var(--accent);color:var(--accent)}
 .icon-btn.active:hover{color:#fff}
 #map{flex:1;min-height:0}
+/* kursor tanda tambah (+) di peta; tangan di atas titik api; tangan menggenggam saat peta digeser */
+.leaflet-container,.leaflet-grab{cursor:crosshair}
+.leaflet-container.leaflet-interactive,.leaflet-interactive{cursor:pointer}
+.leaflet-dragging .leaflet-container,.leaflet-dragging .leaflet-grab{cursor:grabbing}
 .locate{position:absolute;right:14px;bottom:28px;z-index:1000;width:46px;height:46px;border-radius:50%;border:1px solid var(--accent);background:var(--panel);color:var(--accent);box-shadow:0 3px 12px rgba(0,0,0,.3);cursor:pointer}
 .legend{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:11px;line-height:1.8}
 .legend span.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
@@ -85,9 +93,9 @@ select,.icon-btn{height:32px;border:1px solid var(--line);border-radius:8px;back
   <div class="brand"><i class="fas fa-fire"></i><span class="t" id="ui-title">TITEK APUI MONITOR</span><span class="count" id="count-val">0</span></div>
 
   <div class="seg" id="lang-seg">
-    <button data-lang="ace" class="active">ACE</button>
-    <button data-lang="id">ID</button>
-    <button data-lang="en">EN</button>
+    <button data-lang="ace" class="active" title="Acèh" aria-label="Acèh"><img src="https://flagcdn.com/w40/tr.png" alt="" width="20" height="15"></button>
+    <button data-lang="id" title="Indonesia" aria-label="Indonesia"><img src="https://flagcdn.com/w40/id.png" alt="" width="20" height="15"></button>
+    <button data-lang="en" title="English" aria-label="English"><img src="https://flagcdn.com/w40/gb.png" alt="" width="20" height="15"></button>
   </div>
 
   <div class="seg" id="map-seg">
@@ -153,7 +161,7 @@ select,.icon-btn{height:32px;border:1px solid var(--line);border-radius:8px;back
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 <script>
-const GAS_URL = "https://script.google.com/macros/s/AKfycby7s23R5i8o3lfaCAKO-04QU2-wUQyc2H7ZAsjDvJsR7AwVrtaUxtgrEAUJiROhvmIl/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbwqXZcykIRMf6k2it_wewSHSx31bzwCm6838x_0-wMbp7uKJmoeB5gOolcXuIyZTR7C/exec";
 const $ = id => document.getElementById(id);
 const Q = new URLSearchParams(location.search);   // parameter tautan: ?maps=lat,lon,zoom&layer=...
 
@@ -168,7 +176,7 @@ const tr = {
     legend:"Keuteurangan", high:"Confidence Manyang", low:"Confidence Reundah",
     detail:"DEUTAIL LOKASI", loc:"Mita nan lokasi...", noLoc:"Di laot / hana alamat", temp:"Suhu kecerahan", sat:"Sateulit", det:"Deuteksi", energy:"Energi (FRP)", time:"Update", coord:"Koordinat",
     err:"Data gadôh troh, cuba lom.", errLoc:"Gagal akses lokasi", errSmoke:"Citra satelit belum tersedia untuk tanggal ini",
-    delPin:"Peuhah pin",
+    delPin:"Peuhah pin", zoomHere:"Zoom u teumpat nyoe", adm:"Wilayah",
     about:"Teuntang web nyoe",
     aboutText:"Sistem pantau titek apui nyoe datajih dari sateulit NASA FIRMS (VIIRS & MODIS) untuk deteksi tutong uteun ngon lahan, awai phon lon peugot khusuh untuk aceh jinoe data ka leungkap near real-time ban sigom donya"
   },
@@ -182,7 +190,7 @@ const tr = {
     legend:"Keterangan", high:"Kepercayaan Tinggi", low:"Kepercayaan Rendah",
     detail:"DETAIL LOKASI", loc:"Mencari Lokasi...", noLoc:"Di laut / alamat tidak tersedia", temp:"Suhu kecerahan", sat:"Satelit", det:"Deteksi", energy:"Energi (FRP)", time:"Update", coord:"Koordinat",
     err:"Gagal memuat data, coba lagi.", errLoc:"Gagal akses lokasi", errSmoke:"Citra satelit belum tersedia untuk tanggal ini",
-    delPin:"Hapus pin",
+    delPin:"Hapus pin", zoomHere:"Zoom ke posisi ini", adm:"Wilayah",
     about:"Tentang Sistem",
     aboutText:"Sistem pemantauan titik api berbasis data satelit NASA FIRMS (VIIRS & MODIS) untuk deteksi dini kebakaran hutan dan lahan di Aceh. Data diperbarui berkala oleh NASA dan disajikan dalam peta interaktif yang mudah dibaca. Titik panas adalah deteksi panas oleh satelit, bukan kebakaran yang sudah terkonfirmasi (bisa juga flare migas atau industri). Data tertunda beberapa jam dan area berawan tidak terpantau."
   },
@@ -196,7 +204,7 @@ const tr = {
     legend:"Legend", high:"High Confidence", low:"Low Confidence",
     detail:"LOCATION DETAIL", loc:"Locating...", noLoc:"At sea / no address available", temp:"Brightness temp", sat:"Satellite", det:"Detections", energy:"Power (FRP)", time:"Update", coord:"Coordinates",
     err:"Failed to load data, please retry.", errLoc:"Failed to access location", errSmoke:"Satellite imagery is not yet available for this date",
-    delPin:"Remove pin",
+    delPin:"Remove pin", zoomHere:"Zoom to this position", adm:"Region",
     about:"About",
     aboutText:"A hotspot monitoring system using NASA FIRMS satellite data (VIIRS & MODIS) for early detection of forest and land fires in Aceh. Data is refreshed periodically by NASA and shown on an easy-to-read interactive map. A hotspot is a satellite heat detection, not a confirmed fire (it may also be an oil & gas flare or industry). Data lags by a few hours and cloudy areas are not observed."
   }
@@ -457,6 +465,7 @@ const pinIcon = L.divIcon({html:'<i class="fas fa-location-dot"></i>', className
 function pinPopupHtml(lat, lon){
   return `<b>${lat.toFixed(5)}, ${lon.toFixed(5)}</b><br>
     <a href="https://www.google.com/maps?q=${lat},${lon}" target="_blank" rel="noopener" style="color:#d93000;font-weight:700;text-decoration:none">📍 Google Maps</a><br>
+    <a href="#" onclick="zoomTo(${lat},${lon});return false" style="color:#d93000;font-weight:700;text-decoration:none">🔍 ${tr[lang].zoomHere}</a><br>
     <a href="#" onclick="clearPin();return false" style="color:#666;font-size:11px">${tr[lang].delPin}</a>`;
 }
 function setPin(lat, lon, open){
@@ -466,6 +475,7 @@ function setPin(lat, lon, open){
   if (open) pinMarker.openPopup();
   syncUrl();
 }
+function zoomTo(lat, lon){ map.flyTo([lat, lon], 16, {duration: 3, easeLinearity: 0.2}); }   // duration = detik; naikkan bila ingin lebih pelan
 function clearPin(){
   if (pinMarker) map.removeLayer(pinMarker);
   pinMarker = pinLL = null;
@@ -538,88 +548,15 @@ function saveFile(name, mime, text){
 }
 const csvCell = v => { const s = v == null ? '' : String(v); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
 const xmlEsc = v => String(v == null ? '' : v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-// ---- Nama tempat (Nominatim/OpenStreetMap) ----
-// Aturan Nominatim: maks. 1 permintaan/detik. Titik dikelompokkan ke sel ~1 km (0,01°) agar permintaan hemat,
-// hasilnya disimpan di memori + IndexedDB sehingga unduhan berikutnya tidak mengulang pencarian.
-const GEO_MAX = 300;                 // maks. pencarian baru per unduhan
-let geoBusy = false, geoCancel = false;
-const geoMem = new Map();
-const geoKey = (la, lo) => la.toFixed(2) + ',' + lo.toFixed(2);
-const sleep = ms => new Promise(r => setTimeout(r, ms));
-async function geoDbGet(k){
-  const db = await IDB; if (!db) return null;
-  return new Promise(res => {
-    try { const r = db.transaction('geo').objectStore('geo').get(k); r.onsuccess = () => res(r.result || null); r.onerror = () => res(null); }
-    catch(e) { res(null); }
-  });
-}
-async function geoDbSet(k, v){
-  const db = await IDB; if (!db) return;
-  try { db.transaction('geo', 'readwrite').objectStore('geo').put(v, k); } catch(e) {}
-}
-async function geoLookup(lat, lon){
-  const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 10000);
-  try {
-    const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=14&addressdetails=1&accept-language=id&lat=${lat}&lon=${lon}`, {signal: ctl.signal});
-    if (!res.ok) throw new Error('http ' + res.status);
-    const a = (await res.json()).address;
-    if (!a) return {sea: true};      // "Unable to geocode": laut / tanpa alamat
-    // Penamaan OSM di Indonesia tidak seragam, jadi beberapa kemungkinan kunci dicoba berurutan
-    return {
-      desa: a.village || a.suburb || a.hamlet || a.neighbourhood || a.quarter || '',
-      kec:  a.municipality || a.city_district || a.district || (a.village && a.suburb) || '',
-      kab:  a.county || a.city || a.regency || a.state_district || a.town || '',
-      prov: a.state || a.region || a.country || ''
-    };
-  } finally { clearTimeout(to); }
-}
-async function resolvePlaces(rows, onStep){
-  const cells = new Map();   // kunci sel -> koordinat titik pertama di sel itu
-  rows.forEach(r => { const k = geoKey(r.Latitude, r.Longitude); if (!cells.has(k)) cells.set(k, [r.Latitude, r.Longitude]); });
-  const need = [];
-  for (const k of cells.keys()) {
-    if (geoMem.has(k)) continue;
-    const c = await geoDbGet(k);
-    if (c) geoMem.set(k, c); else need.push(k);
-  }
-  onStep(0, 0);   // nama dari cache sudah tersedia
-  const todo = need.slice(0, GEO_MAX);
-  let done = 0, fails = 0;
-  for (const k of todo) {
-    if (geoCancel || fails >= 3) break;
-    try { const g = await geoLookup(...cells.get(k)); geoMem.set(k, g); geoDbSet(k, g); fails = 0; }
-    catch(e) { fails++; }
-    done++; onStep(done, todo.length);
-    if (done < todo.length) await sleep(1100);
-  }
-  return {skipped: need.length - done, failed: fails >= 3};
-}
-// sisipkan kolom nama tempat tepat setelah kolom Longitude
-function withPlaces(rows){
-  const sea = tr[lang].geoSea;
-  return rows.map(r => {
-    const g = geoMem.get(geoKey(r.Latitude, r.Longitude)) || {};
-    const o = {};
-    for (const k in r) {
-      o[k] = r[k];
-      if (k === 'Longitude') {
-        o['Desa/Kelurahan'] = g.sea ? sea : (g.desa || '');
-        o['Kecamatan'] = g.kec || '';
-        o['Kabupaten/Kota'] = g.kab || '';
-        o['Provinsi'] = g.prov || '';
-      }
-    }
-    return o;
-  });
-}
-
 // ---- Panel unduh: pilih Provinsi / Kabupaten (daftar diisi dari nama tempat hasil pencarian) ----
 const dlMenu = $('dl-menu'), SEA = '(Laut / tanpa alamat)';
 let dlRows = [], dlStatus = '';
-const placeOf = r => geoMem.get(geoKey(r.Latitude, r.Longitude));
+// Nama tempat sudah dihitung server (Google Script + Spreadsheet) dan ikut di data: kolom Kabupaten/Kota & Provinsi.
 function labelsOf(r){
-  const p = placeOf(r); if (!p) return null;
-  return p.sea ? {prov: SEA, kab: ''} : {prov: p.prov || '(Tanpa nama provinsi)', kab: p.kab || '(Tanpa nama kabupaten)'};
+  const prov = r['Provinsi'], kab = r['Kabupaten/Kota'];
+  if (!prov && !kab) return null;                       // belum diproses server
+  if (prov === SEA) return {prov: SEA, kab: ''};
+  return {prov: prov || '(Tanpa nama provinsi)', kab: kab || '(Tanpa nama kabupaten)'};
 }
 function fillSelect(sel, label, counts, total){
   const cur = sel.value;
@@ -644,22 +581,14 @@ function refreshDl(status){
   fillSelect($('dl-prov'), 'Semua Provinsi', pc, dlRows.length);
   fillSelect($('dl-kab'), 'Semua Kabupaten/Kota', kc, pc.get($('dl-prov').value) || 0);
   $('dl-kab').disabled = !$('dl-prov').value || !kc.size;
-  const n = dlSelected().length, unk = dlRows.filter(r => !placeOf(r)).length;
-  $('dl-info').innerHTML = `Titik diunduh: <b>${n}</b> dari ${dlRows.length}` + (dlStatus ? `<br>${dlStatus}` : '') + (unk && !geoBusy ? `<br>${unk} titik belum diketahui nama tempatnya.` : '');
+  const n = dlSelected().length, unk = dlRows.filter(r => !labelsOf(r)).length;
+  $('dl-info').innerHTML = `Titik diunduh: <b>${n}</b> dari ${dlRows.length}` + (dlStatus ? `<br>${dlStatus}` : '') + (unk ? `<br>${unk} titik belum ada nama tempatnya (sedang diproses server).` : '');
   $('dl-go').disabled = !n;
 }
-async function openDl(){
+function openDl(){
   dlRows = lastRows.slice();
-  geoCancel = false;
   if (!dlRows.length) { dlMenu.classList.remove('show'); showError(tr[lang].noData); return; }
-  if (geoBusy) { refreshDl(); return; }
-  geoBusy = true;
-  refreshDl('Memuat nama tempat...');
-  try {
-    const info = await resolvePlaces(dlRows, (d, t) => refreshDl(t ? `Mencari nama tempat ${d}/${t}...` : ''));
-    geoBusy = false;
-    refreshDl(info.failed ? tr[lang].geoFail : info.skipped > 0 ? tr[lang].geoSkip.replace('{n}', info.skipped) : '');
-  } finally { geoBusy = false; }
+  refreshDl('');
 }
 
 // ---- Excel berformat (ExcelJS): judul, info, header berwarna, zebra, filter, freeze, siap cetak ----
@@ -745,25 +674,25 @@ $('btn-dl').onclick = e => {
     dlMenu.style.top = (r.bottom + 4) + 'px';
     dlMenu.style.left = Math.max(8, Math.min(r.left, window.innerWidth - dlMenu.offsetWidth - 8)) + 'px';
     openDl();
-  } else geoCancel = true;
+  }
 };
 $('dl-prov').onchange = () => { $('dl-kab').value = ''; refreshDl(); };
 $('dl-kab').onchange = () => refreshDl();
 $('dl-go').onclick = async () => {
   const pv = $('dl-prov').value, kb = $('dl-kab').value, rows = dlSelected();
   if (!rows.length) return;
-  geoCancel = true; dlMenu.classList.remove('show');
+  dlMenu.classList.remove('show');
   const wilayah = kb ? `${kb}, ${pv}` : pv || `Semua wilayah (${$('region-sel').selectedOptions[0].text})`;
   const ic = $('btn-dl').firstElementChild;
   ic.className = 'fas fa-spinner fa-spin'; $('dl-go').disabled = true;
   loadStart('xls'); clearInterval(lbTimer);          // progres diatur manual oleh exportXlsx
   await new Promise(res => requestAnimationFrame(() => setTimeout(res, 30)));   // beri waktu browser menampilkan bilah loading
-  try { await exportXlsx(withPlaces(rows), wilayah); }
+  try { await exportXlsx(rows, wilayah); }
   catch(e) { console.error(e); showError('Gagal membuat file Excel.'); }
   finally { loadDone(); ic.className = 'fas fa-download'; $('dl-go').disabled = false; }
 };
 dlMenu.addEventListener('click', e => e.stopPropagation());
-document.addEventListener('click', () => { dlMenu.classList.remove('show'); geoCancel = true; });
+document.addEventListener('click', () => { dlMenu.classList.remove('show'); });
 
 // ---------- LOADING BAR ----------
 const LOAD_TXT = {
@@ -826,7 +755,7 @@ async function cacheGet(k){
   const db = await IDB; if (!db) return null;
   return new Promise(res => {
     try {
-      const r = db.transaction('raw').objectStore('raw').get(k);
+      const r = db.transaction('raw').objectStore('raw').get('v3:' + k);
       r.onsuccess = () => { const v = r.result; res(v && Date.now() - v.t < CACHE_MAX_AGE ? v.raw : null); };
       r.onerror = () => res(null);
     } catch(e) { res(null); }
@@ -834,7 +763,7 @@ async function cacheGet(k){
 }
 async function cacheSet(k, raw){
   const db = await IDB; if (!db) return;
-  try { db.transaction('raw', 'readwrite').objectStore('raw').put({t: Date.now(), raw}, k); } catch(e) {}
+  try { db.transaction('raw', 'readwrite').objectStore('raw').put({t: Date.now(), raw}, 'v3:' + k); } catch(e) {}
 }
 function parseRaw(raw){
   const t = raw.trim();
@@ -938,6 +867,9 @@ async function fetchData(fly, force, partial){
         const wibDate = dt.toLocaleDateString('id-ID', {day:'2-digit', month:'short', timeZone:'UTC'});
         const tempRow = tb ? `<tr><td>${t.temp}</td><td align="right">${(tb - 273.15).toFixed(1)} °C</td></tr>` : '';
         const detRow = det ? `<tr><td>${t.det}</td><td align="right">${det}×</td></tr>` : '';
+        // kabupaten & provinsi dari server (Google Script + Spreadsheet); kosong bila sel belum diproses server
+        const admTxt = [d.kabupaten, d.provinsi].filter(Boolean).join(', ');
+        const admRow = admTxt ? `<tr><td>${t.adm}</td><td align="right">${xmlEsc(admTxt)}</td></tr>` : '';
         // Nama lokasi: titik di laut tidak punya alamat, jadi tampilkan teks "di laut" (bukan loading terus)
         fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${d.latitude}&lon=${d.longitude}`)
           .then(r => r.json())
@@ -947,13 +879,14 @@ async function fetchData(fly, force, partial){
           <div class="popup-h">${t.detail}</div>
           <div id="${id}" style="font-size:10px;color:#777;margin:6px 0">${t.loc}</div>
           <table class="popup-t">
+            ${admRow}
             <tr><td>${t.sat}</td><td align="right"><b>${satName}</b></td></tr>
             ${tempRow}
             ${detRow}
             <tr><td>${t.energy}</td><td align="right">${(+d.frp || 0).toFixed(1)} MW</td></tr>
             <tr><td>${t.time}</td><td align="right">${wibDate}, ${wibTime}</td></tr>
             <tr><td>${t.coord}</td><td align="right">${d.latitude.toFixed(3)}, ${d.longitude.toFixed(3)}</td></tr>
-            <tr><td colspan="2" style="padding-top:8px;border-bottom:0"><a href="https://www.google.com/maps?q=${d.latitude},${d.longitude}" target="_blank" rel="noopener" style="color:#d93000;font-weight:700;text-decoration:none">📍 Google Maps</a></td></tr>
+            <tr><td colspan="2" style="padding-top:8px;border-bottom:0"><a href="https://www.google.com/maps?q=${d.latitude},${d.longitude}" target="_blank" rel="noopener" style="color:#d93000;font-weight:700;text-decoration:none">📍 Google Maps</a><br><a href="#" onclick="zoomTo(${d.latitude},${d.longitude});return false" style="color:#d93000;font-weight:700;text-decoration:none;display:inline-block;margin-top:4px">🔍 ${t.zoomHere}</a></td></tr>
           </table></div>`;
       });
       exportRows.push({
@@ -962,6 +895,8 @@ async function fetchData(fly, force, partial){
         'Jam (WIB)': isNaN(dt) ? '' : dt.toISOString().slice(11,16),
         'Latitude': +d.latitude.toFixed(4),
         'Longitude': +d.longitude.toFixed(4),
+        'Kabupaten/Kota': d.kabupaten ? String(d.kabupaten) : '',
+        'Provinsi': d.provinsi ? String(d.provinsi) : '',
         'Satelit': satName,
         'Kepercayaan': confLabel(d.confidence),
         'Energi (MW)': +(Number(d.frp) || 0).toFixed(1),
