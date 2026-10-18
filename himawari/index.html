@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Peta Titik Api Himawari</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+  html, body { height: 100%; margin: 0; font-family: system-ui, sans-serif; }
+  #map { position: fixed; inset: 0; }
+  .panel {
+    background: rgba(255,255,255,.96); padding: 10px 12px; border-radius: 8px;
+    box-shadow: 0 1px 6px rgba(0,0,0,.3); font-size: 13px; line-height: 1.45; color: #222;
+  }
+  .ctl { width: 270px; }
+  .ctl h3 { margin: 0 0 6px; font-size: 14px; }
+  .ctl button, .ctl input[type=file] { width: 100%; margin-top: 6px; }
+  .ctl button { padding: 5px; cursor: pointer; }
+  .ctl input[type=range] { width: 100%; margin-top: 6px; }
+  .ctl label { display: block; margin-top: 4px; cursor: pointer; }
+  .small { font-size: 11px; color: #555; margin-top: 6px; }
+  .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+  #drop { position: fixed; inset: 0; z-index: 2000; display: none; align-items: center; justify-content: center;
+    background: rgba(0,0,0,.45); color: #fff; font-size: 22px; pointer-events: none; }
+  #msg { margin-top: 6px; font-size: 12px; color: #b03a2e; white-space: pre-wrap; }
+  a { color: #1a5fb4; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div id="drop">Lepas file CSV Himawari di sini</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// ===== Peta dasar =====
+const map = L.map('map', { preferCanvas: true }).setView([-1.0, 110.0], 5);
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 18, attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+const layer = L.layerGroup().addTo(map);
+
+// ===== Data: { t (ms UTC), lat, lng, frp } =====
+let points = [];
+let times = [];        // waktu unik terurut
+const loaded = new Set();
+
+const $ = id => document.getElementById(id);
+
+// Waktu dari nama file: H09_YYYYMMDD_hhmm_...
+function timeFromName(name) {
+  const m = name.match(/_(\d{4})(\d{2})(\d{2})_(\d{2})(\d{2})_/);
+  return m ? Date.UTC(+m[1], +m[2] - 1, +m[3], +m[4], +m[5]) : null;
+}
+// Cadangan: cari pola tanggal-jam di baris header
+function timeFromHeader(lines) {
+  for (const l of lines) {
+    const m = l.match(/(\d{4})[-\/]?(\d{2})[-\/]?(\d{2})[T _]?(\d{2}):?(\d{2})/);
+    if (m) return Date.UTC(+m[1], +m[2] - 1, +m[3], +m[4], +m[5]);
+  }
+  return null;
+}
+
+function parseCSV(text, fileName) {
+  const lines = text.split(/\r?\n/).filter(l => l.trim() !== '');
+  const head = lines.filter(l => l.startsWith('#'));
+  const body = lines.filter(l => !l.startsWith('#'));
+  if (!head.length) throw new Error('Header (#) tidak ditemukan');
+
+  // Baris header terakhir berisi nama kolom
+  const names = head[head.length - 1].replace(/^#+\s*/, '').split(',').map(s => s.trim().toLowerCase());
+  const iLat = names.findIndex(n => /^lat/.test(n));
+  const iLon = names.findIndex(n => /^lon/.test(n));
+  const iFrp = names.findIndex(n => /frp|firepower|power/.test(n));
+  if (iLat < 0 || iLon < 0)
+    throw new Error('Kolom lat/lon tidak ditemukan. Kolom terbaca: ' + names.join(', '));
+
+  const t = timeFromName(fileName) ?? timeFromHeader(head);
+  if (t == null) throw new Error('Waktu observasi tidak terbaca dari nama file/header');
+
+  const out = [];
+  for (const row of body) {
+    const c = row.split(',');
+    const lat = parseFloat(c[iLat]), lng = parseFloat(c[iLon]);
+    if (isNaN(lat) || isNaN(lng)) continue;
+    const frp = iFrp >= 0 ? parseFloat(c[iFrp]) : NaN;
+    out.push({ t, lat, lng, frp });
+  }
+  return out;
+}
+
+// GeoJSON hasil skrip fetch_himawari.py: properti time (ISO UTC) dan frp
+function parseGeoJSON(text) {
+  const data = JSON.parse(text);
+  const out = [];
+  for (const f of data.features || []) {
+    const g = f.geometry && f.geometry.coordinates;
+    const t = Date.parse(f.properties && f.properties.time);
+    if (!g || isNaN(t)) continue;
+    const frp = f.properties.frp == null ? NaN : +f.properties.frp;
+    out.push({ t, lat: g[1], lng: g[0], frp });
+  }
+  return out;
+}
+
+// Perbarui slider, tampilan, dan batas peta setelah data bertambah
+function refresh(fit) {
+  times = [...new Set(points.map(p => p.t))].sort((a, b) => a - b);
+  const s = $('slider');
+  s.max = Math.max(0, times.length - 1);
+  s.value = s.max;
+  s.disabled = times.length === 0;
+  render();
+  if (fit && points.length) {
+    const b = L.latLngBounds(points.map(p => [p.lat, p.lng]));
+    if (b.isValid()) map.fitBounds(b.pad(0.2), { maxZoom: 9 });
+  }
+}
+
+async function addFiles(fileList) {
+  const errors = [];
+  for (const f of fileList) {
+    if (loaded.has(f.name + f.size)) continue;
+    try {
+      const text = await f.text();
+      const isJson = /\.(geo)?json$/i.test(f.name);
+      points.push(...(isJson ? parseGeoJSON(text) : parseCSV(text, f.name)));
+      loaded.add(f.name + f.size);
+    } catch (e) { errors.push(f.name + ': ' + e.message); }
+  }
+  $('msg').textContent = errors.join('\n');
+  refresh(true);
+}
+
+// Saat dihosting (mis. GitHub Pages), muat otomatis hotspots.geojson di folder yang sama
+async function autoLoad() {
+  if (location.protocol === 'file:') return;
+  try {
+    const res = await fetch('hotspots.geojson', { cache: 'no-cache' });
+    if (!res.ok) return;
+    points.push(...parseGeoJSON(await res.text()));
+    loaded.add('hotspots.geojson');
+    refresh(true);
+  } catch (e) { /* belum ada file: abaikan */ }
+}
+
+// ===== Tampilan =====
+function colorFor(frp) {
+  if (isNaN(frp)) return '#888';
+  if (frp < 10) return '#f1c40f';
+  if (frp < 50) return '#e67e22';
+  if (frp < 100) return '#e74c3c';
+  return '#7b241c';
+}
+const fmt = t => new Date(t).toISOString().replace('T', ' ').slice(0, 16) + ' UTC';
+const fmtWIB = t => new Date(t + 7 * 3600e3).toISOString().replace('T', ' ').slice(0, 16) + ' WIB';
+
+function render() {
+  layer.clearLayers();
+  if (!times.length) { $('info').textContent = 'Belum ada data.'; return; }
+  const idx = +$('slider').value;
+  const all = $('chkAll').checked;
+  const cur = times[idx];
+  const sel = points.filter(p => all ? p.t <= cur : p.t === cur);
+
+  sel.forEach(p => {
+    const r = isNaN(p.frp) ? 5 : Math.min(11, 4 + Math.sqrt(Math.max(p.frp, 0)) / 2);
+    L.circleMarker([p.lat, p.lng], {
+      radius: r, color: '#222', weight: 0.6, fillColor: colorFor(p.frp), fillOpacity: 0.8
+    }).bindPopup(
+      '<b>' + p.lat.toFixed(3) + ', ' + p.lng.toFixed(3) + '</b><br>' +
+      'FRP: ' + (isNaN(p.frp) ? '–' : p.frp.toFixed(1) + ' MW') + '<br>' +
+      fmt(p.t) + '<br>' + fmtWIB(p.t)
+    ).addTo(layer);
+  });
+  $('info').innerHTML =
+    '<b>' + fmtWIB(cur) + '</b> (' + fmt(cur) + ')<br>' +
+    sel.length + ' titik ditampilkan, ' + times.length + ' waktu dimuat (' + (idx + 1) + '/' + times.length + ')';
+}
+
+let playTimer = null;
+function togglePlay() {
+  if (playTimer) { clearInterval(playTimer); playTimer = null; $('btnPlay').textContent = '▶ Putar'; return; }
+  if (!times.length) return;
+  $('btnPlay').textContent = '⏸ Jeda';
+  const s = $('slider');
+  if (+s.value >= +s.max) s.value = 0;
+  playTimer = setInterval(() => {
+    if (+s.value >= +s.max) { togglePlay(); return; }
+    s.value = +s.value + 1; render();
+  }, 400);
+}
+
+// ===== Kontrol =====
+const ctl = L.control({ position: 'topright' });
+ctl.onAdd = () => {
+  const d = L.DomUtil.create('div', 'panel ctl');
+  d.innerHTML =
+    '<h3>Titik api Himawari</h3>' +
+    '<div class="small" style="margin-top:0">Muat <i>hotspots.geojson</i> (dari skrip) atau CSV produk <i>Wild Fire</i> (L2WLF) JAXA P-Tree: pilih file atau seret ke halaman. Jika dihosting, hotspots.geojson dimuat otomatis.</div>' +
+    '<input type="file" id="file" accept=".csv,.txt,.geojson,.json" multiple>' +
+    '<input type="range" id="slider" min="0" max="0" value="0" disabled>' +
+    '<button id="btnPlay">▶ Putar</button>' +
+    '<label><input type="checkbox" id="chkAll"> Kumulatif sampai waktu terpilih</label>' +
+    '<button id="btnClear">Kosongkan data</button>' +
+    '<div id="info" class="small">Belum ada data.</div>' +
+    '<div id="msg"></div>' +
+    '<div class="small">Data: <a href="https://www.eorc.jaxa.jp/ptree/index.html" target="_blank" rel="noopener">JAXA P-Tree</a> (perlu akun gratis; resolusi ~2 km, tiap 10 menit). ' +
+    'Citra pembanding: <a href="https://www.bmkg.go.id/cuaca/satelit/himawari-geohotspot" target="_blank" rel="noopener">BMKG Geohotspot</a>.</div>';
+  L.DomEvent.disableClickPropagation(d);
+  L.DomEvent.disableScrollPropagation(d);
+  return d;
+};
+ctl.addTo(map);
+
+$('file').onchange = e => addFiles(e.target.files);
+$('slider').oninput = render;
+$('chkAll').onchange = render;
+$('btnPlay').onclick = togglePlay;
+$('btnClear').onclick = () => {
+  points = []; times = []; loaded.clear();
+  $('slider').max = 0; $('slider').disabled = true; $('msg').textContent = '';
+  render();
+};
+
+// Seret & lepas
+['dragenter', 'dragover'].forEach(ev => window.addEventListener(ev, e => { e.preventDefault(); $('drop').style.display = 'flex'; }));
+['dragleave', 'drop'].forEach(ev => window.addEventListener(ev, e => { e.preventDefault(); $('drop').style.display = 'none'; }));
+window.addEventListener('drop', e => addFiles(e.dataTransfer.files));
+
+// Legenda
+const legend = L.control({ position: 'bottomright' });
+legend.onAdd = () => {
+  const d = L.DomUtil.create('div', 'panel legend');
+  d.innerHTML = '<b>FRP (MW)</b><br>' +
+    '<div><i style="background:#f1c40f"></i>&lt; 10</div>' +
+    '<div><i style="background:#e67e22"></i>10 – 50</div>' +
+    '<div><i style="background:#e74c3c"></i>50 – 100</div>' +
+    '<div><i style="background:#7b241c"></i>&ge; 100</div>' +
+    '<div><i style="background:#888"></i>tanpa FRP</div>' +
+    '<div class="small" style="max-width:170px">Potensi titik api, bukan konfirmasi kebakaran. Bisa ada alarm palsu.</div>';
+  return d;
+};
+legend.addTo(map);
+
+render();
+autoLoad();
+</script>
+</body>
+</html>
