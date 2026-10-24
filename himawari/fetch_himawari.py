@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Ambil titik api Himawari (JAXA P-Tree, produk L2 Wild Fire) lewat FTP,
-lalu gabungkan menjadi satu file GeoJSON untuk peta.
+gabungkan menjadi GeoJSON lengkap (arsip) DAN JSON ringan untuk web.
 
 Kredensial dibaca dari environment (jangan ditulis di kode):
   FTP_USER, FTP_PASS            wajib
@@ -8,8 +8,16 @@ Kredensial dibaca dari environment (jangan ditulis di kode):
   FTP_BASE   default /pub/himawari/L2/WLF   (cek struktur asli setelah login)
   HOURS      default 24                     (jendela waktu yang disimpan)
   BBOX       default 94,-12,142,7           (barat,selatan,timur,utara)
-  OUT        default himawari/hotspots.geojson
+  OUT        default himawari/hotspots.geojson          (lengkap, juga penyimpan status)
+  OUT_LIGHT  default himawari/hotspots-ringan.json      (ringan, untuk web)
+  GRID       default 2  (jumlah desimal koordinat sel; 2 = sekitar 1 km)
   FTP_TLS    set 1 jika server meminta FTPS
+
+Format hotspots-ringan.json:
+  {"generated":..., "base":"jam ke-0 (UTC)",
+   "fields":["lon","lat","frp","n","hrs"],
+   "data":[[lon,lat,frp_tertinggi,jumlah_deteksi,[jam sejak base,...]], ...]}
+  Jam asli sebuah deteksi = base + hrs jam (UTC). WIB = UTC + 7.
 """
 import io
 import json
@@ -24,8 +32,11 @@ BASE = os.environ.get("FTP_BASE", "/pub/himawari/L2/WLF")
 HOURS = int(os.environ.get("HOURS", "24"))
 BBOX = [float(x) for x in os.environ.get("BBOX", "94,-12,142,7").split(",")]
 OUT = os.environ.get("OUT", "himawari/hotspots.geojson")
+OUT_LIGHT = os.environ.get("OUT_LIGHT", "himawari/hotspots-ringan.json")
+GRID = int(os.environ.get("GRID", "2"))
 USE_TLS = os.environ.get("FTP_TLS", "0") == "1"
 MAX_DEPTH = 7
+TFMT = "%Y-%m-%dT%H:%MZ"
 
 # Contoh nama: H09_20261018_0310_L2WLF010_FLDK.06001_06001.csv
 NAME_RE = re.compile(r"^H0\d_(\d{8})_(\d{4})_.*WLF.*\.csv$", re.I)
@@ -134,7 +145,7 @@ def parse_csv(text, t):
         raise ValueError("kolom lat/lon tidak ditemukan; kolom: " + ", ".join(names))
 
     west, south, east, north = BBOX
-    iso = t.strftime("%Y-%m-%dT%H:%MZ")
+    iso = t.strftime(TFMT)
     feats = []
     for row in body:
         c = row.split(",")
@@ -158,17 +169,48 @@ def parse_csv(text, t):
     return feats
 
 
+# ---------- Versi ringan untuk web ----------
+def build_light(feats, generated):
+    """Gabungkan titik per sel GRID; simpan jam deteksi sebagai jam sejak base."""
+    rows = []
+    for ft in feats:
+        p = ft["properties"]
+        try:
+            t = datetime.strptime(p["time"], TFMT).replace(tzinfo=timezone.utc, minute=0)
+        except (KeyError, ValueError):
+            continue
+        lon, lat = ft["geometry"]["coordinates"]
+        rows.append((round(lon, GRID), round(lat, GRID), p.get("frp") or 0, t))
+    if not rows:
+        print("Tidak ada titik untuk versi ringan.")
+        return
+    base = min(r[3] for r in rows)
+    cells = {}
+    for lon, lat, frp, t in rows:
+        c = cells.setdefault((lon, lat), {"frp": 0, "n": 0, "h": set()})
+        c["frp"] = max(c["frp"], frp)
+        c["n"] += 1
+        c["h"].add(int((t - base) / timedelta(hours=1)))
+    data = [[k[0], k[1], round(v["frp"], 1), v["n"], sorted(v["h"])] for k, v in cells.items()]
+    os.makedirs(os.path.dirname(OUT_LIGHT) or ".", exist_ok=True)
+    with open(OUT_LIGHT, "w", encoding="utf-8") as f:
+        json.dump({"generated": generated, "base": base.strftime(TFMT),
+                   "fields": ["lon", "lat", "frp", "n", "hrs"], "data": data},
+                  f, separators=(",", ":"))
+    print("Versi ringan: %d titik unik (dari %d deteksi) di %s" % (len(data), len(rows), OUT_LIGHT))
+
+
 # ---------- Utama ----------
 def load_existing(start):
     try:
         with open(OUT, encoding="utf-8") as f:
             data = json.load(f)
     except (OSError, ValueError):
-        return [], {}
+        return [], {}, None
     feats = []
     for ft in data.get("features", []):
         try:
-            t = datetime.strptime(ft["properties"]["time"], "%Y-%m-%dT%H:%MZ").replace(tzinfo=timezone.utc)
+            t = datetime.strptime(ft["properties"]["time"], TFMT).replace(tzinfo=timezone.utc)
         except (KeyError, ValueError):
             continue
         if t >= start:
@@ -178,7 +220,7 @@ def load_existing(start):
         t = time_from_name(n)
         if t and t >= start:
             processed[n] = True
-    return feats, processed
+    return feats, processed, data.get("generated")
 
 
 def main():
@@ -188,7 +230,7 @@ def main():
 
     end = datetime.now(timezone.utc)
     start = end - timedelta(hours=HOURS)
-    feats, processed = load_existing(start)
+    feats, processed, old_generated = load_existing(start)
 
     ftp = (FTP_TLS if USE_TLS else FTP)(HOST, timeout=60)
     ftp.login(user, pw)
@@ -234,19 +276,23 @@ def main():
 
     if not new_files:
         print("Tidak ada file baru; GeoJSON tidak diubah.")
+        if not os.path.exists(OUT_LIGHT) and feats:  # buat sekali jika belum ada
+            build_light(feats, old_generated)
         return
     if errors == len(new_files):
         sys.exit("Semua file baru gagal diproses; data lama tidak diubah.")
 
+    generated = end.strftime(TFMT)
     os.makedirs(os.path.dirname(OUT) or ".", exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump({
             "type": "FeatureCollection",
-            "generated": end.strftime("%Y-%m-%dT%H:%MZ"),
+            "generated": generated,
             "processed": sorted(processed),
             "features": feats,
         }, f, separators=(",", ":"))
     print("Tersimpan %d titik di %s" % (len(feats), OUT))
+    build_light(feats, generated)
 
 
 if __name__ == "__main__":
