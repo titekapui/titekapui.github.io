@@ -2,7 +2,7 @@ name: Ambil titik api Himawari
 
 on:
   schedule:
-    - cron: "*/15 * * * *"   # tiap 15 menit (waktu UTC); GitHub bisa menunda beberapa menit
+    - cron: "*/10 * * * *"   # tiap 15 menit (waktu UTC); GitHub bisa menunda beberapa menit
   workflow_dispatch:          # tombol "Run workflow" untuk uji manual
 
 permissions:
