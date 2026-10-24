@@ -2,7 +2,7 @@ name: Data titik api (FIRMS)
 
 on:
   schedule:
-    - cron: "*/10 * * * *"
+    - cron: "*/15 * * * *"
   workflow_dispatch:
 
 permissions:
@@ -35,9 +35,11 @@ jobs:
       - name: Bangun data
         env:
           GEO_BUDGET: "240"
+          HW_GEO_BUDGET: "150"
         run: |
           python scripts/firms.py out
           python scripts/himawari_csv.py himawari/hotspots.geojson out/himawari/hotspots.csv
+          python scripts/himawari_wilayah.py himawari/hotspots-ringan.json out/himawari/hotspots-wilayah.json out/himawari/places.json
 
       # Branch "data" selalu diganti satu commit saja, jadi ukuran repo tidak membengkak
       - name: Terbitkan ke branch data
@@ -50,4 +52,3 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
           git commit -q -m "data $(date -u +%Y-%m-%dT%H:%MZ)"
-          git push -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" data
