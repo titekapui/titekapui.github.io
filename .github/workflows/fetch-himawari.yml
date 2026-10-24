@@ -35,10 +35,10 @@ jobs:
 
       - name: Simpan jika ada perubahan
         run: |
-          if [ -n "$(git status --porcelain himawari/hotspots.geojson)" ]; then
+          if [ -n "$(git status --porcelain himawari/)" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add himawari/hotspots.geojson
+            git add himawari/hotspots.geojson himawari/hotspots-ringan.json
             git commit -m "Perbarui titik api Himawari"
             # Repo ini juga dipakai untuk hal lain: jika ada push lain di sela-sela, gabungkan lalu coba lagi
             for i in 1 2 3; do
