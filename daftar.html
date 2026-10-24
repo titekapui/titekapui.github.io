@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daftar Titik Api Terbaru | Titek Apui Monitor</title>
+<meta name="description" content="Daftar titik api (hotspot) NASA FIRMS dan Himawari-9, diurutkan dari yang terbaru.">
+<link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin>
+<style>
+:root{--bg:#f5f6f8;--panel:#fff;--text:#1a1a1a;--muted:#666;--line:#d5d8dd;--accent:#d93000;--row:#fafafa}
+body.night{--bg:#111;--panel:#1c1c1c;--text:#eee;--muted:#999;--line:#333;--accent:#ff4a1c;--row:#202020}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
+body{display:flex;flex-direction:column}
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 12px;background:var(--panel);border-bottom:1px solid var(--line)}
+.brand{font-weight:800;font-size:15px;margin-right:auto;display:flex;align-items:center;gap:8px}
+.count{background:var(--accent);color:#fff;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:700}
+a.back{color:var(--accent);font-weight:700;font-size:13px;text-decoration:none;border:1px solid var(--accent);border-radius:8px;padding:6px 10px}
+select,input,button{height:32px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--text);font-size:12px;padding:0 8px}
+button{cursor:pointer}
+button:hover{border-color:var(--accent);color:var(--accent)}
+input{min-width:150px;flex:1;max-width:260px}
+.wrap{flex:1;min-height:0;overflow:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{position:sticky;top:0;background:var(--panel);text-align:left;padding:9px 10px;border-bottom:2px solid var(--accent);white-space:nowrap;z-index:1}
+td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr:nth-child(even){background:var(--row)}
+td.n,th.n{text-align:right;white-space:nowrap}
+td.t{white-space:nowrap;font-weight:700}
+td.age{white-space:nowrap;color:var(--muted)}
+.tag{display:inline-block;border-radius:4px;padding:1px 6px;font-size:10px;font-weight:800;color:#fff;margin-right:6px;background:#555}
+.tag.n{background:var(--accent)}
+.tag.h{background:#8e44ad}
+a.lnk{color:var(--accent);font-weight:700;text-decoration:none;white-space:nowrap}
+a.lnk:hover{text-decoration:underline}
+.msg{padding:28px 16px;text-align:center;color:var(--muted);font-size:13px}
+.pager{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;padding:8px 12px;background:var(--panel);border-top:1px solid var(--line);font-size:12px}
+.pager button{min-width:32px;padding:0 8px;font-weight:700}
+.pager button.cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.pager button:disabled{opacity:.4;cursor:not-allowed}
+.pager button:disabled:hover{border-color:var(--line);color:var(--text)}
+.pager .gap{color:var(--muted)}
+.pager .info{color:var(--muted);margin-right:8px}
+.note{padding:8px 12px;font-size:11px;color:var(--muted)}
+@media(max-width:700px){.hide-m{display:none}}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <a class="back" id="back" href="index.html">← <span id="t-back"></span></a>
+  <div class="brand"><span id="t-title"></span><span class="count" id="cnt">0</span></div>
+  <select id="region"><option value="aceh">Aceh</option><option value="indonesia" selected>Indonesia</option><option value="global">Global</option></select>
+  <select id="range"><option value="1">1</option><option value="3">3</option><option value="6">6</option><option value="12" selected>12</option><option value="24">24</option></select>
+  <select id="source"><option value="all"></option><option value="nasa">NASA FIRMS</option><option value="hw">Himawari-9</option></select>
+  <select id="psize"><option value="25">25</option><option value="50" selected>50</option><option value="100">100</option><option value="200">200</option></select>
+  <input id="q" type="search" autocomplete="off">
+  <select id="lang"><option value="ace">Acèh</option><option value="id">Indonesia</option><option value="en">English</option></select>
+  <button id="btn-refresh" title="Refresh">⟳</button>
+  <button id="btn-theme" title="Tema">◐</button>
+</div>
+
+<div class="wrap">
+  <table>
+    <thead><tr>
+      <th id="h-time"></th><th id="h-age"></th><th id="h-place"></th>
+      <th class="hide-m" id="h-sat"></th><th class="n" id="h-frp"></th><th id="h-map"></th>
+    </tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <div class="msg" id="msg"></div>
+  <div class="note" id="note"></div>
+</div>
+<div class="pager" id="pager" style="display:none"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const Q = new URLSearchParams(location.search);
+const DATA_BASE = "https://raw.githubusercontent.com/titekapui/titekapui.github.io/data/firms/";
+const HW_WILAYAH = "https://raw.githubusercontent.com/titekapui/titekapui.github.io/data/himawari/hotspots-wilayah.json";
+const HW_RINGAN = "https://titekapui.github.io/himawari/hotspots-ringan.json";
+const BOX = {aceh:[1.85, 6.10, 94.80, 98.30], indonesia:[-11.0, 6.5, 95.0, 141.0], global:null};
+const SAT_NAME = {suomi_npp:'Suomi NPP', noaa20:'NOAA-20', noaa21:'NOAA-21', terra_aqua:'Terra/Aqua (MODIS)'};
+
+const tr = {
+  ace:{title:"Dapeuta Titek Apui", back:"Peuta", search:"Mita wilayah / sateulit...", all:"Bandum sumber", time:"Wektu (WIB)", age:"Umu", place:"Wilayah", sat:"Sateulit", frp:"Energi (MW)", map:"Peuta", of:"nibak", perPage:"baris/halaman", prev:"Sigohlom", next:"Lanjut", empty:"Hana titek dalam rentang wektu nyoe.", err:"Data gadôh troh, cuba lom.", points:"titek", ago:"nyang leupah", min:"mnt", hr:"jeum", sea:"Di laot / hana alamat", unit:"jeum", loading:"Muat data...", note:"Diurot nibak nyang paleng barô. Titek Himawari-9 geupeuleumah per jeum. Nyoe deuteksi paneuh, kon kebakaran nyang ka teukonfirmasi."},
+  id:{title:"Daftar Titik Api", back:"Peta", search:"Cari wilayah / satelit...", all:"Semua sumber", time:"Waktu (WIB)", age:"Usia", place:"Wilayah", sat:"Satelit", frp:"Energi (MW)", map:"Peta", of:"dari", perPage:"baris/halaman", prev:"Sebelumnya", next:"Berikutnya", empty:"Tidak ada titik dalam rentang waktu ini.", err:"Gagal memuat data, coba lagi.", points:"titik", ago:"lalu", min:"mnt", hr:"jam", sea:"Di laut / alamat tidak tersedia", unit:"jam", loading:"Memuat data...", note:"Diurutkan dari yang terbaru. Waktu titik Himawari-9 ditampilkan per jam. Ini deteksi panas, bukan kebakaran yang sudah terkonfirmasi."},
+  en:{title:"Hotspot List", back:"Map", search:"Search region / satellite...", all:"All sources", time:"Time (WIB)", age:"Age", place:"Region", sat:"Satellite", frp:"Power (MW)", map:"Map", of:"of", perPage:"rows/page", prev:"Previous", next:"Next", empty:"No hotspots in this time range.", err:"Failed to load data, please retry.", points:"points", ago:"ago", min:"min", hr:"h", sea:"At sea / no address available", unit:"h", loading:"Loading data...", note:"Sorted newest first. Himawari-9 times are shown per hour. A heat detection, not a confirmed fire."}
+};
+let lang = 'id', all = [], hwBase = 0, page = 1, loadedAt = 0, busy = false;
+
+const esc = v => String(v == null ? '' : v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const inBox = (la, lo, b) => !b || (la >= b[0] && la <= b[1] && lo >= b[2] && lo <= b[3]);
+const wibIso = ms => new Date(ms + 7 * 3600e3).toISOString();   // "2026-10-24T13:05:00.000Z" (sudah digeser ke WIB)
+const fmtWib = ms => { const w = wibIso(ms); return w.slice(8,10) + '/' + w.slice(5,7) + ' ' + w.slice(11,16); };
+
+function initLang(){
+  const q = Q.get('lang'); if (tr[q]) return q;
+  try { const v = localStorage.getItem('lang'); if (tr[v]) return v; } catch(e){}
+  return (navigator.language || 'id').toLowerCase().startsWith('id') ? 'id' : 'en';
+}
+function setLang(l){
+  lang = l; $('lang').value = l;
+  try { localStorage.setItem('lang', l); } catch(e){}
+  const t = tr[l];
+  document.documentElement.lang = l;
+  $('t-title').textContent = t.title; $('t-back').textContent = t.back;
+  $('q').placeholder = t.search;
+  $('source').options[0].textContent = t.all;
+  [...$('range').options].forEach(o => o.textContent = o.value + ' ' + t.unit);
+  $('h-time').textContent = t.time; $('h-age').textContent = t.age; $('h-place').textContent = t.place;
+  $('h-sat').textContent = t.sat; $('h-frp').textContent = t.frp; $('h-map').textContent = t.map;
+  $('psize').title = t.perPage; $('note').textContent = t.note;
+  [...$('psize').options].forEach(o => o.textContent = o.value + ' / ' + t.perPage.split('/')[1]);
+  $('back').href = backUrl();
+  render();
+}
+function backUrl(){
+  return 'index.html?lang=' + lang + '&region=' + $('region').value + (document.body.classList.contains('night') ? '&theme=night' : '') +
+         ($('range').value !== '12' ? '&jam=' + $('range').value : '');
+}
+
+// ---------- DATA ----------
+async function fetchText(url){
+  const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 60000);
+  try {
+    const r = await fetch(url, {signal: ctl.signal});
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return await r.text();
+  } finally { clearTimeout(to); }
+}
+async function loadNasa(region, stamp){
+  const res = Papa.parse(await fetchText(`${DATA_BASE}${region}.csv${stamp}`), {header:true, dynamicTyping:true, skipEmptyLines:true});
+  const out = [];
+  res.data.forEach(d => {
+    if (typeof d.latitude !== 'number' || typeof d.longitude !== 'number') return;
+    const tu = String(d.acq_time).padStart(4, '0');
+    const ms = Date.parse(`${d.acq_date}T${tu.slice(0,2)}:${tu.slice(2,4)}:00Z`);
+    if (!Number.isFinite(ms)) return;
+    const keys = d.satelit ? String(d.satelit).split('+') : [];
+    out.push({src:'nasa', ms, lat:d.latitude, lon:d.longitude, frp:+d.frp || 0,
+              sat: keys.map(k => SAT_NAME[k] || k).join(' + ') || 'VIIRS',
+              place: [d.kabupaten, d.provinsi].filter(Boolean).join(', ')});
+  });
+  return out;
+}
+async function loadHw(region, stamp){
+  let text;
+  try { text = await fetchText(HW_WILAYAH + stamp); } catch(e) { text = await fetchText(HW_RINGAN + stamp); }
+  const j = JSON.parse(text), base = Date.parse(j.base);
+  if (!Number.isFinite(base) || !Array.isArray(j.data)) throw new Error('format');
+  hwBase = base;
+  const box = BOX[region], out = [];
+  j.data.forEach(([lon, lat, frp, n, hrs, pl]) => {
+    if (!Number.isFinite(lon) || !Number.isFinite(lat) || !Array.isArray(hrs) || !hrs.length || !inBox(lat, lon, box)) return;
+    const last = hrs[hrs.length - 1];
+    let place = '—';
+    if (Array.isArray(pl)) place = pl.filter(Boolean).join(', ') || tr[lang].sea;
+    out.push({src:'hw', ms: base + last * 3600e3, hr:last, lat, lon, frp:+frp || 0, sat:'Himawari-9', place, placeEmpty: !Array.isArray(pl) || !pl.filter(Boolean).length});
+  });
+  return out;
+}
+async function load(){
+  if (busy) return;
+  busy = true;
+  $('msg').textContent = tr[lang].loading; $('msg').style.display = '';
+  const region = $('region').value, stamp = '?t=' + Math.floor(Date.now() / 300000);
+  const [nasa, hw] = await Promise.all([
+    loadNasa(region, stamp).catch(e => { console.error(e); return null; }),
+    loadHw(region, stamp).catch(e => { console.error(e); return null; })
+  ]);
+  busy = false;
+  if (!nasa && !hw) { all = []; $('rows').innerHTML = ''; $('cnt').textContent = 0; $('msg').textContent = tr[lang].err; return; }
+  all = (nasa || []).concat(hw || []).sort((a, b) => b.ms - a.ms || b.frp - a.frp);
+  loadedAt = Date.now();
+  page = 1;
+  render();
+}
+
+// ---------- TAMPIL ----------
+function ageText(ms){
+  const t = tr[lang], m = Math.max(0, Math.round((Date.now() - ms) / 60000));
+  const s = m < 60 ? `${m} ${t.min}` : `${Math.floor(m / 60)} ${t.hr} ${m % 60} ${t.min}`;
+  return s + ' ' + t.ago;
+}
+function render(){
+  const t = tr[lang], now = Date.now();
+  const hours = parseInt($('range').value) || 12, src = $('source').value, q = $('q').value.trim().toLowerCase();
+  const cutoff = now - hours * 3600e3;
+  const nowH = hwBase ? Math.floor((now - hwBase) / 3600e3) : 0;
+  const rows = all.filter(r => {
+    if (src !== 'all' && r.src !== src) return false;
+    if (r.src === 'hw') { if (r.hr < nowH - hours + 1) return false; }   // jendela jam, sama dengan peta
+    else if (r.ms < cutoff) return false;
+    if (q && !(r.place + ' ' + r.sat).toLowerCase().includes(q)) return false;
+    return true;
+  });
+  $('cnt').textContent = rows.length;
+  const size = parseInt($('psize').value) || 50, pages = Math.max(1, Math.ceil(rows.length / size));
+  if (page > pages) page = pages;
+  if (page < 1) page = 1;
+  const start = (page - 1) * size, lg = '&lang=' + lang;
+  $('rows').innerHTML = rows.slice(start, start + size).map(r => {
+    const timeTxt = r.src === 'hw' ? fmtWib(r.ms).slice(0, 8) + ':00–59' : fmtWib(r.ms);
+    const tag = r.src === 'hw' ? '<span class="tag h">H9</span>' : '<span class="tag n">NASA</span>';
+    const map = `index.html?maps=${r.lat.toFixed(5)},${r.lon.toFixed(5)},15&pin=${r.lat.toFixed(5)},${r.lon.toFixed(5)}${lg}`;
+    return `<tr><td class="t">${timeTxt}</td><td class="age">${ageText(r.ms)}</td>` +
+           `<td>${esc(r.place)}<div style="font-size:10px;color:var(--muted)">${r.lat.toFixed(3)}, ${r.lon.toFixed(3)}</div></td>` +
+           `<td class="hide-m">${tag}${esc(r.sat)}</td><td class="n">${r.frp.toFixed(1)}</td>` +
+           `<td><a class="lnk" href="${map}">📍 ${esc(t.map)}</a></td></tr>`;
+  }).join('');
+  $('msg').style.display = rows.length || busy ? 'none' : '';
+  if (!rows.length && !busy && loadedAt) $('msg').textContent = t.empty;
+  renderPager(rows.length, size, pages, start);
+}
+function renderPager(total, size, pages, start){
+  const t = tr[lang], el = $('pager');
+  if (!total) { el.style.display = 'none'; return; }
+  el.style.display = '';
+  const nums = [...new Set([1, pages, page - 1, page, page + 1])].filter(n => n >= 1 && n <= pages).sort((a, b) => a - b);
+  let h = `<span class="info">${start + 1}–${Math.min(start + size, total)} ${t.of} ${total}</span>`;
+  h += `<button data-p="${page - 1}" ${page <= 1 ? 'disabled' : ''} title="${t.prev}" aria-label="${t.prev}">‹</button>`;
+  let last = 0;
+  nums.forEach(n => {
+    if (n - last > 1) h += '<span class="gap">…</span>';
+    h += `<button data-p="${n}" class="${n === page ? 'cur' : ''}">${n}</button>`;
+    last = n;
+  });
+  h += `<button data-p="${page + 1}" ${page >= pages ? 'disabled' : ''} title="${t.next}" aria-label="${t.next}">›</button>`;
+  el.innerHTML = h;
+}
+
+// ---------- UI ----------
+function syncUrl(){
+  const p = new URLSearchParams();
+  p.set('region', $('region').value);
+  if ($('range').value !== '12') p.set('jam', $('range').value);
+  if ($('source').value !== 'all') p.set('sumber', $('source').value);
+  p.set('lang', lang);
+  if (document.body.classList.contains('night')) p.set('theme', 'night');
+  try { history.replaceState(null, '', location.pathname + '?' + p.toString()); } catch(e){}
+  $('back').href = backUrl();
+}
+function opt(id, v){ return v && [...$(id).options].some(o => o.value === v); }
+
+try { if (localStorage.getItem('theme') === 'night') document.body.classList.add('night'); } catch(e){}
+if (Q.get('theme') === 'night') document.body.classList.add('night'); else if (Q.get('theme') === 'day') document.body.classList.remove('night');
+if (opt('region', Q.get('region'))) $('region').value = Q.get('region');
+if (opt('range', Q.get('jam'))) $('range').value = Q.get('jam');
+if (opt('source', Q.get('sumber'))) $('source').value = Q.get('sumber');
+
+$('region').onchange = () => { syncUrl(); load(); };
+$('range').onchange = () => { page = 1; syncUrl(); render(); };
+$('source').onchange = () => { page = 1; syncUrl(); render(); };
+$('psize').onchange = () => { page = 1; render(); };
+$('q').oninput = () => { page = 1; render(); };
+$('lang').onchange = () => { setLang($('lang').value); syncUrl(); load(); };   // muat ulang agar teks "laut" ikut bahasa
+$('pager').onclick = e => {
+  const b = e.target.closest('button[data-p]');
+  if (!b || b.disabled) return;
+  page = parseInt(b.dataset.p);
+  render();
+  document.querySelector('.wrap').scrollTop = 0;
+};
+$('btn-refresh').onclick = load;
+$('btn-theme').onclick = () => {
+  document.body.classList.toggle('night');
+  try { localStorage.setItem('theme', document.body.classList.contains('night') ? 'night' : 'day'); } catch(e){}
+  syncUrl();
+};
+setInterval(() => { if (!document.hidden) { if (Date.now() - loadedAt > 10 * 60 * 1000) load(); else render(); } }, 60 * 1000);   // usia diperbarui tiap menit
+
+setLang(initLang());
+syncUrl();
+load();
+</script>
+</body>
+</html>
