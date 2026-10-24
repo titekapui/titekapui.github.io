@@ -14,8 +14,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://titekapui.github.io/og.jpeg">
-<link rel="preconnect" href="https://script.google.com">
-<link rel="preconnect" href="https://script.googleusercontent.com" crossorigin>
+<link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin>
 <link rel="preconnect" href="https://flagcdn.com">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
@@ -121,6 +120,14 @@ select,.icon-btn{height:32px;border:1px solid var(--line);border-radius:8px;back
 
   <button class="icon-btn" id="btn-smoke" title="Citra Asap (VIIRS True Color)"><i class="fas fa-smog"></i></button>
 
+  <select id="hw-sel" autocomplete="off">
+    <option value="1">1</option>
+    <option value="3">3</option>
+    <option value="6">6</option>
+    <option value="12" selected>12</option>
+    <option value="24">24</option>
+  </select>
+
   <select id="region-sel" title="Lokasi" autocomplete="off">
     <option value="aceh">Aceh</option>
     <option value="indonesia" selected>Indonesia</option>
@@ -133,11 +140,14 @@ select,.icon-btn{height:32px;border:1px solid var(--line);border-radius:8px;back
     <option value="noaa20">NOAA-20</option>
     <option value="noaa21">NOAA-21</option>
     <option value="terra_aqua">Terra &amp; Aqua</option>
+    <option value="himawari">Himawari-9</option>
+    <option value="all_hw">Semua + Himawari-9</option>
   </select>
 
   <button class="icon-btn" id="btn-refresh" title="Refresh"><i class="fas fa-sync" id="refresh-icon"></i></button>
   <button class="icon-btn" id="btn-dl" title="Unduh"><i class="fas fa-download"></i></button>
   <button class="icon-btn" id="btn-share" title="Bagikan"><i class="fas fa-share-nodes"></i></button>
+  <button class="icon-btn" id="btn-list" title="Daftar terbaru"><i class="fas fa-list"></i></button>
   <button class="icon-btn" id="btn-theme" title="Tema"><i class="fa-solid fa-circle-half-stroke"></i></button>
   <button class="icon-btn" id="btn-info" title="Info"><i class="fas fa-circle-info"></i></button>
 </div>
@@ -176,7 +186,8 @@ select,.icon-btn{height:32px;border:1px solid var(--line);border-radius:8px;back
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 <script>
-const GAS_URL = "https://script.google.com/macros/s/AKfycbwqXZcykIRMf6k2it_wewSHSx31bzwCm6838x_0-wMbp7uKJmoeB5gOolcXuIyZTR7C/exec";
+// Data titik api dibangun GitHub Actions (firms.yml) dan disimpan di branch "data"
+const DATA_BASE = "https://raw.githubusercontent.com/titekapui/titekapui.github.io/data/firms/";
 const $ = id => document.getElementById(id);
 const Q = new URLSearchParams(location.search);   // parameter tautan: ?maps=lat,lon,zoom&layer=...
 
@@ -230,6 +241,7 @@ const credit = {
   en:{t:"Made in Cot Mesjid, for Aceh", p:"Titek Apui Monitor is developed by Ali Akbar, Gampong Cot Mesjid, Samatiga, West Aceh.", c:"Have feedback? Contact me."}
 };
 let lang = 'ace', userMarker, toastTimer;
+const FIRE_COLOR = '#e74c3c';   // satu warna untuk semua titik api (NASA & Himawari); ubah di sini bila ingin warna lain
 
 // ---------- MAP ----------
 const layers = {
@@ -295,7 +307,10 @@ legend.onAdd = () => { const d = L.DomUtil.create('div','legend'); d.id='legend'
 legend.addTo(map);
 function renderLegend(){
   const t = tr[lang];
-  $('legend').innerHTML = `<b>${t.legend}</b><br><span class="dot" style="background:#e74c3c"></span>${t.high}<br><span class="dot" style="background:#f39c12"></span>${t.low}`;
+  let h = `<b>${t.legend}</b>`;
+  h += `<br><span class="dot" style="background:${FIRE_COLOR}"></span>${t.hot}`;
+  if (map.hasLayer(hwLayer)) h += `<br><span style="color:var(--muted)">Himawari-9: ${hwShown} ${t.hwCount}</span>`;
+  $('legend').innerHTML = h;
 }
 
 
@@ -364,6 +379,129 @@ snppLayer.on('tileerror', () => {
   if (!smokeWarned) { smokeWarned = true; showError(tr[lang].errSmoke); }
 });
 
+// ---------- HIMAWARI-9 (JAXA P-Tree; file diperbarui tiap ±15 menit lewat GitHub Actions) ----------
+// File berasal dari fetch_himawari.py: {base, data:[[lon,lat,frp,n,[jam sejak base]],...]}.
+// Ubah HIMAWARI_URL bila file ringan disimpan di repo/alamat lain.
+const HIMAWARI_URL = "https://titekapui.github.io/himawari/hotspots-ringan.json";   // cadangan: tanpa nama wilayah
+// Versi dengan nama wilayah detail (desa, kecamatan, kabupaten, provinsi), dibuat GitHub Actions di branch "data"
+const HIMAWARI_WILAYAH_URL = "https://raw.githubusercontent.com/titekapui/titekapui.github.io/data/himawari/hotspots-wilayah.json";
+Object.assign(tr.ace, {satAllHw:"Bandum + Himawari-9", tipHw:"Titek apui Himawari-9 (saban 10 menit)", hrUnit:"jeum", hwTitle:"HIMAWARI-9 (JAXA)", hwLast:"Deuteksi pungoe", hwHours:"Jeum teudeteksi", hwNote:"Reusolusi ±2 km. Nyoe deuteksi paneuh, kon kebakaran nyang ka teukonfirmasi.", hwErr:"Data Himawari belum na", hwCount:"titek", hwSize:"Rayek apui", sizeS:"Ubit", sizeM:"Sedang", sizeL:"Rayek", hot:"Titek apui", tipHours:"Rentang wektu", tipList:"Dapeuta titek (paleng barô)", hwDesa:"Gampong", hwKec:"Kecamatan", hwKab:"Kabupaten/Kota", hwProv:"Provinsi"});
+Object.assign(tr.id,  {satAllHw:"Semua + Himawari-9", tipHw:"Titik panas Himawari-9 (tiap 10 menit)", hrUnit:"jam", hwTitle:"HIMAWARI-9 (JAXA)", hwLast:"Deteksi terakhir", hwHours:"Jam terdeteksi", hwNote:"Resolusi ±2 km. Ini deteksi panas, bukan kebakaran yang sudah terkonfirmasi.", hwErr:"Data Himawari belum tersedia", hwCount:"titik", hwSize:"Ukuran api", sizeS:"Kecil", sizeM:"Sedang", sizeL:"Besar", hot:"Titik api", tipHours:"Rentang waktu", tipList:"Daftar titik api (terbaru)", hwDesa:"Desa/Kelurahan", hwKec:"Kecamatan", hwKab:"Kabupaten/Kota", hwProv:"Provinsi"});
+Object.assign(tr.en,  {satAllHw:"All + Himawari-9", tipHw:"Himawari-9 hotspots (every 10 min)", hrUnit:"h", hwTitle:"HIMAWARI-9 (JAXA)", hwLast:"Last detection", hwHours:"Hours detected", hwNote:"Resolution ~2 km. A heat detection, not a confirmed fire.", hwErr:"Himawari data not available yet", hwCount:"points", hwSize:"Fire size", sizeS:"Small", sizeM:"Medium", sizeL:"Large", hot:"Hotspot", tipHours:"Time range", tipList:"Hotspot list (newest first)", hwDesa:"Village", hwKec:"District", hwKab:"Regency/City", hwProv:"Province"});
+
+// Marker Himawari memakai canvas yang sama dengan titik NASA (tanpa pane khusus),
+// supaya klik sampai ke marker. Urutan gambar diatur lewat bringToBack().
+const hwLayer = L.layerGroup();
+let hwData = null, hwShown = 0, hwBusy = false;
+const hwWib = ms => new Date(ms + 7*3600e3).toISOString();
+
+async function loadHimawari(){
+  if (hwBusy) return;
+  hwBusy = true; loadStart('upd');
+  try {
+    const stamp = '?t=' + Math.floor(Date.now() / 300000);
+    let r = null;
+    try { r = await fetch(HIMAWARI_WILAYAH_URL + stamp); if (!r.ok) r = null; } catch(e) { r = null; }
+    if (!r) r = await fetch(HIMAWARI_URL + stamp);   // cadangan: tanpa nama wilayah
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const j = await r.json(), base = Date.parse(j.base);
+    if (!Number.isFinite(base) || !Array.isArray(j.data)) throw new Error('format');
+    let max = 0;
+    const pts = [];
+    j.data.forEach(([lon, lat, frp, n, hrs, place]) => {
+      if (!Number.isFinite(lon) || !Number.isFinite(lat) || !Array.isArray(hrs) || !hrs.length) return;
+      const last = hrs[hrs.length - 1];
+      if (last > max) max = last;
+      pts.push({lon, lat, frp, n, hrs, last, place});
+    });
+    hwData = {base, max, pts};
+    renderHimawari();
+  } catch(e) { console.error(e); showError(tr[lang].hwErr); }
+  finally { hwBusy = false; loadDone(); }
+}
+
+// Nama wilayah (kabupaten/kota, provinsi) titik Himawari dicari saat popup dibuka, lewat OpenStreetMap Nominatim.
+// Hasil disimpan per sel ±1 km, jadi titik yang sama tidak diminta dua kali.
+const hwPlaceCache = new Map();
+function hwPlace(p){
+  const key = p.lat.toFixed(2) + '|' + p.lon.toFixed(2);
+  const show = raw => { const el = $('hw-place'); if (el) el.innerText = raw || tr[lang].noLoc; centerOnPopup(); };
+  if (hwPlaceCache.has(key)) { setTimeout(() => show(hwPlaceCache.get(key)), 0); return; }
+  fetch(`https://nominatim.openstreetmap.org/reverse?format=json&zoom=10&addressdetails=1&accept-language=id&lat=${p.lat}&lon=${p.lon}`)
+    .then(r => r.json())
+    .then(j => {
+      const a = j.address || {};
+      const kab = a.county || a.city || a.municipality || a.regency || a.town || a.state_district || '';
+      const raw = [kab, a.state].filter(Boolean).join(', ');   // kosong bila di laut / tanpa alamat
+      hwPlaceCache.set(key, raw);
+      show(raw);
+    })
+    .catch(() => show(''));
+}
+
+// Kategori ukuran api dari nilai FRP (MW): <10 kecil, 10-50 sedang, >=50 besar
+const hwSizeLabel = frp => { const t = tr[lang], v = +frp || 0; return v < 10 ? t.sizeS : v < 50 ? t.sizeM : t.sizeL; };
+
+// Baris wilayah: dari data Actions bila ada ([desa, kecamatan, kabupaten, provinsi]); kalau belum ada, cari lewat Nominatim
+function hwPlaceRows(p){
+  const t = tr[lang];
+  if (!Array.isArray(p.place)) { hwPlace(p); return `<tr><td>${t.adm}</td><td align="right" id="hw-place">${t.loc}</td></tr>`; }
+  const rows = [[t.hwDesa, p.place[0]], [t.hwKec, p.place[1]], [t.hwKab, p.place[2]], [t.hwProv, p.place[3]]].filter(r => r[1]);
+  if (!rows.length) return `<tr><td>${t.adm}</td><td align="right">${t.noLoc}</td></tr>`;
+  return rows.map(([k, v]) => `<tr><td>${k}</td><td align="right">${xmlEsc(v)}</td></tr>`).join('');
+}
+
+function hwPopup(p, from){
+  const t = tr[lang], w = hwWib(hwData.base + p.last * 3600e3);
+  const tgl = w.slice(8,10) + '/' + w.slice(5,7), jam = w.slice(11,13);
+  const inRange = p.hrs.filter(h => h >= from).length;
+  return `<div style="min-width:230px">
+    <div class="popup-h">${t.hwTitle}</div>
+    <table class="popup-t">
+      ${hwPlaceRows(p)}
+      <tr><td>${t.energy}</td><td align="right">${(+p.frp || 0).toFixed(1)} MW</td></tr>
+      <tr><td>${t.hwSize}</td><td align="right"><b>${hwSizeLabel(p.frp)}</b></td></tr>
+      <tr><td>${t.hwLast}</td><td align="right">${tgl}, ${jam}:00–${jam}:59 WIB</td></tr>
+      <tr><td>${t.hwHours}</td><td align="right">${inRange}</td></tr>
+      <tr><td>${t.det}</td><td align="right">${p.n}×</td></tr>
+      <tr><td>${t.coord}</td><td align="right">${p.lat.toFixed(3)}, ${p.lon.toFixed(3)}</td></tr>
+      <tr><td colspan="2" style="padding-top:8px;border-bottom:0"><a href="https://www.google.com/maps?q=${p.lat},${p.lon}" target="_blank" rel="noopener" style="color:#d93000;font-weight:700;text-decoration:none">📍 Google Maps</a><br><a href="#" onclick="zoomTo(${p.lat},${p.lon});return false" style="color:#d93000;font-weight:700;text-decoration:none;display:inline-block;margin-top:4px">🔍 ${t.zoomHere}</a></td></tr>
+    </table>
+    <div style="font-size:10px;color:#777;margin-top:6px">${t.hwNote}</div></div>`;
+}
+
+function renderHimawari(){
+  hwLayer.clearLayers(); hwShown = 0;
+  if (hwData) {
+    const nowH = Math.floor((Date.now() - hwData.base) / 3600e3);   // jam sekarang, relatif ke base
+    const from = nowH - (parseInt($('hw-sel').value) || 12) + 1;    // jendela jam terakhir dari waktu sekarang
+    hwData.pts.forEach(p => {
+      if (p.last < from) return;
+      hwShown++;
+      L.circleMarker([p.lat, p.lon], {radius:Math.min(4 + Math.sqrt(+p.frp || 0) * 1.1, 14), fillColor:FIRE_COLOR, color:'#fff', weight:1.5, fillOpacity:0.75})
+        .bindPopup(() => hwPopup(p, from)).addTo(hwLayer);
+    });
+    hwLayer.eachLayer(l => l.bringToBack());   // di bawah titik NASA, tetap bisa diklik
+  }
+  if ($('sat-sel').value === 'himawari') $('count-val').innerText = hwShown;   // mode Himawari saja: hitung titik Himawari
+  renderLegend();
+}
+
+function setHimawari(on){
+  if (on === map.hasLayer(hwLayer)) return;
+  if (on) { hwLayer.addTo(map); if (hwData) renderHimawari(); else loadHimawari(); }
+  else { map.removeLayer(hwLayer); renderLegend(); }
+  syncUrl();
+}
+// Himawari mengikuti pilihan di dropdown satelit: 'himawari' = hanya Himawari, 'all_hw' = semua NASA + Himawari
+function syncHw(){ const v = $('sat-sel').value; setHimawari(v === 'himawari' || v === 'all_hw'); renderLegend(); }
+$('hw-sel').onchange = () => { renderHimawari(); fetchData(false); syncUrl(); };   // rentang waktu berlaku untuk NASA & Himawari
+setInterval(() => {
+  if (!map.hasLayer(hwLayer) || document.hidden) return;
+  loadHimawari();                  // ambil file terbaru
+  if (hwData) renderHimawari();    // saring ulang memakai waktu sekarang
+}, 10 * 60 * 1000);
+
 // ---------- AUTO GANTI KE MODE INDONESIA SAAT KELUAR ACEH/SUMUT ----------
 const AUTO_TEXT = {
   ace: "Peta di luwa Aceh & Sumatera Utara. Beralih u mode Indonesia.",
@@ -414,8 +552,13 @@ function applyTips(){
   tip('#btn-locate', 'tipLocate');
   tip('#btn-dl', 'tipDl');
   tip('#btn-share', 'tipShare');
+  tip('#btn-list', 'tipList');
   $('btn-smoke').title = t.tipSmoke + ' (' + smokeDate + ')';
   $('btn-smoke').setAttribute('aria-label', t.tipSmoke);
+  document.querySelector('#sat-sel option[value="himawari"]').textContent = 'Himawari-9';
+  document.querySelector('#sat-sel option[value="all_hw"]').textContent = t.satAllHw;
+  $('hw-sel').title = t.tipHours;
+  [...$('hw-sel').options].forEach(o => o.textContent = o.value + ' ' + t.hrUnit);
   document.querySelector('#sat-sel option[value="all"]').textContent = t.allSat;
 }
 function initLang(){
@@ -453,9 +596,12 @@ if (Q.get('theme') === 'night') document.body.classList.add('night'); else if (Q
 document.querySelectorAll('#lang-seg button').forEach(b => b.onclick = () => setLang(b.dataset.lang));
 document.querySelectorAll('#map-seg button').forEach(b => b.onclick = () => setBase(b.dataset.map));
 $('region-sel').onchange = () => { fetchData(true); syncUrl(); };
-$('sat-sel').onchange = () => { fetchData(false); syncUrl(); };
-$('btn-refresh').onclick = () => fetchData(false, true);
+$('sat-sel').onchange = () => { syncHw(); fetchData(false); syncUrl(); };
+$('btn-refresh').onclick = () => { fetchData(false, true); if (map.hasLayer(hwLayer)) loadHimawari(); };
 $('btn-theme').onclick = toggleTheme;
+$('btn-list').onclick = () => {   // buka halaman daftar dengan pilihan yang sama
+  location.href = 'daftar.html?region=' + $('region-sel').value + '&jam=' + $('hw-sel').value + '&lang=' + lang + (document.body.classList.contains('night') ? '&theme=night' : '');
+};
 $('btn-info').onclick = () => $('modal').classList.add('show');
 document.addEventListener('keydown', e => { if (e.key === 'Escape') { $('modal').classList.remove('show'); $('dl-menu').classList.remove('show'); } });
 $('modal-close').onclick = () => $('modal').classList.remove('show');
@@ -473,7 +619,7 @@ $('btn-locate').onclick = () => {
   }, () => { showError(tr[lang].errLoc); icon.className = "fas fa-location-crosshairs fa-lg"; });
 };
 
-// ---------- TAUTAN: ?maps=lat,lon,zoom&layer=sat&smoke=1&region=aceh&sat=noaa20&pin=lat,lon&lang=id&theme=night ----------
+// ---------- TAUTAN: ?maps=lat,lon,zoom&layer=sat&smoke=1&hw=24&region=aceh&sat=noaa20&pin=lat,lon&lang=id&theme=night ----------
 // pin dibuat dengan klik kanan (desktop) atau tekan lama (HP); koordinatnya ikut tersimpan di tautan.
 let pinMarker, pinLL, urlTimer;
 const pinIcon = L.divIcon({html:'<i class="fas fa-location-dot"></i>', className:'pin-icon', iconSize:[30,36], iconAnchor:[15,34]});
@@ -569,6 +715,7 @@ function buildShareUrl(){
   const c = map.getCenter(), parts = [`maps=${c.lat.toFixed(5)},${c.lng.toFixed(5)},${map.getZoom()}`];
   if (currentBase !== 'street') parts.push('layer=' + currentBase);
   if (map.hasLayer(smokeLayer)) parts.push('smoke=1');
+  if ($('hw-sel').value !== '12') parts.push('jam=' + $('hw-sel').value);
   if ($('region-sel').value !== 'indonesia') parts.push('region=' + $('region-sel').value);
   if ($('sat-sel').value !== 'all') parts.push('sat=' + $('sat-sel').value);
   if (pinLL) parts.push(`pin=${pinLL[0].toFixed(5)},${pinLL[1].toFixed(5)}`);
@@ -587,6 +734,12 @@ function applyUrlParams(){
   if (layers[Q.get('layer')]) setBase(Q.get('layer'));
   if (Q.get('smoke') === '1') setSmoke(true);
   if (opt('sat-sel', Q.get('sat'))) $('sat-sel').value = Q.get('sat');
+  if (opt('hw-sel', Q.get('jam'))) $('hw-sel').value = Q.get('jam');
+  if (Q.get('hw')) {
+    if (opt('hw-sel', Q.get('hw'))) $('hw-sel').value = Q.get('hw');
+    if (!['himawari', 'all_hw'].includes($('sat-sel').value)) $('sat-sel').value = 'all_hw';   // tautan lama ?hw=
+  }
+  syncHw();
   if (opt('region-sel', Q.get('region'))) $('region-sel').value = Q.get('region');
   const m = (Q.get('maps') || '').split(',').map(Number);
   const p = (Q.get('pin') || '').split(',').map(Number);
@@ -859,10 +1012,12 @@ function parseRaw(raw){
 function fetchRegion(r){
   return (async () => {
     const get = async () => {
-      // batas waktu panjang: permintaan global pertama setelah cache habis bisa lambat di server
-      const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 120000);
-      try { return await (await fetch(`${GAS_URL}?sat=all&wilayah=${r}`, {signal: ctl.signal})).text(); }
-      finally { clearTimeout(to); }
+      const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 60000);
+      try {
+        const res = await fetch(`${DATA_BASE}${r}.csv?t=${Math.floor(Date.now() / 300000)}`, {signal: ctl.signal});
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return await res.text();
+      } finally { clearTimeout(to); }
     };
     let raw; try { raw = await get(); } catch(e) { raw = await get(); }   // coba ulang sekali
     const out = parseRaw(raw);
@@ -873,11 +1028,22 @@ function fetchRegion(r){
 function loadRegion(r){ return store[r] = fetchRegion(r); }
 
 // partial = true: tampilkan data Aceh saja dulu (cepat), sebelum data wilayah terpilih selesai dimuat
+function flyToRegion(region){
+  if (region === 'aceh') map.flyTo([4.3, 96.8], 8);
+  else if (region === 'indonesia') map.flyToBounds(INDONESIA_BOUNDS, {maxZoom:6});
+  else map.flyTo([10, 100], 3);
+}
 async function fetchData(fly, force, partial){
-  const sat = $('sat-sel').value;
+  const rawSat = $('sat-sel').value, sat = rawSat === 'all_hw' ? 'all' : rawSat;   // all_hw = semua satelit NASA + Himawari
   const selRegion = $('region-sel').value;
   const region = partial ? 'aceh' : selRegion;
   const token = ++renderToken;
+  if (rawSat === 'himawari') {   // hanya Himawari: kosongkan titik NASA
+    fireLayer.clearLayers(); acehLayer.clearLayers(); lastRows = [];
+    $('count-val').innerText = hwShown;
+    if (fly) flyToRegion(region);
+    return;
+  }
   const icon = $('refresh-icon');
   icon.classList.add('fa-spin');
   loadStart('dl');
@@ -907,11 +1073,15 @@ async function fetchData(fly, force, partial){
     const rowsAll = sources.flatMap(src => src.rows || []);
 
     const allow = SAT_MATCH[sat];
+    const cutoff = Date.now() - (parseInt($('hw-sel').value) || 12) * 3600e3;   // rentang waktu terpilih
     fireLayer.clearLayers(); acehLayer.clearLayers();
     const seen = new Set(), markers = [], exportRows = [];
 
     rowsAll.forEach((d, i) => {
       if (typeof d.latitude !== 'number' || typeof d.longitude !== 'number') return; // lewati baris komentar/rusak
+      // kolom waktu acq_date + acq_time (UTC): sembunyikan titik yang lebih lama dari rentang waktu
+      const tu = String(d.acq_time).padStart(4, '0'), tMs = Date.parse(`${d.acq_date}T${tu.slice(0,2)}:${tu.slice(2,4)}:00Z`);
+      if (Number.isFinite(tMs) && tMs < cutoff) return;
       // Format baru backend: kolom "satelit" berisi daftar gabungan, mis. "suomi_npp+noaa20"
       // Format lama: kolom "satellite" berisi kode satu huruf (T/A/N/1/2)
       const satKeys = d.satelit ? String(d.satelit).split('+') : null;
@@ -937,7 +1107,7 @@ async function fetchData(fly, force, partial){
       else if (s === '1' || s === 'J1') satName = "NOAA-20";
       else if (s === '2' || s === 'J2') satName = "NOAA-21";
 
-      const color = d.confidence === 'h' || d.confidence > 80 ? '#e74c3c' : '#f39c12';
+      const color = FIRE_COLOR;
       const m = L.circleMarker([d.latitude, d.longitude], {radius:radiusFromFRP(d.frp), fillColor:color, color:'#fff', weight:2, fillOpacity:0.9});
       const tb = d.bright_ti4 || d.bright_t31;
       const det = d.jumlah_deteksi;
@@ -1008,12 +1178,9 @@ async function fetchData(fly, force, partial){
     exportRows.sort((x, y) => (y['Tanggal'] + y['Jam (WIB)']).localeCompare(x['Tanggal'] + x['Jam (WIB)']) || y['Energi (MW)'] - x['Energi (MW)']);
     exportRows.forEach((r, i) => r['No'] = i + 1);
     lastRows = exportRows;
+    if (map.hasLayer(hwLayer)) hwLayer.eachLayer(l => l.bringToBack());   // titik NASA baru ditambahkan: Himawari tetap di belakang
     if (failed.length) showError(failed[0].error || undefined);
-    if (fly) {
-      if (region === 'aceh') map.flyTo([4.3, 96.8], 8);
-      else if (region === 'indonesia') map.flyToBounds(INDONESIA_BOUNDS, {maxZoom:6});
-      else map.flyTo([10, 100], 3);
-    }
+    if (fly) flyToRegion(region);
   } catch(e) {
     console.error(e); showError();
   } finally {
