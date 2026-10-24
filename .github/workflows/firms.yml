@@ -1,0 +1,53 @@
+name: Data titik api (FIRMS)
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: firms
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Ambil hasil sebelumnya dari branch "data" (terutama cache nama tempat places.json)
+      - name: Ambil data sebelumnya
+        run: |
+          mkdir -p out
+          if git ls-remote --exit-code --heads origin data >/dev/null 2>&1; then
+            git fetch --depth=1 origin data
+            git archive FETCH_HEAD | tar -x -C out
+          fi
+
+      - name: Bangun data
+        env:
+          GEO_BUDGET: "240"
+        run: |
+          python scripts/firms.py out
+          python scripts/himawari_csv.py himawari/hotspots.geojson out/himawari/hotspots.csv
+
+      # Branch "data" selalu diganti satu commit saja, jadi ukuran repo tidak membengkak
+      - name: Terbitkan ke branch data
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cd out
+          git init -q -b data
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "data $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" data
