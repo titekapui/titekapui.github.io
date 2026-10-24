@@ -141,7 +141,7 @@ select,.icon-btn{height:32px;border:1px solid var(--line);border-radius:8px;back
     <option value="noaa21">NOAA-21</option>
     <option value="terra_aqua">Terra &amp; Aqua</option>
     <option value="himawari">Himawari-9</option>
-    <option value="all_hw">Semua + Himawari-9</option>
+    <option value="all_hw" selected>Semua + Himawari-9</option>
   </select>
 
   <button class="icon-btn" id="btn-refresh" title="Refresh"><i class="fas fa-sync" id="refresh-icon"></i></button>
@@ -392,7 +392,7 @@ Object.assign(tr.en,  {satAllHw:"All + Himawari-9", tipHw:"Himawari-9 hotspots (
 // Marker Himawari memakai canvas yang sama dengan titik NASA (tanpa pane khusus),
 // supaya klik sampai ke marker. Urutan gambar diatur lewat bringToBack().
 const hwLayer = L.layerGroup();
-let hwData = null, hwShown = 0, hwBusy = false;
+let hwData = null, hwShown = 0, hwBusy = false, lastDataAt = Date.now();
 const hwWib = ms => new Date(ms + 7*3600e3).toISOString();
 
 async function loadHimawari(){
@@ -478,7 +478,7 @@ function renderHimawari(){
     hwData.pts.forEach(p => {
       if (p.last < from) return;
       hwShown++;
-      L.circleMarker([p.lat, p.lon], {radius:Math.min(4 + Math.sqrt(+p.frp || 0) * 1.1, 14), fillColor:FIRE_COLOR, color:'#fff', weight:1.5, fillOpacity:0.75})
+      L.circleMarker([p.lat, p.lon], {radius:Math.min(3 + Math.sqrt(+p.frp || 0) * 0.7, 9), fillColor:FIRE_COLOR, color:'#8e44ad', weight:2.5, fillOpacity:0.75}   /* lebih kecil dari titik NASA; cincin ungu penanda Himawari */)
         .bindPopup(() => hwPopup(p, from)).addTo(hwLayer);
     });
     hwLayer.eachLayer(l => l.bringToBack());   // di bawah titik NASA, tetap bisa diklik
@@ -597,7 +597,15 @@ document.querySelectorAll('#lang-seg button').forEach(b => b.onclick = () => set
 document.querySelectorAll('#map-seg button').forEach(b => b.onclick = () => setBase(b.dataset.map));
 $('region-sel').onchange = () => { fetchData(true); syncUrl(); };
 $('sat-sel').onchange = () => { syncHw(); fetchData(false); syncUrl(); };
-$('btn-refresh').onclick = () => { fetchData(false, true); if (map.hasLayer(hwLayer)) loadHimawari(); };
+$('btn-refresh').onclick = () => { lastDataAt = Date.now(); fetchData(false, true); if (map.hasLayer(hwLayer)) loadHimawari(); };
+// Tab/aplikasi yang lama di latar belakang tidak memperbarui data. Saat dibuka lagi: bila data lebih tua dari 5 menit, ambil yang baru.
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) return;
+  if (Date.now() - lastDataAt < 5 * 60 * 1000) { if (hwData && map.hasLayer(hwLayer)) renderHimawari(); return; }
+  lastDataAt = Date.now();
+  fetchData(false, true);
+  if (map.hasLayer(hwLayer)) loadHimawari();
+});
 $('btn-theme').onclick = toggleTheme;
 $('btn-list').onclick = () => {   // buka halaman daftar dengan pilihan yang sama
   location.href = 'daftar.html?region=' + $('region-sel').value + '&jam=' + $('hw-sel').value + '&lang=' + lang + (document.body.classList.contains('night') ? '&theme=night' : '');
@@ -717,7 +725,7 @@ function buildShareUrl(){
   if (map.hasLayer(smokeLayer)) parts.push('smoke=1');
   if ($('hw-sel').value !== '12') parts.push('jam=' + $('hw-sel').value);
   if ($('region-sel').value !== 'indonesia') parts.push('region=' + $('region-sel').value);
-  if ($('sat-sel').value !== 'all') parts.push('sat=' + $('sat-sel').value);
+  if ($('sat-sel').value !== 'all_hw') parts.push('sat=' + $('sat-sel').value);
   if (pinLL) parts.push(`pin=${pinLL[0].toFixed(5)},${pinLL[1].toFixed(5)}`);
   parts.push('lang=' + lang);
   if (document.body.classList.contains('night')) parts.push('theme=night');
@@ -1033,17 +1041,27 @@ function flyToRegion(region){
   else if (region === 'indonesia') map.flyToBounds(INDONESIA_BOUNDS, {maxZoom:6});
   else map.flyTo([10, 100], 3);
 }
+// Titik NASA (cluster + titik Aceh) dilepas dari peta sekaligus saat mode "Himawari-9" saja, dipasang lagi saat mode lain
+function setNasaVisible(on){
+  [fireLayer, acehLayer].forEach(l => {
+    if (on && !map.hasLayer(l)) map.addLayer(l);
+    if (!on && map.hasLayer(l)) map.removeLayer(l);
+  });
+}
 async function fetchData(fly, force, partial){
   const rawSat = $('sat-sel').value, sat = rawSat === 'all_hw' ? 'all' : rawSat;   // all_hw = semua satelit NASA + Himawari
   const selRegion = $('region-sel').value;
   const region = partial ? 'aceh' : selRegion;
   const token = ++renderToken;
   if (rawSat === 'himawari') {   // hanya Himawari: kosongkan titik NASA
+    setNasaVisible(false);
     fireLayer.clearLayers(); acehLayer.clearLayers(); lastRows = [];
+    $('refresh-icon').classList.remove('fa-spin');
     $('count-val').innerText = hwShown;
     if (fly) flyToRegion(region);
     return;
   }
+  setNasaVisible(true);
   const icon = $('refresh-icon');
   icon.classList.add('fa-spin');
   loadStart('dl');
