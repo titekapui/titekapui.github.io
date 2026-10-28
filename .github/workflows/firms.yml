@@ -10,85 +10,98 @@ permissions:
   contents: write
 
 concurrency:
-  group: firms
+  group: firms-data-publish
   cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
-      - name: Checkout repository
+      - name: Checkout kode utama
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          persist-credentials: true
 
-      - name: Setup Python
+      - name: Siapkan Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: Install dependencies
+      - name: Ambil data lama dari branch data
+        shell: bash
         run: |
-          python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then
-            pip install -r requirements.txt
-          fi
-
-      - name: Fetch and process FIRMS data
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -e
-
-          python scripts/firms.py
-
-      - name: Publish data to branch data
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -e
-
-          if [ ! -d "out" ]; then
-            echo "ERROR: Folder out tidak ditemukan."
-            echo "Periksa lokasi keluaran scripts/firms.py."
-            exit 1
-          fi
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          # Simpan hasil pengolahan sebelum berpindah branch.
-          TEMP_DIR="$(mktemp -d)"
-          cp -a out/. "$TEMP_DIR/"
-
-          # Siapkan branch data dari remote.
-          git fetch origin data || true
+          set -euo pipefail
+          mkdir -p out
 
           if git ls-remote --exit-code --heads origin data >/dev/null 2>&1; then
-            git checkout -B data origin/data
+            git fetch --no-tags origin data
+            git archive origin/data | tar -x -C out
           else
-            git checkout --orphan data
-            git rm -rf . >/dev/null 2>&1 || true
+            echo "Branch data belum ada."
           fi
 
-          # Ganti isi branch data dengan hasil terbaru.
-          find . -mindepth 1 -maxdepth 1 \
-            ! -name ".git" -exec rm -rf {} +
+      - name: Bangun data FIRMS dan keluaran Himawari
+        shell: bash
+        env:
+          GEO_BUDGET: "240"
+          HW_GEO_BUDGET: "150"
+        run: |
+          set -euo pipefail
 
-          cp -a "$TEMP_DIR"/. .
+          python scripts/firms.py out
 
-          git add -A
+          python scripts/himawari_csv.py \
+            himawari/hotspots.geojson \
+            out/himawari/hotspots.csv
 
-          if git diff --cached --quiet; then
+          python scripts/himawari_wilayah.py \
+            himawari/hotspots-ringan.json \
+            out/himawari/hotspots-wilayah.json \
+            out/himawari/places.json
+
+          test -s out/firms/aceh.csv
+          test -s out/firms/indonesia.csv
+          test -s out/firms/global.csv
+          test -s out/firms/titik_api.csv
+          test -s out/firms/meta.json
+          test -s out/firms/places.json
+
+          echo "Berkas FIRMS siap diterbitkan:"
+          ls -lh out/firms/
+
+          if [ -s out/himawari/hotspots.csv ]; then
+            echo "CSV Himawari tersedia."
+          else
+            echo "Peringatan: CSV Himawari tidak dibuat pada putaran ini."
+          fi
+
+      - name: Terbitkan ke branch data
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          git -C out init -q -b data
+          git -C out config user.name "github-actions[bot]"
+          git -C out config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git -C out add -A
+
+          if git -C out diff --cached --quiet; then
             echo "Tidak ada perubahan data."
             exit 0
           fi
 
-          git commit -m "Update FIRMS data $(date -u +%Y-%m-%dT%H:%MZ)"
+          git -C out commit -q \
+            -m "Perbarui data FIRMS $(date -u +%Y-%m-%dT%H:%MZ)"
 
-          # Kirim commit ke GitHub.
-          git push origin data
+          git -C out remote add publish \
+            "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
 
-          echo "Data FIRMS berhasil dipublikasikan ke branch data."
+          git -C out push --force publish HEAD:refs/heads/data
+
+          echo "Data berhasil diterbitkan ke branch data."
