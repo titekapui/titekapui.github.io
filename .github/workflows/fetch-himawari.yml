@@ -1,51 +1,79 @@
-name: Ambil titik api Himawari
+
+name: Fetch Himawari Data
 
 on:
+  # Jalankan otomatis setiap 10 menit (UTC).
   schedule:
-    - cron: "*/10 * * * *"   # tiap 15 menit (waktu UTC); GitHub bisa menunda beberapa menit
-  workflow_dispatch:          # tombol "Run workflow" untuk uji manual
+    - cron: "*/10 * * * *"
+
+  # Izinkan menjalankan workflow secara manual.
+  workflow_dispatch:
 
 permissions:
   contents: write
 
 concurrency:
-  group: fetch-himawari
+  group: himawari
   cancel-in-progress: false
 
 jobs:
-  fetch:
+  build:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: Unduh dan gabungkan data
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          fi
+
+      - name: Fetch and process Himawari data
         env:
           FTP_USER: ${{ secrets.FTP_USER }}
           FTP_PASS: ${{ secrets.FTP_PASS }}
-          # Opsional: ubah lewat Settings > Secrets and variables > Actions > Variables
-          FTP_BASE: ${{ vars.FTP_BASE || '/pub/himawari/L2/WLF' }}
-          HOURS: ${{ vars.HOURS || '24' }}
-          BBOX: ${{ vars.BBOX || '94,-12,142,7' }}
-        run: python himawari/fetch_himawari.py
-
-      - name: Simpan jika ada perubahan
         run: |
-          if [ -n "$(git status --porcelain himawari/)" ]; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add himawari/hotspots.geojson himawari/hotspots-ringan.json
-            git commit -m "Perbarui titik api Himawari"
-            # Repo ini juga dipakai untuk hal lain: jika ada push lain di sela-sela, gabungkan lalu coba lagi
-            for i in 1 2 3; do
-              git pull --rebase && git push && exit 0
-              sleep 5
-            done
-            echo "Gagal push setelah 3 percobaan" && exit 1
-          else
-            echo "Tidak ada perubahan."
+          set -e
+          python himawari/fetch_himawari.py
+
+      - name: Check generated data
+        run: |
+          set -e
+          if [ ! -f "himawari/hotspots.geojson" ]; then
+            echo "ERROR: himawari/hotspots.geojson tidak ditemukan."
+            echo "Periksa lokasi output skrip fetch_himawari.py."
+            exit 1
           fi
+
+          echo "File GeoJSON ditemukan."
+          ls -lh himawari/hotspots.geojson
+
+      - name: Commit and push updated data
+        run: |
+          set -e
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add himawari/
+
+          if git diff --cached --quiet; then
+            echo "Tidak ada perubahan data Himawari."
+            exit 0
+          fi
+
+          git commit -m "Update Himawari data $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push origin HEAD:${GITHUB_REF_NAME}
+
+          echo "Data Himawari berhasil dikirim ke GitHub."
