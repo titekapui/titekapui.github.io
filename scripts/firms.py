@@ -25,6 +25,9 @@ import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import wilayah  # noqa: E402  (pencari wilayah offline; None bila berkas batas tidak ada)
+
 URLS = {
     "terra_aqua": "https://firms2.modaps.eosdis.nasa.gov/data/active_fire/modis-c6.1/csv/MODIS_C6_1_Global_24h.csv",
     "suomi_npp":  "https://firms2.modaps.eosdis.nasa.gov/data/active_fire/suomi-npp-viirs-c2/csv/SUOMI_VIIRS_C2_Global_24h.csv",
@@ -42,6 +45,7 @@ BOUNDS = {  # (lat_min, lat_max, lon_min, lon_max)
 MAX_ROWS = 5000          # batas titik per berkas (FRP tertinggi diprioritaskan)
 RADIUS = 0.005           # derajat, sekitar 550 m
 WINDOW_JAM = 3           # jendela waktu penggabungan (jam)
+MIN_SAT_OK = int(os.environ.get("MIN_SAT_OK", "2"))   # minimal sumber FIRMS yang harus berhasil; di bawah ini data lama dipertahankan
 GLOBAL_MIN_FRP = 0       # naikkan (mis. 5) bila global terlalu berat; 0 = tanpa saringan
 
 GEO_CELL = 0.05          # ukuran sel nama tempat, derajat (~5 km)
@@ -214,7 +218,11 @@ def geo_nominatim(lat, lon):
 
 
 def fill_places(rows, places):
-    """Cari nama tempat untuk sel yang belum ada. Aceh didahulukan, lalu FRP tertinggi."""
+    """Cari nama tempat lewat Nominatim untuk sel yang belum ada (hanya bila berkas batas tidak tersedia).
+    Aceh didahulukan, lalu FRP tertinggi."""
+    if wilayah.load():
+        print("Berkas batas tersedia: Nominatim tidak dipakai.")
+        return
     need = {}
     for r in rows:
         if not in_box(r["lat"], r["lon"], BOUNDS["indonesia"]):
@@ -252,8 +260,9 @@ def build_rows(all_rows, region, places):
     merged = dedup(rows)
     merged.sort(key=lambda r: -r["frp"])
     capped = merged[:MAX_ROWS]
+    w = wilayah.load()
     for r in capped:
-        p = places.get(geo_key(r["lat"], r["lon"]))
+        p = w.lookup(r["lat"], r["lon"]) if w else places.get(geo_key(r["lat"], r["lon"]))
         r["kabupaten"] = p["kab"] if p and not p["sea"] else ""
         r["provinsi"] = (SEA_LABEL if p["sea"] else p["prov"]) if p else ""
     print(f"{region}: {len(rows)} mentah -> {len(merged)} gabungan -> {len(capped)} ditulis")
@@ -312,9 +321,14 @@ def main():
     os.makedirs(d, exist_ok=True)
 
     rows, failed = load_rows()
-    if failed:
-        print("Dibatalkan, satelit gagal: " + ", ".join(failed) + ". Data lama tetap dipakai.", file=sys.stderr)
+    ok = len(URLS) - len(failed)
+    if ok < MIN_SAT_OK:
+        print(f"Dibatalkan: hanya {ok} dari {len(URLS)} sumber berhasil (minimal {MIN_SAT_OK}), gagal: "
+              + ", ".join(failed) + ". Data lama tetap dipakai.", file=sys.stderr)
         sys.exit(1)
+    if failed:
+        # Lanjutkan dengan sumber yang berhasil; catat di meta.json agar UI bisa memberi peringatan.
+        print("PERINGATAN: sumber gagal dan dilewati: " + ", ".join(failed), file=sys.stderr)
 
     pp = os.path.join(d, "places.json")
     try:
@@ -335,7 +349,10 @@ def main():
 
     with open(os.path.join(d, "meta.json"), "w", encoding="utf-8") as f:
         json.dump({"diperbarui": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-                   "titik_mentah": len(rows)}, f)
+                   "titik_mentah": len(rows),
+                   "satelit_ok": [k for k in URLS if k not in failed],
+                   "satelit_gagal": failed,
+                   "wilayah": "poligon" if wilayah.load() else "nominatim"}, f)
 
 
 if __name__ == "__main__":
