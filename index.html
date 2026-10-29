@@ -420,32 +420,16 @@ async function loadHimawari(){
   finally { hwBusy = false; loadDone(); }
 }
 
-// Nama wilayah (kabupaten/kota, provinsi) titik Himawari dicari saat popup dibuka, lewat OpenStreetMap Nominatim.
-// Hasil disimpan per sel ±1 km, jadi titik yang sama tidak diminta dua kali.
-const hwPlaceCache = new Map();
-function hwPlace(p){
-  const key = p.lat.toFixed(2) + '|' + p.lon.toFixed(2);
-  const show = raw => { const el = $('hw-place'); if (el) el.innerText = raw || tr[lang].noLoc; centerOnPopup(); };
-  if (hwPlaceCache.has(key)) { setTimeout(() => show(hwPlaceCache.get(key)), 0); return; }
-  fetch(`https://nominatim.openstreetmap.org/reverse?format=json&zoom=10&addressdetails=1&accept-language=id&lat=${p.lat}&lon=${p.lon}`)
-    .then(r => r.json())
-    .then(j => {
-      const a = j.address || {};
-      const kab = a.county || a.city || a.municipality || a.regency || a.town || a.state_district || '';
-      const raw = [kab, a.state].filter(Boolean).join(', ');   // kosong bila di laut / tanpa alamat
-      hwPlaceCache.set(key, raw);
-      show(raw);
-    })
-    .catch(() => show(''));
-}
+// Nama wilayah titik Himawari dihitung server (Actions, point-in-polygon) dan sudah ada di data;
+// browser tidak lagi memanggil layanan geocoding pihak ketiga.
 
 // Kategori ukuran api dari nilai FRP (MW): <10 kecil, 10-50 sedang, >=50 besar
 const hwSizeLabel = frp => { const t = tr[lang], v = +frp || 0; return v < 10 ? t.sizeS : v < 50 ? t.sizeM : t.sizeL; };
 
-// Baris wilayah: dari data Actions bila ada ([desa, kecamatan, kabupaten, provinsi]); kalau belum ada, cari lewat Nominatim
+// Baris wilayah: dari data Actions ([desa, kecamatan, kabupaten, provinsi]); kosong bila di laut / di luar cakupan
 function hwPlaceRows(p){
   const t = tr[lang];
-  if (!Array.isArray(p.place)) { hwPlace(p); return `<tr><td>${t.adm}</td><td align="right" id="hw-place">${t.loc}</td></tr>`; }
+  if (!Array.isArray(p.place)) return `<tr><td>${t.adm}</td><td align="right">${t.noLoc}</td></tr>`;
   const rows = [[t.hwDesa, p.place[0]], [t.hwKec, p.place[1]], [t.hwKab, p.place[2]], [t.hwProv, p.place[3]]].filter(r => r[1]);
   if (!rows.length) return `<tr><td>${t.adm}</td><td align="right">${t.noLoc}</td></tr>`;
   return rows.map(([k, v]) => `<tr><td>${k}</td><td align="right">${xmlEsc(v)}</td></tr>`).join('');
@@ -1131,27 +1115,22 @@ async function fetchData(fly, force, partial){
       const det = d.jumlah_deteksi;
 
       m.bindPopup(() => {
-        const t = tr[lang], id = "loc-" + i;
+        const t = tr[lang];
         // format waktu hanya dihitung saat popup dibuka (lebih ringan untuk ribuan titik)
         const wibTime = dt.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit', timeZone:'UTC'}) + " WIB";
         const wibDate = dt.toLocaleDateString('id-ID', {day:'2-digit', month:'short', timeZone:'UTC'});
         const tempRow = tb ? `<tr><td>${t.temp}</td><td align="right">${(tb - 273.15).toFixed(1)} °C</td></tr>` : '';
         const detRow = det ? `<tr><td>${t.det}</td><td align="right">${det}×</td></tr>` : '';
-        // kabupaten & provinsi dari server (Google Script + Spreadsheet); kosong bila sel belum diproses server
+        // kabupaten & provinsi dihitung server (Actions); kosong bila titik di laut / di luar cakupan
         const admTxt = [d.kabupaten, d.provinsi].filter(Boolean).join(', ');
         const admRow = admTxt ? `<tr><td>${t.adm}</td><td align="right">${xmlEsc(admTxt)}</td></tr>` : '';
         currentShare = {
           lat: d.latitude, lon: d.longitude,
           txt: `🔥 Titik api${admTxt ? ' di ' + admTxt : ''}\n📍 ${d.latitude.toFixed(4)}, ${d.longitude.toFixed(4)}\n🕑 ${wibDate}, ${wibTime}\n🛰️ ${satName} • ${(+d.frp || 0).toFixed(1)} MW`
         };
-        // Nama lokasi: titik di laut tidak punya alamat, jadi tampilkan teks "di laut" (bukan loading terus)
-        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${d.latitude}&lon=${d.longitude}`)
-          .then(r => r.json())
-          .then(j => { const el = $(id); if (el) el.innerText = j.display_name || t.noLoc; centerOnPopup(); })
-          .catch(() => { const el = $(id); if (el) el.innerText = t.noLoc; centerOnPopup(); });
         return `<div style="min-width:235px">
           <div class="popup-h">${t.detail}</div>
-          <div id="${id}" style="font-size:10px;color:#777;margin:6px 0">${t.loc}</div>
+          ${admTxt ? '' : `<div style="font-size:10px;color:#777;margin:6px 0">${t.noLoc}</div>`}
           <table class="popup-t">
             ${admRow}
             <tr><td>${t.sat}</td><td align="right"><b>${satName}</b></td></tr>
