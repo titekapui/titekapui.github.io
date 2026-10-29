@@ -8,10 +8,12 @@ Pemakaian:
 Masukan : {base, data:[[lon,lat,frp,n,[jam]], ...]}
 Keluaran: {base, data:[[lon,lat,frp,n,[jam],[desa,kec,kab,prov] atau null], ...]}
   - [desa,kec,kab,prov] semuanya "" = laut / tanpa alamat
-  - null = belum dicari atau di luar Indonesia (peta mencari sendiri saat popup dibuka)
+  - null = belum dicari (mode Nominatim, kena batas waktu) atau di luar Indonesia; peta menampilkan "alamat tidak tersedia"
 
-Sel pencarian ~1 km (lebih rapat dari FIRMS yang ~5 km) supaya desa/kecamatan lebih tepat.
-Hasil disimpan permanen di places.json, jadi tiap titik hanya dicari sekali.
+Sumber nama wilayah:
+  1. Bila scripts/batas/wilayah.geojson ada: point-in-polygon lokal (tanpa jaringan, tanpa batas permintaan).
+  2. Bila tidak ada: Nominatim dengan sel ~1 km (lebih rapat dari FIRMS yang ~5 km) supaya desa/kecamatan lebih tepat.
+     Hasil disimpan permanen di places.json, jadi tiap titik hanya dicari sekali.
 """
 import json
 import math
@@ -23,6 +25,7 @@ import urllib.request
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from firms import BOUNDS, GEO_UA, in_box  # noqa: E402
+import wilayah  # noqa: E402
 
 CELL = 0.01   # derajat, ~1 km
 DELAY = 1.1   # detik antar permintaan (aturan Nominatim: maks. 1/detik)
@@ -78,9 +81,12 @@ def main():
         except (TypeError, ValueError):
             return 0.0
 
+    w = wilayah.load()
+
     # sel yang belum punya nama; Aceh didahulukan, lalu FRP tertinggi
+    # (hanya dipakai bila berkas batas tidak ada; kalau ada, tiap titik dicari langsung lewat poligon)
     need = {}
-    for p in pts:
+    for p in ([] if w else pts):
         lon, lat = num(p[0]), num(p[1])
         if not in_box(lat, lon, BOUNDS["indonesia"]):
             continue
@@ -110,7 +116,8 @@ def main():
     for p in pts:
         lon, lat = num(p[0]), num(p[1])
         row = list(p[:5])
-        pl = places.get(key(lat, lon)) if in_box(lat, lon, BOUNDS["indonesia"]) else None
+        inside = in_box(lat, lon, BOUNDS["indonesia"])
+        pl = (w.lookup(lat, lon) if w else places.get(key(lat, lon))) if inside else None
         row.append([pl["desa"], pl["kec"], pl["kab"], pl["prov"]] if pl else None)
         out.append(row)
 
