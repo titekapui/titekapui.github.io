@@ -1,0 +1,3 @@
+latitude,longitude,frp,confidence,acq_date,acq_time,daynight,satelit,jumlah_deteksi,kabupaten,provinsi
+3.84985,96.63193,2.5,nominal,2026-10-31,0741,D,suomi_npp+noaa20,2,Aceh Barat Daya,Aceh
+5.22063,97.07263,0.75,nominal,2026-10-30,1942,N,noaa20+noaa21,3,Lhokseumawe,Aceh
