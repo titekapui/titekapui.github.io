@@ -1,0 +1,1011 @@
+latitude,longitude,frp,confidence,acq_date,acq_time,daynight,satelit,jumlah_deteksi,kabupaten,provinsi
+-8.25813,140.70676,229.3,0,2026-11-20,0624,D,terra_aqua,1,Semangga,Papua Selatan
+-4.38211,122.41615,166.46,82,2026-11-21,0705,D,terra_aqua,1,Konawe Selatan,Sulawesi Tenggara
+-2.57559,121.3847,163.75,nominal,2026-11-20,0529,D,noaa21,1,Luwu Timur,Sulawesi Selatan
+-3.88848,121.77013,123.59,low,2026-11-21,0508,D,noaa21,1,Kolaka Timur,Sulawesi Tenggara
+-8.26134,138.76288,107.04,97,2026-11-20,0624,D,terra_aqua,1,Semangga,Papua Selatan
+-8.21654,138.57529,106.51,97,2026-11-20,0624,D,terra_aqua,1,Semangga,Papua Selatan
+-8.98966,140.86238,93.94,nominal,2026-11-20,0442,D,terra_aqua+noaa20,3,Semangga,Papua Selatan
+-8.98431,140.86624,93.94,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-4.64516,123.05535,80.7,nominal,2026-11-20,0527,D,noaa21,1,Buton Utara,Sulawesi Tenggara
+-4.3884,122.42422,75.43,65,2026-11-21,0705,D,terra_aqua,1,Konawe Selatan,Sulawesi Tenggara
+-3.60113,104.43761,60.78,nominal,2026-11-21,0650,D,noaa21,1,Muara Enim,Sumatera Selatan
+-3.26711,121.76265,58.78,72,2026-11-20,0054,D,terra_aqua,1,Konawe,Sulawesi Tenggara
+-8.21481,138.58777,56.79,89,2026-11-20,0624,D,terra_aqua,1,Semangga,Papua Selatan
+-8.22514,138.58922,52.36,88,2026-11-20,0624,D,terra_aqua,1,Semangga,Papua Selatan
+-8.27351,123.50673,48.17,nominal,2026-11-21,0508,D,noaa21,1,Lembata,Nusa Tenggara Timur
+-2.03669,120.83518,46.81,nominal,2026-11-20,0529,D,noaa21,1,,Sulawesi Tengah
+-8.77229,140.65797,41.59,64,2026-11-21,0705,D,terra_aqua,1,Semangga,Papua Selatan
+-4.84028,121.70298,40.55,0,2026-11-20,0054,D,terra_aqua,1,Bombana,Sulawesi Tenggara
+-3.54582,126.76389,38.29,nominal,2026-11-20,0444,D,noaa20,1,Buru,Maluku
+-4.96271,122.84663,37.93,nominal,2026-11-21,0508,D,noaa21,2,Muna,Sulawesi Tenggara
+-8.98593,140.85701,37.66,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-7.43094,138.77652,34.43,nominal,2026-11-20,0344,D,noaa21,1,Semangga,Papua Selatan
+-7.46166,138.63657,34.06,nominal,2026-11-20,0442,D,noaa20,4,Semangga,Papua Selatan
+-8.519,126.13122,33.25,39,2026-11-20,1134,N,terra_aqua,1,Laleia,Manatuto
+-7.87055,139.25517,33.05,low,2026-11-20,0344,D,noaa21,3,Semangga,Papua Selatan
+-8.26301,138.75069,31.11,81,2026-11-20,0624,D,terra_aqua,1,Semangga,Papua Selatan
+-8.25225,140.69994,30.89,nominal,2026-11-20,1545,N,noaa20+noaa21,8,Semangga,Papua Selatan
+-8.25531,140.69435,30.21,nominal,2026-11-20,1545,N,noaa20,1,Semangga,Papua Selatan
+-7.48531,139.47269,30.1,85,2026-11-20,0624,D,terra_aqua,1,Semangga,Papua Selatan
+0.53588,122.61723,28.36,nominal,2026-11-21,0510,D,noaa21,1,Boalemo,Gorontalo
+-1.03969,121.40612,28.34,nominal,2026-11-20,0529,D,noaa20+noaa21,4,Tojo Una-Una,Sulawesi Tengah
+-7.43164,138.77148,28.28,nominal,2026-11-20,0344,D,noaa21,1,Semangga,Papua Selatan
+-8.80408,118.55814,27.83,high,2026-11-20,0622,D,noaa20,2,Bima,Nusa Tenggara Barat
+-8.03592,138.70084,27.79,81,2026-11-20,0624,D,terra_aqua,1,Semangga,Papua Selatan
+-8.03577,139.42287,26.96,81,2026-11-20,0624,D,terra_aqua,1,Semangga,Papua Selatan
+-7.72085,139.11536,26.23,79,2026-11-20,0624,D,terra_aqua,1,Semangga,Papua Selatan
+-7.76987,130.08774,26.0,nominal,2026-11-20,0442,D,noaa20,4,Maluku Barat Daya,Maluku
+-4.59414,120.22932,25.97,82,2026-11-20,0805,D,terra_aqua,1,Watampone,Sulawesi Selatan
+-4.50415,121.665,25.81,low,2026-11-21,0508,D,noaa21,1,Kolaka,Sulawesi Tenggara
+-7.45467,139.11688,25.77,81,2026-11-20,0624,D,terra_aqua,1,Semangga,Papua Selatan
+-7.42251,138.62273,25.48,nominal,2026-11-20,0344,D,noaa20+noaa21,5,Semangga,Papua Selatan
+-7.41773,138.6221,25.48,nominal,2026-11-20,0344,D,noaa20+noaa21,5,Semangga,Papua Selatan
+-7.90652,129.86043,25.24,nominal,2026-11-21,0505,D,noaa21,1,Maluku Barat Daya,Maluku
+-2.45984,121.16433,24.98,nominal,2026-11-21,0508,D,noaa21,1,Luwu Timur,Sulawesi Selatan
+-7.75384,138.77608,24.88,nominal,2026-11-20,0344,D,noaa21,1,Semangga,Papua Selatan
+-7.4628,138.62956,24.87,nominal,2026-11-20,0442,D,noaa20,3,Semangga,Papua Selatan
+-4.40019,120.16121,24.81,nominal,2026-11-21,0508,D,noaa21,1,Bone,Sulawesi Selatan
+-2.5774,121.38515,24.36,nominal,2026-11-21,0508,D,noaa21,4,Luwu Timur,Sulawesi Selatan
+-4.58601,121.84599,24.26,nominal,2026-11-21,0508,D,noaa21,4,Bombana,Sulawesi Tenggara
+-3.46929,126.89111,24.19,nominal,2026-11-20,0527,D,noaa21,3,Buru,Maluku
+-4.07197,122.55157,23.86,56,2026-11-20,0805,D,terra_aqua,1,Kendari,Sulawesi Tenggara
+-3.85069,121.81139,22.74,nominal,2026-11-20,0529,D,noaa21,1,Kolaka Timur,Sulawesi Tenggara
+-8.40505,123.54256,22.72,high,2026-11-20,0442,D,noaa20+noaa21,4,Lembata,Nusa Tenggara Timur
+0.32343,117.51199,22.64,71,2026-11-20,0807,D,terra_aqua,1,Kutai Timur,Kalimantan Timur
+-2.58676,121.37767,22.59,68,2026-11-20,0805,D,terra_aqua,1,Luwu Timur,Sulawesi Selatan
+-1.25049,115.02145,22.37,nominal,2026-11-20,0626,D,noaa20,1,Barito Utara,Kalimantan Tengah
+-4.59591,120.21762,22.31,80,2026-11-20,0805,D,terra_aqua,1,Watampone,Sulawesi Selatan
+-7.21855,131.66753,22.19,nominal,2026-11-20,0442,D,noaa20,1,Kepulauan Tanimbar,Maluku
+-1.03577,114.85767,22.14,nominal,2026-11-20,0626,D,noaa20,2,Barito Utara,Kalimantan Tengah
+-3.87338,121.82249,21.95,nominal,2026-11-20,0529,D,noaa21,2,Kolaka Timur,Sulawesi Tenggara
+-3.47309,126.89365,21.89,nominal,2026-11-20,0527,D,noaa20+noaa21,3,Buru,Maluku
+-3.89611,121.83337,21.41,nominal,2026-11-20,0529,D,noaa21,1,Kolaka Timur,Sulawesi Tenggara
+-9.42659,123.96636,21.3,58,2026-11-20,0805,D,terra_aqua,1,Kupang,Nusa Tenggara Timur
+-8.22687,138.57675,21.16,75,2026-11-20,0624,D,terra_aqua,1,Semangga,Papua Selatan
+-2.70734,121.14183,21.16,nominal,2026-11-21,0508,D,noaa21,1,Luwu Timur,Sulawesi Selatan
+-8.02029,129.68721,20.71,nominal,2026-11-21,0505,D,noaa21,6,Maluku Barat Daya,Maluku
+-10.24237,124.02842,20.56,nominal,2026-11-20,0527,D,noaa21,1,Kupang,Nusa Tenggara Timur
+-1.51093,122.92611,20.56,nominal,2026-11-21,0508,D,noaa21,1,,Sulawesi Tengah
+-8.25202,140.70178,20.49,54,2026-11-20,1132,N,terra_aqua,1,Semangga,Papua Selatan
+-1.16937,114.87203,20.43,nominal,2026-11-20,0529,D,noaa21,1,Barito Utara,Kalimantan Tengah
+0.13009,116.63421,20.35,82,2026-11-20,0807,D,terra_aqua,1,Kutai Kartanegara,Kalimantan Timur
+0.58648,122.61591,19.77,nominal,2026-11-21,0510,D,noaa21,1,Boalemo,Gorontalo
+-8.31962,123.30207,19.37,nominal,2026-11-20,0527,D,noaa21,1,Flores Timur,Nusa Tenggara Timur
+-3.36719,126.93806,19.13,nominal,2026-11-21,0508,D,noaa21,3,Buru,Maluku
+-8.22168,138.61411,18.71,33,2026-11-20,0624,D,terra_aqua,1,Semangga,Papua Selatan
+-8.11081,112.92554,18.64,0,2026-11-20,0056,D,terra_aqua,1,Lumajang,Jawa Timur
+-3.70522,103.17002,18.39,nominal,2026-11-21,0650,D,noaa21,1,Lahat,Sumatera Selatan
+-8.26074,140.70021,17.73,nominal,2026-11-20,1630,N,noaa21,2,Semangga,Papua Selatan
+0.13138,116.64303,17.72,81,2026-11-20,0807,D,terra_aqua,1,Kutai Kartanegara,Kalimantan Timur
+-1.66363,128.11455,17.45,nominal,2026-11-20,0444,D,noaa20,1,Halmahera Selatan,Maluku Utara
+-0.41169,115.97857,17.35,nominal,2026-11-21,0510,D,noaa21,1,Kutai Barat,Kalimantan Timur
+-0.41256,115.97301,17.35,nominal,2026-11-21,0510,D,noaa21,1,Kutai Barat,Kalimantan Timur
+-1.12273,122.70902,17.33,nominal,2026-11-21,0508,D,noaa21,2,,Sulawesi Tengah
+-6.9603,107.80084,17.07,73,2026-11-21,0134,D,terra_aqua,1,Kabupaten Bandung,Jawa Barat
+-8.08713,139.90993,17.07,nominal,2026-11-20,0344,D,noaa20+noaa21,4,Semangga,Papua Selatan
+1.34344,116.61421,17.07,low,2026-11-20,0626,D,noaa20,2,Kutai Timur,Kalimantan Timur
+-1.52876,122.14064,16.97,nominal,2026-11-21,0508,D,noaa21,2,,Sulawesi Tengah
+-8.94381,140.85463,16.93,low,2026-11-21,0325,D,noaa21,3,Semangga,Papua Selatan
+-8.06581,139.93349,16.9,nominal,2026-11-20,0344,D,noaa20+noaa21,2,Semangga,Papua Selatan
+-7.48684,139.46202,16.85,78,2026-11-20,0624,D,terra_aqua,1,Semangga,Papua Selatan
+-9.19515,124.56958,16.64,nominal,2026-11-21,0505,D,noaa21,1,Timor Tengah Utara,Nusa Tenggara Timur
+-3.87752,122.40756,16.6,41,2026-11-20,2356,D,terra_aqua,1,Konawe,Sulawesi Tenggara
+-3.90261,122.41848,16.55,nominal,2026-11-21,0508,D,noaa21,2,Konawe,Sulawesi Tenggara
+-4.06798,122.54588,16.53,50,2026-11-20,0805,D,terra_aqua,1,Kendari,Sulawesi Tenggara
+-3.71739,121.84753,16.46,low,2026-11-21,0508,D,noaa21,1,Konawe,Sulawesi Tenggara
+-8.36361,140.30598,16.44,nominal,2026-11-20,0442,D,noaa20+noaa21,2,Semangga,Papua Selatan
+0.55022,116.72434,16.44,nominal,2026-11-21,0510,D,noaa21,2,Kutai Timur,Kalimantan Timur
+-3.77927,121.65358,16.38,low,2026-11-21,0508,D,noaa21,1,Kolaka Timur,Sulawesi Tenggara
+-4.46593,120.0991,16.25,nominal,2026-11-21,0508,D,noaa21,1,Bone,Sulawesi Selatan
+-3.55549,122.11007,16.11,nominal,2026-11-20,0529,D,noaa20+noaa21,2,Konawe Utara,Sulawesi Tenggara
+-8.2096,138.57857,16.02,89,2026-11-20,1132,N,terra_aqua,1,Semangga,Papua Selatan
+-3.71559,121.8596,15.9,low,2026-11-21,0508,D,noaa21,1,Konawe,Sulawesi Tenggara
+-2.11695,121.27825,15.84,72,2026-11-20,0805,D,terra_aqua,1,Morowali Utara,Sulawesi Tengah
+-8.3662,140.30226,15.65,nominal,2026-11-20,0344,D,noaa20+noaa21,5,Semangga,Papua Selatan
+-1.4448,122.30225,15.52,nominal,2026-11-21,0508,D,noaa21,1,,Sulawesi Tengah
+-8.26431,138.24394,15.49,nominal,2026-11-21,0505,D,noaa21,2,Semangga,Papua Selatan
+-8.2578,138.24266,15.49,low,2026-11-21,0505,D,noaa21,2,Semangga,Papua Selatan
+-3.41071,122.10233,15.25,low,2026-11-21,0508,D,noaa21,1,Konawe Utara,Sulawesi Tenggara
+-7.93929,138.30473,15.19,53,2026-11-20,0624,D,terra_aqua,1,Semangga,Papua Selatan
+-1.59174,123.13282,15.11,nominal,2026-11-21,0508,D,noaa21,1,,Sulawesi Tengah
+-8.20592,140.37666,14.99,nominal,2026-11-20,0344,D,noaa21,1,Merauke,Papua Selatan
+-3.36407,122.07281,14.96,nominal,2026-11-20,0529,D,noaa21,1,Konawe Utara,Sulawesi Tenggara
+-9.30686,125.18478,14.88,nominal,2026-11-21,0505,D,noaa21,2,Suai,Cova-Lima
+-8.32729,123.73497,14.79,low,2026-11-21,0508,D,noaa21,1,Lembata,Nusa Tenggara Timur
+-8.98386,140.8636,14.77,nominal,2026-11-21,0325,D,noaa21,1,Semangga,Papua Selatan
+-4.16273,121.96827,14.74,low,2026-11-21,0508,D,noaa21,1,Kolaka Timur,Sulawesi Tenggara
+-8.25508,138.76407,14.72,88,2026-11-20,1132,N,terra_aqua,1,Semangga,Papua Selatan
+-8.06778,139.95131,14.67,nominal,2026-11-20,0344,D,terra_aqua+noaa20+noaa21,7,Semangga,Papua Selatan
+-9.82042,130.27074,14.58,nominal,2026-11-21,0505,D,noaa21,1,,(Laut / tanpa alamat)
+-4.71842,120.07962,14.48,67,2026-11-20,0805,D,terra_aqua,1,Bone,Sulawesi Selatan
+-7.5429,110.44389,14.41,86,2026-11-20,2027,N,terra_aqua,1,Magelang,Jawa Tengah
+-1.60789,122.00938,14.39,nominal,2026-11-21,0508,D,noaa21,1,Morowali Utara,Sulawesi Tengah
+-0.41343,115.96745,14.34,nominal,2026-11-21,0510,D,noaa21,1,Kutai Barat,Kalimantan Timur
+-7.45307,138.63876,14.26,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-0.03581,115.77425,14.24,80,2026-11-20,0807,D,terra_aqua,1,Kutai Barat,Kalimantan Timur
+-3.86977,122.39777,14.23,54,2026-11-20,0805,D,terra_aqua+noaa21,3,Konawe,Sulawesi Tenggara
+-8.07096,139.96048,14.2,nominal,2026-11-20,0344,D,noaa21,1,Semangga,Papua Selatan
+-1.20323,123.29303,14.14,nominal,2026-11-20,0529,D,noaa21,2,,Sulawesi Tengah
+0.32203,117.50259,14.12,75,2026-11-20,0807,D,terra_aqua,1,Kutai Timur,Kalimantan Timur
+-2.1327,120.2856,13.99,nominal,2026-11-21,0508,D,noaa21,1,Luwu Utara,Sulawesi Selatan
+-8.18211,117.64818,13.96,low,2026-11-20,0527,D,noaa20+noaa21,2,Sumbawa,Nusa Tenggara Barat
+0.23329,115.27296,13.94,79,2026-11-20,0807,D,terra_aqua,1,Mahakam Ulu,Kalimantan Timur
+-7.73918,126.76788,13.77,nominal,2026-11-21,0508,D,noaa21,1,Maluku Barat Daya,Maluku
+-8.37113,140.30762,13.74,63,2026-11-20,0624,D,terra_aqua+noaa20+noaa21,4,Semangga,Papua Selatan
+-3.79864,122.0321,13.69,nominal,2026-11-20,0529,D,noaa21,1,Konawe,Sulawesi Tenggara
+-8.35603,140.54985,13.65,71,2026-11-20,1132,N,terra_aqua,1,Semangga,Papua Selatan
+-7.83868,139.78705,13.55,nominal,2026-11-20,0442,D,noaa20,2,Semangga,Papua Selatan
+-0.96425,123.25754,13.54,nominal,2026-11-21,0508,D,noaa21,1,,Sulawesi Tengah
+-3.33472,103.75154,13.51,nominal,2026-11-21,0650,D,noaa21,1,Penukal Abab Lematang Ilir,Sumatera Selatan
+-2.17972,121.31744,13.45,nominal,2026-11-20,0529,D,noaa21,2,Morowali Utara,Sulawesi Tengah
+-8.82473,126.45434,13.31,nominal,2026-11-21,0505,D,noaa21,2,Ossu,Viqueque
+-0.87879,123.3507,13.26,nominal,2026-11-21,0510,D,noaa21,1,,Sulawesi Tengah
+-8.21174,140.3782,13.25,74,2026-11-20,0624,D,terra_aqua,1,Merauke,Papua Selatan
+-8.21913,138.57999,13.11,82,2026-11-20,1132,N,terra_aqua,1,Semangga,Papua Selatan
+-7.43618,138.38843,13.09,nominal,2026-11-20,0344,D,noaa21,2,Semangga,Papua Selatan
+-0.50405,116.32832,13.06,nominal,2026-11-21,0510,D,noaa21,1,Kutai Kartanegara,Kalimantan Timur
+-8.43918,140.98384,13.02,38,2026-11-20,1132,N,terra_aqua,1,Semangga,Papua Selatan
+0.31167,120.11486,13.01,nominal,2026-11-21,0510,D,noaa21,1,Parigi Moutong,Sulawesi Tengah
+-8.26998,140.49611,12.98,56,2026-11-20,0624,D,terra_aqua,1,Semangga,Papua Selatan
+-3.72329,121.85664,12.97,low,2026-11-21,0508,D,noaa21,1,Konawe,Sulawesi Tenggara
+-2.63652,121.43064,12.89,nominal,2026-11-21,0508,D,noaa21,1,Luwu Timur,Sulawesi Selatan
+-8.29017,138.70473,12.82,61,2026-11-20,0624,D,terra_aqua,1,Semangga,Papua Selatan
+-3.87077,122.39424,12.73,nominal,2026-11-21,0508,D,noaa21,1,Konawe,Sulawesi Tenggara
+-9.22449,125.3439,12.72,nominal,2026-11-20,0527,D,noaa21,2,Suai,Cova-Lima
+-3.5521,122.10715,12.66,low,2026-11-21,0508,D,noaa21,1,Konawe Utara,Sulawesi Tenggara
+-7.73798,140.02849,12.59,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-5.38708,122.92341,12.44,nominal,2026-11-20,0527,D,noaa21,1,Buton,Sulawesi Tenggara
+-3.17421,121.73686,12.43,low,2026-11-20,0529,D,noaa21,2,Konawe,Sulawesi Tenggara
+-3.68541,121.91644,12.35,low,2026-11-21,0508,D,noaa21,1,Konawe,Sulawesi Tenggara
+-3.46227,122.07776,12.25,low,2026-11-21,0508,D,noaa21,1,Konawe Utara,Sulawesi Tenggara
+-4.72634,120.26156,12.23,nominal,2026-11-21,0508,D,noaa21,1,Bone,Sulawesi Selatan
+-3.17987,122.44069,12.17,40,2026-11-20,0805,D,terra_aqua+noaa21,3,Morowali,Sulawesi Tengah
+-8.1034,139.5351,12.11,nominal,2026-11-20,0344,D,noaa20+noaa21,3,Semangga,Papua Selatan
+-7.94112,138.29179,11.93,29,2026-11-20,0624,D,terra_aqua,1,Semangga,Papua Selatan
+-8.72407,125.22253,11.83,nominal,2026-11-20,0527,D,noaa21,2,Maubara,Liquiçá
+-4.70787,121.75355,11.7,26,2026-11-20,0805,D,terra_aqua,1,Bombana,Sulawesi Tenggara
+-3.51454,121.44388,11.63,low,2026-11-21,0508,D,noaa21,1,Kolaka Timur,Sulawesi Tenggara
+-8.80313,118.55523,11.4,nominal,2026-11-20,0527,D,terra_aqua+noaa21,2,Bima,Nusa Tenggara Barat
+-7.8383,139.21823,11.39,nominal,2026-11-20,0344,D,noaa21,2,Semangga,Papua Selatan
+-2.07858,125.8658,11.39,nominal,2026-11-20,0529,D,noaa21,1,Kepulauan Sula,Maluku Utara
+-8.10919,117.8608,11.34,low,2026-11-20,0527,D,noaa21,1,Bima,Nusa Tenggara Barat
+-4.57346,119.95793,11.32,nominal,2026-11-20,0624,D,noaa20,2,Bone,Sulawesi Selatan
+-4.76898,120.0944,11.27,58,2026-11-20,0805,D,terra_aqua,1,Bone,Sulawesi Selatan
+-8.31403,138.75795,11.25,63,2026-11-20,0624,D,terra_aqua,1,Semangga,Papua Selatan
+-3.42219,122.08566,11.24,nominal,2026-11-20,0529,D,noaa21,1,Konawe Utara,Sulawesi Tenggara
+-8.95589,140.89488,11.23,nominal,2026-11-20,0442,D,noaa20,2,Semangga,Papua Selatan
+-7.92361,138.31071,11.13,nominal,2026-11-20,1630,N,noaa20+noaa21,3,Semangga,Papua Selatan
+-7.90103,139.70554,11.09,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-8.16968,140.09262,11.02,69,2026-11-20,0624,D,terra_aqua,1,Merauke,Papua Selatan
+-1.57247,121.77168,10.99,nominal,2026-11-20,0529,D,noaa21,1,Morowali Utara,Sulawesi Tengah
+-5.38613,122.92052,10.92,low,2026-11-21,0508,D,noaa21,1,Buton,Sulawesi Tenggara
+-4.08601,122.17225,10.9,nominal,2026-11-20,0529,D,noaa21,1,Konawe Selatan,Sulawesi Tenggara
+-8.46624,124.06723,10.89,nominal,2026-11-20,0527,D,noaa21,1,Alor,Nusa Tenggara Timur
+-8.54911,140.47974,10.87,nominal,2026-11-20,0344,D,noaa20+noaa21,4,Merauke,Papua Selatan
+-8.45684,122.40972,10.87,nominal,2026-11-20,0527,D,noaa21,1,Sikka,Nusa Tenggara Timur
+-8.26721,140.70808,10.85,0,2026-11-20,0624,D,terra_aqua,1,Semangga,Papua Selatan
+-7.54668,127.47018,10.85,nominal,2026-11-20,0527,D,noaa20+noaa21,3,Maluku Barat Daya,Maluku
+-1.32331,123.03651,10.84,nominal,2026-11-20,0529,D,noaa21,1,,Sulawesi Tengah
+-7.43249,138.58879,10.81,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-2.20452,120.34405,10.76,57,2026-11-20,0805,D,terra_aqua,1,Luwu Utara,Sulawesi Selatan
+-8.38622,120.8868,10.72,nominal,2026-11-20,0442,D,noaa20,2,Manggarai Timur,Nusa Tenggara Timur
+-4.48534,121.69234,10.69,nominal,2026-11-21,0508,D,noaa21,1,Kolaka,Sulawesi Tenggara
+-1.96385,120.78005,10.66,nominal,2026-11-20,0529,D,noaa21,1,,Sulawesi Tengah
+-8.35416,140.54378,10.62,73,2026-11-20,1132,N,terra_aqua,1,Semangga,Papua Selatan
+-10.17743,123.91272,10.61,nominal,2026-11-20,0527,D,noaa21,1,Kupang,Nusa Tenggara Timur
+-3.24688,116.11517,10.6,77,2026-11-20,0805,D,terra_aqua+noaa20,2,Kotabaru,Kalimantan Selatan
+0.48353,127.99146,10.56,nominal,2026-11-20,0529,D,noaa20+noaa21,5,Halmahera Tengah,Maluku Utara
+-6.63427,108.0303,10.55,50,2026-11-21,0134,D,terra_aqua,1,Indramayu,Jawa Barat
+-4.03379,122.00674,10.52,low,2026-11-21,0508,D,noaa21,1,Konawe,Sulawesi Tenggara
+-7.97152,140.09845,10.39,nominal,2026-11-20,0344,D,noaa21,1,Merauke,Papua Selatan
+-8.42005,140.38887,10.32,nominal,2026-11-20,0344,D,noaa20+noaa21,4,Semangga,Papua Selatan
+-7.45629,139.10567,10.31,70,2026-11-20,0624,D,terra_aqua,1,Semangga,Papua Selatan
+-8.0672,139.82739,10.26,nominal,2026-11-20,0344,D,noaa20+noaa21,2,Semangga,Papua Selatan
+-4.83129,120.27815,10.26,nominal,2026-11-20,0624,D,noaa20,2,Bone,Sulawesi Selatan
+-4.55754,119.88052,10.26,nominal,2026-11-21,0508,D,noaa21,2,Bone,Sulawesi Selatan
+0.81506,116.9124,10.26,nominal,2026-11-21,0510,D,noaa21,1,Kutai Timur,Kalimantan Timur
+-8.93707,140.85751,10.23,low,2026-11-21,0325,D,noaa21,1,Semangga,Papua Selatan
+-4.73035,120.15144,10.16,nominal,2026-11-21,0508,D,noaa21,1,Bone,Sulawesi Selatan
+0.56959,122.39429,10.11,nominal,2026-11-21,0510,D,noaa21,2,Boalemo,Gorontalo
+-5.00837,122.94114,10.09,low,2026-11-21,0508,D,noaa21,2,Buton Utara,Sulawesi Tenggara
+-8.91977,140.93741,10.05,nominal,2026-11-20,0442,D,noaa20+noaa21,2,Semangga,Papua Selatan
+-1.59347,122.01134,10.04,nominal,2026-11-21,0508,D,noaa21,1,Morowali Utara,Sulawesi Tengah
+-3.37598,122.1325,10.03,nominal,2026-11-20,0529,D,noaa21,1,Konawe Utara,Sulawesi Tenggara
+-7.6465,140.21361,10.0,67,2026-11-20,0624,D,terra_aqua+noaa20,2,Semangga,Papua Selatan
+-9.31623,125.0313,9.97,nominal,2026-11-21,0505,D,noaa21,1,Malaka,Nusa Tenggara Timur
+-7.91857,138.32271,9.96,43,2026-11-20,1849,N,terra_aqua,1,Semangga,Papua Selatan
+-8.06782,139.82298,9.94,nominal,2026-11-20,0344,D,noaa21,1,Semangga,Papua Selatan
+-8.06839,139.94701,9.87,nominal,2026-11-20,0344,D,noaa21,1,Semangga,Papua Selatan
+-3.14439,122.10886,9.85,nominal,2026-11-20,0529,D,noaa21,1,Konawe Utara,Sulawesi Tenggara
+-3.37832,127.04453,9.82,nominal,2026-11-20,0529,D,noaa20+noaa21,4,Buru,Maluku
+-0.14003,116.11494,9.8,67,2026-11-20,0807,D,terra_aqua,1,Kutai Kartanegara,Kalimantan Timur
+-3.68679,104.45098,9.8,nominal,2026-11-21,0650,D,noaa21,2,Ogan Ilir,Sumatera Selatan
+-8.73491,118.64539,9.79,low,2026-11-20,0527,D,noaa21,1,Bima,Nusa Tenggara Barat
+-4.86096,121.94706,9.78,nominal,2026-11-20,0527,D,noaa20+noaa21,3,Bombana,Sulawesi Tenggara
+-1.93219,125.00708,9.73,nominal,2026-11-20,0529,D,noaa21,1,Pulau Taliabu,Maluku Utara
+-7.47723,139.46063,9.71,51,2026-11-20,0624,D,terra_aqua,1,Semangga,Papua Selatan
+-0.10589,116.27135,9.53,nominal,2026-11-21,0510,D,noaa21,1,Kutai Kartanegara,Kalimantan Timur
+-0.10669,116.26611,9.53,nominal,2026-11-21,0510,D,noaa21,1,Kutai Kartanegara,Kalimantan Timur
+-8.88592,125.82853,9.47,nominal,2026-11-20,0442,D,noaa20+noaa21,4,Laklubar,Manatuto
+-8.14115,129.87544,9.44,nominal,2026-11-21,0505,D,noaa21,1,Maluku Barat Daya,Maluku
+-5.37285,123.03854,9.43,nominal,2026-11-20,0527,D,noaa21,1,Buton,Sulawesi Tenggara
+-8.34277,140.37398,9.39,71,2026-11-20,0624,D,terra_aqua+noaa20,2,Semangga,Papua Selatan
+-9.93614,124.49069,9.39,nominal,2026-11-20,0527,D,noaa21,2,Timor Tengah Selatan,Nusa Tenggara Timur
+-7.4757,139.47131,9.38,46,2026-11-20,0624,D,terra_aqua,1,Semangga,Papua Selatan
+-3.76857,122.09253,9.38,nominal,2026-11-20,0529,D,noaa21,1,Konawe,Sulawesi Tenggara
+-8.20338,124.60642,9.37,nominal,2026-11-20,0527,D,noaa21,1,Alor,Nusa Tenggara Timur
+-3.86962,122.40189,9.35,low,2026-11-21,0508,D,noaa21,2,Konawe,Sulawesi Tenggara
+0.48666,127.98499,9.34,nominal,2026-11-20,0444,D,noaa20+noaa21,4,Halmahera Tengah,Maluku Utara
+-5.54784,122.82787,9.3,low,2026-11-20,0527,D,noaa21,3,Buton,Sulawesi Tenggara
+-4.01136,122.036,9.28,nominal,2026-11-21,0508,D,noaa21,1,Konawe,Sulawesi Tenggara
+-8.40919,140.40402,9.21,nominal,2026-11-20,0344,D,noaa20+noaa21,3,Semangga,Papua Selatan
+-7.70295,108.9935,9.15,nominal,2026-11-20,0527,D,noaa21,1,Cilacap,Jawa Tengah
+-3.12688,122.09335,9.14,nominal,2026-11-21,0508,D,noaa21,1,Konawe Utara,Sulawesi Tenggara
+0.50219,122.77619,9.14,nominal,2026-11-21,0510,D,noaa21,2,Gorontalo,Gorontalo
+0.24609,116.11288,9.07,nominal,2026-11-20,0626,D,terra_aqua+noaa20,3,Kutai Kartanegara,Kalimantan Timur
+3.60802,112.40936,9.06,nominal,2026-11-21,0510,D,noaa21,2,,(Laut / tanpa alamat)
+-8.1711,138.90366,9.03,57,2026-11-20,0624,D,terra_aqua,1,Semangga,Papua Selatan
+-8.8669,140.71291,9.02,nominal,2026-11-20,0344,D,noaa21,1,Semangga,Papua Selatan
+-8.06905,139.81419,8.97,nominal,2026-11-20,0344,D,noaa21,1,Semangga,Papua Selatan
+-8.12926,140.06578,8.96,nominal,2026-11-20,0442,D,noaa20,1,Merauke,Papua Selatan
+-8.90981,126.18985,8.94,nominal,2026-11-21,0505,D,noaa21,1,Vikeke,Viqueque
+-1.09337,122.67574,8.94,nominal,2026-11-21,0508,D,noaa21,1,,Sulawesi Tengah
+-7.9368,140.76051,8.93,68,2026-11-20,0624,D,terra_aqua,1,Semangga,Papua Selatan
+-6.96942,107.61818,8.88,51,2026-11-21,0134,D,terra_aqua,1,Kabupaten Bandung,Jawa Barat
+-7.86722,139.24631,8.88,nominal,2026-11-20,0344,D,noaa21,4,Semangga,Papua Selatan
+-4.93287,122.95521,8.88,nominal,2026-11-20,0527,D,noaa21,1,Buton Utara,Sulawesi Tenggara
+-3.3698,127.03812,8.83,nominal,2026-11-20,0529,D,noaa20+noaa21,3,Buru,Maluku
+-2.89719,116.3251,8.81,low,2026-11-20,0529,D,noaa21,1,Kotabaru,Kalimantan Selatan
+-8.13579,140.02794,8.79,nominal,2026-11-20,0442,D,noaa20,1,Merauke,Papua Selatan
+1.34718,116.63877,8.76,nominal,2026-11-20,0626,D,noaa20,1,Kutai Timur,Kalimantan Timur
+-8.34513,140.54817,8.73,54,2026-11-20,1132,N,terra_aqua,1,Semangga,Papua Selatan
+-7.44562,138.63396,8.73,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-9.78512,124.59222,8.73,low,2026-11-20,0527,D,noaa21,1,Timor Tengah Selatan,Nusa Tenggara Timur
+-3.20815,126.85825,8.7,nominal,2026-11-21,0508,D,noaa21,1,Buru,Maluku
+-7.36641,139.31802,8.68,60,2026-11-20,0624,D,terra_aqua,1,Semangga,Papua Selatan
+-8.25664,138.7534,8.67,73,2026-11-20,1132,N,terra_aqua,1,Semangga,Papua Selatan
+0.48191,128.00423,8.67,nominal,2026-11-20,0444,D,noaa20,1,Halmahera Tengah,Maluku Utara
+-9.14516,125.68259,8.65,nominal,2026-11-20,0527,D,noaa21,1,Same,Manufahi
+-0.51131,116.34555,8.61,nominal,2026-11-21,0510,D,noaa21,2,Kutai Kartanegara,Kalimantan Timur
+-8.62642,122.56833,8.6,nominal,2026-11-20,0442,D,noaa20,2,Sikka,Nusa Tenggara Timur
+-8.94947,140.81812,8.6,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-4.06309,123.19068,8.57,nominal,2026-11-21,0508,D,noaa21,1,Konawe Kepulauan,Sulawesi Tenggara
+-2.0096,121.43063,8.55,low,2026-11-21,0508,D,noaa21,1,Morowali Utara,Sulawesi Tengah
+-8.06939,139.9655,8.54,nominal,2026-11-20,0442,D,noaa20,3,Semangga,Papua Selatan
+-4.92951,120.18751,8.54,nominal,2026-11-21,0508,D,noaa21,2,Bone,Sulawesi Selatan
+-0.24783,115.64949,8.46,nominal,2026-11-20,0626,D,noaa20,1,Kutai Barat,Kalimantan Timur
+-4.75795,121.79017,8.41,low,2026-11-21,0508,D,noaa21,1,Bombana,Sulawesi Tenggara
+0.67051,116.53059,8.38,nominal,2026-11-21,0510,D,noaa21,1,Kutai Timur,Kalimantan Timur
+-8.20858,128.8725,8.37,nominal,2026-11-20,0527,D,noaa20+noaa21,3,Maluku Barat Daya,Maluku
+-8.74674,116.84354,8.36,59,2026-11-20,0056,D,terra_aqua,1,Sumbawa Barat,Nusa Tenggara Barat
+4.66613,95.63612,8.33,nominal,2026-11-20,0709,D,noaa21,1,Aceh Jaya,Aceh
+-8.9944,140.87315,8.29,nominal,2026-11-21,0325,D,noaa21,1,Semangga,Papua Selatan
+0.50853,122.83967,8.28,nominal,2026-11-21,0510,D,noaa21,2,Gorontalo,Gorontalo
+-8.6255,117.6914,8.2,nominal,2026-11-20,0624,D,noaa20,1,Sumbawa,Nusa Tenggara Barat
+-9.61003,124.81691,8.2,nominal,2026-11-20,0527,D,noaa21,1,Timor Tengah Selatan,Nusa Tenggara Timur
+-3.87096,122.05657,8.18,low,2026-11-21,0508,D,noaa21,1,Konawe,Sulawesi Tenggara
+-8.5139,126.13312,8.16,nominal,2026-11-21,0505,D,noaa21,1,Laleia,Manatuto
+-7.74558,126.78504,8.09,nominal,2026-11-20,0442,D,noaa20,2,Maluku Barat Daya,Maluku
+-3.89685,121.76312,8.09,low,2026-11-21,0508,D,noaa21,1,Kolaka Timur,Sulawesi Tenggara
+-8.09515,139.68469,8.07,nominal,2026-11-20,0442,D,noaa20+noaa21,2,Semangga,Papua Selatan
+-7.81491,139.83141,8.06,nominal,2026-11-20,0344,D,noaa21,1,Semangga,Papua Selatan
+0.99333,116.86313,8.06,nominal,2026-11-20,0529,D,noaa21,1,Kutai Timur,Kalimantan Timur
+-7.41252,138.78496,8.05,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-4.01961,122.00478,8.0,low,2026-11-21,0508,D,noaa21,1,Konawe,Sulawesi Tenggara
+-7.8009,140.35806,7.99,69,2026-11-20,0624,D,terra_aqua+noaa20+noaa21,3,Merauke,Papua Selatan
+-8.18449,138.88138,7.97,38,2026-11-20,0624,D,terra_aqua,1,Semangga,Papua Selatan
+-3.59579,103.6238,7.93,nominal,2026-11-21,0650,D,noaa21,1,Lahat,Sumatera Selatan
+-8.74844,116.85664,7.91,47,2026-11-20,0056,D,terra_aqua,1,Sumbawa Barat,Nusa Tenggara Barat
+-8.38804,140.43608,7.91,71,2026-11-20,0624,D,terra_aqua,1,Semangga,Papua Selatan
+-3.17711,122.45097,7.84,nominal,2026-11-20,0529,D,noaa21,1,Morowali,Sulawesi Tengah
+-1.47541,122.84359,7.81,nominal,2026-11-21,0508,D,noaa21,1,,Sulawesi Tengah
+-8.07726,139.84036,7.8,69,2026-11-20,1132,N,terra_aqua,1,Semangga,Papua Selatan
+-8.29898,120.32821,7.8,nominal,2026-11-20,0442,D,noaa20,1,Manggarai,Nusa Tenggara Timur
+-8.5261,140.52567,7.79,nominal,2026-11-20,0344,D,noaa20+noaa21,2,Merauke,Papua Selatan
+-3.79869,122.07825,7.76,low,2026-11-21,0508,D,noaa21,2,Konawe,Sulawesi Tenggara
+-8.46561,123.01158,7.74,low,2026-11-21,0508,D,noaa21,1,Flores Timur,Nusa Tenggara Timur
+-8.20131,138.19508,7.73,73,2026-11-20,1132,N,terra_aqua,1,Semangga,Papua Selatan
+-5.32085,123.62489,7.71,high,2026-11-20,0444,D,noaa20,1,Wakatobi,Sulawesi Tenggara
+-4.1635,121.84137,7.71,low,2026-11-21,0508,D,noaa21,1,Kolaka Timur,Sulawesi Tenggara
+-7.42297,138.77199,7.7,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-5.31752,123.09147,7.68,nominal,2026-11-20,0527,D,noaa21,1,Buton,Sulawesi Tenggara
+-3.34976,122.08534,7.67,nominal,2026-11-20,0444,D,noaa20,1,Konawe Utara,Sulawesi Tenggara
+-4.2545,122.10212,7.62,nominal,2026-11-20,0527,D,noaa21,1,Konawe Selatan,Sulawesi Tenggara
+-4.59716,121.94328,7.62,low,2026-11-21,0508,D,noaa21,1,Bombana,Sulawesi Tenggara
+-8.02225,139.01181,7.61,30,2026-11-20,1132,N,terra_aqua,1,Semangga,Papua Selatan
+-8.01657,140.09094,7.6,nominal,2026-11-20,0442,D,noaa20,2,Merauke,Papua Selatan
+-1.3689,122.38103,7.59,nominal,2026-11-20,0529,D,noaa21,1,,Sulawesi Tengah
+-5.54115,122.82258,7.58,nominal,2026-11-21,0508,D,noaa21,1,Buton,Sulawesi Tenggara
+0.4949,116.73034,7.55,nominal,2026-11-21,0510,D,noaa21,1,Kutai Timur,Kalimantan Timur
+-4.07003,122.12534,7.51,nominal,2026-11-21,0508,D,noaa21,2,Konawe,Sulawesi Tenggara
+-8.81543,140.80577,7.5,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-9.50755,124.45043,7.5,low,2026-11-20,0527,D,noaa21,2,Timor Tengah Utara,Nusa Tenggara Timur
+-8.51643,140.46626,7.49,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-5.24526,123.11314,7.48,nominal,2026-11-20,0527,D,noaa21,1,Buton,Sulawesi Tenggara
+-8.42473,140.63321,7.44,nominal,2026-11-20,0344,D,noaa21,1,Semangga,Papua Selatan
+-8.79228,118.72799,7.44,low,2026-11-20,0527,D,noaa21,1,Bima,Nusa Tenggara Barat
+-3.81744,122.09709,7.43,low,2026-11-21,0508,D,noaa21,1,Konawe,Sulawesi Tenggara
+0.23459,115.28176,7.4,63,2026-11-20,0807,D,terra_aqua,1,Mahakam Ulu,Kalimantan Timur
+-7.17669,131.54277,7.35,60,2026-11-21,0705,D,terra_aqua,1,Kepulauan Tanimbar,Maluku
+-3.86976,122.40808,7.34,nominal,2026-11-20,0529,D,noaa20+noaa21,4,Konawe,Sulawesi Tenggara
+-2.20816,115.50092,7.33,nominal,2026-11-20,0529,D,noaa21,1,Balangan,Kalimantan Selatan
+-5.35293,123.09693,7.31,nominal,2026-11-20,0527,D,noaa21,2,Buton,Sulawesi Tenggara
+-4.66588,120.07479,7.31,nominal,2026-11-21,0508,D,noaa21,1,Bone,Sulawesi Selatan
+-7.43444,138.38039,7.3,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-9.06862,125.86212,7.3,nominal,2026-11-21,0505,D,noaa21,3,Alas,Manufahi
+-4.21104,122.62734,7.27,nominal,2026-11-21,0508,D,noaa21,1,Konawe Selatan,Sulawesi Tenggara
+-8.28244,123.77808,7.26,low,2026-11-21,0508,D,noaa21,2,Lembata,Nusa Tenggara Timur
+-4.06006,119.80635,7.21,nominal,2026-11-21,0508,D,noaa21,1,Sidenreng Rappang,Sulawesi Selatan
+-8.17125,127.88313,7.2,nominal,2026-11-20,0442,D,noaa20,1,Maluku Barat Daya,Maluku
+-1.57651,122.10114,7.14,nominal,2026-11-21,0508,D,noaa21,2,,Sulawesi Tengah
+-7.47969,139.47267,7.13,31,2026-11-20,1849,N,terra_aqua,1,Semangga,Papua Selatan
+0.50351,122.62896,7.11,nominal,2026-11-21,0510,D,noaa21,1,Gorontalo,Gorontalo
+-7.78808,140.10603,7.05,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-8.91955,125.92758,7.05,nominal,2026-11-20,0527,D,noaa21,1,Fatu-Berliu,Manufahi
+2.09381,117.15475,7.04,nominal,2026-11-21,0510,D,noaa21,1,Berau,Kalimantan Timur
+-3.87194,122.41005,7.03,low,2026-11-21,0508,D,noaa21,2,Konawe,Sulawesi Tenggara
+-5.32876,123.08916,7.01,low,2026-11-20,0527,D,noaa21,2,Buton,Sulawesi Tenggara
+0.45553,116.63396,7.0,nominal,2026-11-20,0626,D,noaa20,1,Kutai Timur,Kalimantan Timur
+-1.66888,128.10573,6.99,nominal,2026-11-20,0444,D,noaa20+noaa21,4,Halmahera Selatan,Maluku Utara
+2.78159,125.40601,6.99,nominal,2026-11-21,0510,D,noaa21,1,Kepulauan Siau Tagulandang Biaro,Sulawesi Utara
+-0.03752,109.96755,6.99,nominal,2026-11-21,0650,D,noaa21,1,Sanggau,Kalimantan Barat
+-3.84116,115.26029,6.98,nominal,2026-11-20,0529,D,noaa21,2,Tanah Laut,Kalimantan Selatan
+-8.23262,138.48645,6.97,66,2026-11-20,1132,N,terra_aqua,1,Semangga,Papua Selatan
+-2.69844,140.57224,6.96,22,2026-11-20,0626,D,terra_aqua,1,Jayapura,Papua
+-4.80831,120.10052,6.95,49,2026-11-20,0805,D,terra_aqua,1,Bone,Sulawesi Selatan
+-8.27126,140.35684,6.9,70,2026-11-20,0624,D,terra_aqua,1,Malind,Papua Selatan
+-1.38225,122.4794,6.89,low,2026-11-21,0508,D,noaa21,1,,Sulawesi Tengah
+-8.02635,139.00793,6.87,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+0.5288,122.68278,6.87,nominal,2026-11-21,0510,D,noaa21,1,Gorontalo,Gorontalo
+-1.58853,122.09141,6.85,nominal,2026-11-21,0508,D,noaa21,2,,Sulawesi Tengah
+-4.48294,119.93105,6.84,nominal,2026-11-21,0508,D,noaa21,1,Soppeng,Sulawesi Selatan
+-2.01142,121.41844,6.84,low,2026-11-21,0508,D,noaa21,1,Morowali Utara,Sulawesi Tengah
+-1.95622,121.1581,6.84,nominal,2026-11-21,0508,D,noaa21,1,Morowali Utara,Sulawesi Tengah
+-7.44822,138.34627,6.83,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-8.37521,127.03607,6.83,nominal,2026-11-20,0442,D,noaa20,1,Lautém,Lautém
+0.55755,121.51641,6.83,nominal,2026-11-21,0510,D,noaa21,2,Pohuwato,Gorontalo
+-8.26648,125.02673,6.81,nominal,2026-11-20,0527,D,noaa20+noaa21,2,Alor,Nusa Tenggara Timur
+-3.9034,122.42121,6.78,nominal,2026-11-20,0529,D,noaa20+noaa21,3,Konawe,Sulawesi Tenggara
+-6.31827,113.00566,6.78,nominal,2026-11-20,1810,N,noaa21,1,,Jawa Timur
+0.24597,116.10438,6.71,69,2026-11-20,0807,D,terra_aqua,1,Kutai Kartanegara,Kalimantan Timur
+-8.46731,117.61289,6.69,low,2026-11-20,0527,D,noaa21,1,Sumbawa,Nusa Tenggara Barat
+-8.01709,129.68494,6.63,nominal,2026-11-21,0505,D,noaa21,1,Maluku Barat Daya,Maluku
+-4.83543,122.38416,6.62,low,2026-11-21,0508,D,noaa21,1,Muna Barat,Sulawesi Tenggara
+-8.29577,140.59624,6.61,nominal,2026-11-20,0344,D,noaa21,1,Semangga,Papua Selatan
+-2.93275,116.31208,6.6,low,2026-11-20,0529,D,noaa21,1,Kotabaru,Kalimantan Selatan
+-8.0249,139.00671,6.58,27,2026-11-20,1132,N,terra_aqua,1,Semangga,Papua Selatan
+-7.86934,126.37016,6.58,nominal,2026-11-20,0527,D,noaa21,1,Maluku Barat Daya,Maluku
+-8.7959,118.77608,6.58,low,2026-11-20,0527,D,noaa21,1,Bima,Nusa Tenggara Barat
+0.49116,127.97437,6.58,nominal,2026-11-20,0529,D,noaa21,1,Halmahera Tengah,Maluku Utara
+-8.51458,126.13303,6.57,nominal,2026-11-20,1728,N,noaa20+noaa21,5,Laleia,Manatuto
+-8.74073,126.65604,6.53,nominal,2026-11-20,0442,D,noaa20,2,Watucarbau,Viqueque
+-3.26718,103.87299,6.5,nominal,2026-11-21,0650,D,noaa21,2,Penukal Abab Lematang Ilir,Sumatera Selatan
+0.5113,127.89275,6.48,nominal,2026-11-20,0444,D,noaa20,1,Halmahera Tengah,Maluku Utara
+1.05805,117.66901,6.47,65,2026-11-20,0054,D,terra_aqua,1,Kutai Timur,Kalimantan Timur
+-2.47712,116.53249,6.47,nominal,2026-11-20,0529,D,noaa21,1,Kotabaru,Kalimantan Selatan
+1.34924,116.61342,6.46,nominal,2026-11-20,0626,D,noaa20,1,Kutai Timur,Kalimantan Timur
+-8.07411,139.81039,6.46,nominal,2026-11-20,0344,D,noaa21,1,Semangga,Papua Selatan
+-8.4913,140.55833,6.44,nominal,2026-11-20,0442,D,noaa20,1,Merauke,Papua Selatan
+-1.48014,121.9186,6.44,nominal,2026-11-20,0529,D,noaa20+noaa21,2,Morowali Utara,Sulawesi Tengah
+-8.99258,140.87242,6.43,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-4.81484,120.02541,6.42,nominal,2026-11-20,0624,D,noaa20,1,Bone,Sulawesi Selatan
+0.54181,116.70116,6.4,nominal,2026-11-21,0510,D,noaa21,1,Kutai Timur,Kalimantan Timur
+-3.72985,103.33406,6.39,nominal,2026-11-20,0626,D,noaa20,1,Lahat,Sumatera Selatan
+-7.37609,139.31943,6.37,43,2026-11-20,0624,D,terra_aqua,1,Semangga,Papua Selatan
+-7.78219,140.16338,6.36,nominal,2026-11-20,0344,D,noaa21,1,Semangga,Papua Selatan
+-1.49998,110.68775,6.36,nominal,2026-11-21,0650,D,noaa21,1,Ketapang,Kalimantan Barat
+-7.86406,139.25984,6.35,21,2026-11-20,1132,N,terra_aqua,1,Semangga,Papua Selatan
+-5.19185,123.00264,6.35,nominal,2026-11-21,0508,D,noaa21,1,Buton,Sulawesi Tenggara
+-4.76322,121.80399,6.35,nominal,2026-11-21,0508,D,noaa21,1,Bombana,Sulawesi Tenggara
+-0.88191,123.33015,6.33,nominal,2026-11-21,0510,D,noaa21,1,,Sulawesi Tengah
+-1.4589,127.43513,6.32,nominal,2026-11-20,1628,N,noaa20+noaa21,3,Halmahera Selatan,Maluku Utara
+-8.00573,139.46187,6.32,nominal,2026-11-20,0344,D,noaa21,1,Semangga,Papua Selatan
+0.28905,116.59827,6.3,61,2026-11-20,0054,D,terra_aqua,1,Kutai Timur,Kalimantan Timur
+-8.06718,139.9523,6.29,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-7.74129,131.46968,6.29,nominal,2026-11-21,0505,D,noaa21,1,Kepulauan Tanimbar,Maluku
+-8.78777,126.06873,6.27,nominal,2026-11-20,0527,D,noaa21,1,Lakluta,Viqueque
+-9.23448,125.30651,6.26,nominal,2026-11-20,0527,D,noaa21,1,Maukatar,Cova-Lima
+-4.56979,121.92535,6.26,nominal,2026-11-20,1630,N,noaa21,3,Bombana,Sulawesi Tenggara
+-8.78549,126.02299,6.26,nominal,2026-11-21,0505,D,noaa21,1,Barike,Manatuto
+-0.87244,122.94593,6.24,nominal,2026-11-21,0510,D,noaa21,1,,Sulawesi Tengah
+-4.87805,104.72983,6.24,nominal,2026-11-21,0650,D,noaa21,2,Lampung Utara,Lampung
+-3.38722,126.95705,6.22,nominal,2026-11-20,0444,D,noaa20,1,Buru,Maluku
+-8.81762,126.17071,6.2,nominal,2026-11-20,0527,D,noaa21,2,Lakluta,Viqueque
+-8.22439,128.96881,6.19,nominal,2026-11-21,0505,D,noaa21,1,Maluku Barat Daya,Maluku
+-8.5309,140.86118,6.18,36,2026-11-20,0624,D,terra_aqua,1,Semangga,Papua Selatan
+-8.70114,125.52673,6.18,nominal,2026-11-20,0442,D,noaa20,1,Aileu,Aileu
+-7.7635,138.90414,6.17,13,2026-11-20,1132,N,terra_aqua,1,Semangga,Papua Selatan
+-7.4711,138.52832,6.16,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-4.56394,121.92359,6.16,nominal,2026-11-20,1630,N,noaa20+noaa21,8,Bombana,Sulawesi Tenggara
+-9.39155,124.54793,6.15,low,2026-11-20,0527,D,noaa21,1,Timor Tengah Utara,Nusa Tenggara Timur
+-1.85642,124.82767,6.14,nominal,2026-11-20,0529,D,noaa21,1,Pulau Taliabu,Maluku Utara
+-2.89116,116.31547,6.14,low,2026-11-20,0529,D,noaa21,1,Kotabaru,Kalimantan Selatan
+-5.5596,122.8177,6.11,low,2026-11-21,0508,D,noaa21,2,Buton,Sulawesi Tenggara
+-8.3804,140.43948,6.1,49,2026-11-20,0624,D,terra_aqua,1,Semangga,Papua Selatan
+-3.36721,127.2342,6.1,nominal,2026-11-20,0444,D,noaa20+noaa21,2,Buru,Maluku
+-10.14208,124.28927,6.08,nominal,2026-11-20,0527,D,noaa21,4,Timor Tengah Selatan,Nusa Tenggara Timur
+-7.91115,140.0433,6.07,nominal,2026-11-20,0344,D,noaa21,1,Semangga,Papua Selatan
+-1.68273,127.9603,6.05,nominal,2026-11-20,0444,D,noaa20,1,Halmahera Selatan,Maluku Utara
+-3.99134,122.25829,6.05,nominal,2026-11-20,0529,D,noaa21,1,Konawe,Sulawesi Tenggara
+-8.45738,124.06635,6.04,low,2026-11-21,0508,D,noaa21,1,Alor,Nusa Tenggara Timur
+0.45759,120.85255,5.97,nominal,2026-11-20,0529,D,noaa21,1,Parigi Moutong,Sulawesi Tengah
+-7.55708,127.47903,5.95,nominal,2026-11-21,0508,D,noaa21,1,Maluku Barat Daya,Maluku
+-4.70503,123.142,5.94,low,2026-11-21,0508,D,noaa21,1,Buton Utara,Sulawesi Tenggara
+-9.33489,124.73301,5.93,nominal,2026-11-20,0527,D,noaa21,1,Timor Tengah Utara,Nusa Tenggara Timur
+-0.20896,116.94917,5.92,nominal,2026-11-21,0510,D,noaa21,1,Kutai Kartanegara,Kalimantan Timur
+-7.93213,138.30945,5.91,nominal,2026-11-20,1630,N,noaa20+noaa21,2,Semangga,Papua Selatan
+-2.01269,121.41913,5.86,nominal,2026-11-20,0529,D,noaa20+noaa21,2,Morowali Utara,Sulawesi Tengah
+-1.50584,122.89199,5.86,nominal,2026-11-21,0508,D,noaa21,1,,Sulawesi Tengah
+0.53962,122.3111,5.85,nominal,2026-11-21,0510,D,noaa21,1,Boalemo,Gorontalo
+-8.13731,139.53374,5.83,nominal,2026-11-20,0344,D,noaa20+noaa21,2,Semangga,Papua Selatan
+-4.47085,120.14752,5.82,nominal,2026-11-20,0529,D,noaa21,1,Bone,Sulawesi Selatan
+-7.92892,139.09312,5.81,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+0.28767,116.60795,5.8,51,2026-11-20,0054,D,terra_aqua,1,Kutai Timur,Kalimantan Timur
+-4.6995,120.36277,5.8,nominal,2026-11-20,0527,D,noaa21,1,Watampone,Sulawesi Selatan
+-2.01053,121.43479,5.78,nominal,2026-11-20,0444,D,noaa20+noaa21,2,Morowali Utara,Sulawesi Tengah
+0.80719,116.59144,5.77,nominal,2026-11-21,0510,D,noaa21,1,Kutai Timur,Kalimantan Timur
+-8.95164,140.83272,5.75,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-7.3821,131.6503,5.74,44,2026-11-21,0705,D,terra_aqua,1,Kepulauan Tanimbar,Maluku
+-8.3557,124.91368,5.73,nominal,2026-11-21,0508,D,noaa21,1,Alor,Nusa Tenggara Timur
+-9.77716,124.68806,5.67,nominal,2026-11-20,0527,D,noaa21,1,Timor Tengah Selatan,Nusa Tenggara Timur
+-8.9205,125.13643,5.66,nominal,2026-11-20,0527,D,noaa21,1,Atabae,Bobonaro
+-9.22506,125.34399,5.66,nominal,2026-11-21,0505,D,noaa21,1,Suai,Cova-Lima
+-8.29352,125.05149,5.63,low,2026-11-20,0527,D,noaa21,1,Alor,Nusa Tenggara Timur
+-8.03828,139.71596,5.62,nominal,2026-11-20,0442,D,noaa20+noaa21,2,Semangga,Papua Selatan
+-8.37171,140.33868,5.58,nominal,2026-11-20,0442,D,noaa20+noaa21,3,Semangga,Papua Selatan
+-7.97679,139.07848,5.58,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-1.66575,128.10042,5.57,nominal,2026-11-20,0444,D,noaa20+noaa21,2,Halmahera Selatan,Maluku Utara
+-8.07948,139.80219,5.56,nominal,2026-11-20,0442,D,noaa20+noaa21,2,Semangga,Papua Selatan
+0.67651,117.56545,5.56,nominal,2026-11-20,1808,N,noaa21,1,Kutai Timur,Kalimantan Timur
+-8.21762,138.59044,5.55,47,2026-11-20,1132,N,terra_aqua,1,Semangga,Papua Selatan
+-1.24118,123.10118,5.55,nominal,2026-11-20,0529,D,noaa21,2,,Sulawesi Tengah
+-1.74447,125.28575,5.53,nominal,2026-11-20,0529,D,noaa21,1,Pulau Taliabu,Maluku Utara
+-4.59855,121.8603,5.5,low,2026-11-21,0508,D,noaa21,1,Bombana,Sulawesi Tenggara
+-2.87444,128.51765,5.49,nominal,2026-11-20,0529,D,noaa21,2,Seram Bagian Barat,Maluku
+-8.76455,125.73908,5.49,nominal,2026-11-21,0505,D,noaa21,1,Lekidoe,Aileu
+-3.95838,102.41294,5.49,nominal,2026-11-21,0650,D,noaa21,1,Seluma,Bengkulu
+-3.33497,122.13045,5.48,low,2026-11-21,0508,D,noaa21,1,Konawe Utara,Sulawesi Tenggara
+-0.01758,116.39832,5.47,nominal,2026-11-21,0510,D,noaa21,1,Kutai Kartanegara,Kalimantan Timur
+-10.15553,124.34186,5.45,nominal,2026-11-20,0527,D,noaa21,1,Timor Tengah Selatan,Nusa Tenggara Timur
+0.76173,116.87686,5.45,nominal,2026-11-21,0510,D,noaa21,2,Kutai Timur,Kalimantan Timur
+-4.78613,119.99368,5.39,nominal,2026-11-21,0508,D,noaa21,1,Bone,Sulawesi Selatan
+-1.38207,122.48132,5.37,nominal,2026-11-20,0444,D,noaa20,2,,Sulawesi Tengah
+-2.57429,121.38339,5.36,nominal,2026-11-20,1726,N,noaa20,4,Luwu Timur,Sulawesi Selatan
+-2.57759,121.38287,5.36,nominal,2026-11-20,1726,N,noaa20+noaa21,5,Luwu Timur,Sulawesi Selatan
+-2.57813,121.3863,5.36,nominal,2026-11-20,1726,N,noaa20,1,Luwu Timur,Sulawesi Selatan
+-7.48685,139.08403,5.36,nominal,2026-11-20,0344,D,noaa21,1,Semangga,Papua Selatan
+-4.77466,121.83904,5.34,nominal,2026-11-21,0508,D,noaa21,1,Bombana,Sulawesi Tenggara
+-7.8018,140.36476,5.32,nominal,2026-11-20,0344,D,noaa21,1,Merauke,Papua Selatan
+-1.96711,123.79191,5.32,nominal,2026-11-20,0529,D,noaa21,1,Banggai Laut,Sulawesi Tengah
+-8.14514,131.11139,5.32,nominal,2026-11-21,0505,D,noaa21,1,Kepulauan Tanimbar,Maluku
+-4.78069,121.82288,5.32,nominal,2026-11-21,0508,D,noaa21,1,Bombana,Sulawesi Tenggara
+0.85352,122.67151,5.32,nominal,2026-11-21,0510,D,noaa21,1,Gorontalo Utara,Gorontalo
+0.52371,122.16283,5.31,nominal,2026-11-21,0510,D,noaa21,1,Boalemo,Gorontalo
+-5.6067,122.70286,5.3,nominal,2026-11-20,0527,D,noaa21,1,Buton Selatan,Sulawesi Tenggara
+-0.86519,116.03254,5.3,nominal,2026-11-21,0510,D,noaa21,1,Kutai Barat,Kalimantan Timur
+-1.47733,122.91164,5.29,nominal,2026-11-20,0529,D,noaa21,1,,Sulawesi Tengah
+-9.21479,125.29955,5.29,nominal,2026-11-21,0505,D,noaa21,1,Suai,Cova-Lima
+-1.54436,122.86459,5.29,nominal,2026-11-21,0508,D,noaa21,1,,Sulawesi Tengah
+-9.39886,124.02128,5.27,low,2026-11-21,0505,D,noaa21,1,Kupang,Nusa Tenggara Timur
+-3.17414,122.08791,5.26,low,2026-11-21,0508,D,noaa21,1,Konawe Utara,Sulawesi Tenggara
+-8.98059,140.86086,5.25,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-4.3812,122.41986,5.25,nominal,2026-11-20,0527,D,noaa21,1,Konawe Selatan,Sulawesi Tenggara
+-2.79578,115.31305,5.24,nominal,2026-11-21,0508,D,noaa21,1,Hulu Sungai Selatan,Kalimantan Selatan
+-1.29165,122.38363,5.24,nominal,2026-11-21,0508,D,noaa21,1,,Sulawesi Tengah
+5.21219,114.74215,5.22,nominal,2026-11-20,0529,D,noaa20+noaa21,2,,(Laut / tanpa alamat)
+-4.06,122.144,5.22,low,2026-11-21,0508,D,noaa21,1,Konawe,Sulawesi Tenggara
+-7.85407,139.25833,5.21,24,2026-11-20,1132,N,terra_aqua,1,Semangga,Papua Selatan
+-7.82891,139.92126,5.2,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-1.29183,121.64826,5.2,nominal,2026-11-21,0508,D,noaa21,1,Tojo Una-Una,Sulawesi Tengah
+-1.87916,111.22015,5.19,nominal,2026-11-20,0626,D,noaa20,1,Lamandau,Kalimantan Tengah
+-10.11115,124.18822,5.15,nominal,2026-11-20,0527,D,noaa21,1,Kupang,Nusa Tenggara Timur
+-3.67127,120.35258,5.15,nominal,2026-11-20,0529,D,noaa21,1,Wajo,Sulawesi Selatan
+-3.74179,121.94324,5.14,nominal,2026-11-20,0444,D,noaa20,1,Konawe,Sulawesi Tenggara
+-8.88135,120.28213,5.14,nominal,2026-11-20,0527,D,noaa21,2,Manggarai,Nusa Tenggara Timur
+-3.17928,122.44027,5.13,nominal,2026-11-20,0444,D,noaa20,1,Morowali,Sulawesi Tengah
+0.45852,116.17777,5.12,nominal,2026-11-21,0510,D,noaa21,1,Kutai Kartanegara,Kalimantan Timur
+-4.70289,121.91265,5.11,nominal,2026-11-21,0508,D,noaa21,1,Bombana,Sulawesi Tenggara
+-0.25315,117.20633,5.1,nominal,2026-11-21,0510,D,noaa21,1,Kutai Kartanegara,Kalimantan Timur
+-1.49083,122.89688,5.09,nominal,2026-11-20,0529,D,noaa21,2,,Sulawesi Tengah
+-1.97178,120.9525,5.08,nominal,2026-11-20,0529,D,noaa21,1,Morowali Utara,Sulawesi Tengah
+-0.96575,123.22564,5.08,nominal,2026-11-21,0508,D,noaa21,1,,Sulawesi Tengah
+-7.45078,138.62761,5.07,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-9.09609,124.75719,5.07,nominal,2026-11-20,0442,D,noaa20,2,Timor Tengah Utara,Nusa Tenggara Timur
+-8.18836,130.96318,5.07,low,2026-11-20,0442,D,noaa20,1,Kepulauan Tanimbar,Maluku
+-3.7918,104.86639,5.07,nominal,2026-11-20,1908,N,noaa20,3,Ogan Komering Ulu Timur,Sumatera Selatan
+-2.88623,114.52144,5.06,nominal,2026-11-21,0508,D,noaa21,1,Kapuas,Kalimantan Tengah
+-5.55402,122.64008,5.03,low,2026-11-21,0508,D,noaa21,1,Buton Selatan,Sulawesi Tenggara
+-7.38128,131.65334,5.0,nominal,2026-11-20,0442,D,noaa20,2,Kepulauan Tanimbar,Maluku
+-4.78581,121.68652,5.0,nominal,2026-11-21,0508,D,noaa21,1,Bombana,Sulawesi Tenggara
+-1.50366,121.83488,4.98,nominal,2026-11-20,0529,D,noaa21,1,Morowali Utara,Sulawesi Tengah
+2.22651,116.96572,4.97,nominal,2026-11-21,0510,D,noaa21,1,Berau,Kalimantan Timur
+-1.38901,122.25211,4.96,nominal,2026-11-21,0508,D,noaa21,1,,Sulawesi Tengah
+-3.33475,119.13319,4.93,nominal,2026-11-21,0508,D,noaa21,1,Polewali Mandar,Sulawesi Barat
+-7.79193,140.15634,4.92,33,2026-11-20,0624,D,terra_aqua,1,Semangga,Papua Selatan
+-8.96206,125.76614,4.91,nominal,2026-11-20,0527,D,noaa21,1,Fatu-Berliu,Manufahi
+-2.14035,120.33781,4.91,nominal,2026-11-20,0529,D,noaa21,1,Luwu Utara,Sulawesi Selatan
+-4.8508,120.01662,4.9,nominal,2026-11-20,0527,D,noaa21,1,Bone,Sulawesi Selatan
+2.25135,102.41702,4.89,nominal,2026-11-20,0626,D,noaa20,1,Jasin,Melaka
+-8.07041,139.83673,4.89,nominal,2026-11-20,0344,D,noaa21,1,Semangga,Papua Selatan
+-4.45507,120.09585,4.88,nominal,2026-11-20,0529,D,noaa21,1,Bone,Sulawesi Selatan
+-8.40965,123.95884,4.82,nominal,2026-11-20,0442,D,noaa20,1,Alor,Nusa Tenggara Timur
+-1.36589,123.03048,4.82,nominal,2026-11-21,0508,D,noaa21,1,,Sulawesi Tengah
+-8.01988,129.68843,4.81,nominal,2026-11-20,0442,D,noaa20,1,Maluku Barat Daya,Maluku
+-7.12335,131.43387,4.77,nominal,2026-11-20,0442,D,noaa20,1,Kepulauan Tanimbar,Maluku
+-4.09641,122.10461,4.77,nominal,2026-11-20,0529,D,noaa21,3,Konawe Selatan,Sulawesi Tenggara
+-1.49297,122.88641,4.77,nominal,2026-11-21,0508,D,noaa21,1,,Sulawesi Tengah
+-3.56194,126.78047,4.76,nominal,2026-11-20,0527,D,noaa20+noaa21,2,Buru,Maluku
+-3.5672,126.77678,4.76,nominal,2026-11-20,0527,D,noaa21,1,Buru,Maluku
+-8.2795,120.62472,4.73,nominal,2026-11-20,0527,D,noaa21,1,Manggarai Timur,Nusa Tenggara Timur
+-5.41406,122.85114,4.72,nominal,2026-11-21,0508,D,noaa21,1,Buton,Sulawesi Tenggara
+-8.00506,139.83557,4.71,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-4.99298,120.06744,4.71,nominal,2026-11-20,0527,D,noaa21,1,Bone,Sulawesi Selatan
+-3.98229,105.69014,4.71,nominal,2026-11-21,0650,D,noaa21,1,Ogan Komering Ilir,Sumatera Selatan
+-3.33244,104.52737,4.7,nominal,2026-11-21,0650,D,noaa21,1,Muara Enim,Sumatera Selatan
+-3.23008,122.18851,4.68,nominal,2026-11-20,0529,D,noaa21,1,Konawe Utara,Sulawesi Tenggara
+-8.71083,119.02068,4.67,nominal,2026-11-20,0622,D,noaa20,2,Bima,Nusa Tenggara Barat
+0.50381,122.78674,4.67,nominal,2026-11-21,0510,D,noaa21,1,Gorontalo,Gorontalo
+-8.5709,123.4041,4.65,nominal,2026-11-20,0527,D,noaa21,1,Lembata,Nusa Tenggara Timur
+-1.0522,122.69379,4.64,nominal,2026-11-20,0444,D,noaa20,2,Luwuk,Sulawesi Tengah
+-4.68028,122.8559,4.63,nominal,2026-11-20,0527,D,noaa21,1,Muna,Sulawesi Tenggara
+-9.21714,124.58002,4.6,nominal,2026-11-20,0527,D,noaa21,1,Timor Tengah Utara,Nusa Tenggara Timur
+-8.79216,125.15112,4.6,nominal,2026-11-21,0505,D,noaa21,1,Atabae,Bobonaro
+0.49032,121.03748,4.59,nominal,2026-11-20,0446,D,noaa20,1,Parigi Moutong,Sulawesi Tengah
+-8.27216,123.50685,4.59,nominal,2026-11-20,1728,N,noaa20+noaa21,4,Lembata,Nusa Tenggara Timur
+-8.91606,126.30574,4.54,nominal,2026-11-20,0527,D,noaa21,1,Vikeke,Viqueque
+-8.80384,126.47979,4.54,nominal,2026-11-21,0505,D,noaa21,1,Ossu,Viqueque
+-4.09184,122.10439,4.54,low,2026-11-21,0508,D,noaa21,1,Konawe Selatan,Sulawesi Tenggara
+-3.2381,116.11387,4.52,48,2026-11-20,0805,D,terra_aqua,1,Kotabaru,Kalimantan Selatan
+-8.95388,126.12992,4.52,nominal,2026-11-20,0527,D,noaa21,1,Vikeke,Viqueque
+-8.22974,140.77928,4.51,nominal,2026-11-20,1545,N,noaa20+noaa21,4,Semangga,Papua Selatan
+-4.69453,120.28449,4.51,nominal,2026-11-20,0527,D,noaa21,1,Watampone,Sulawesi Selatan
+-8.30531,123.34724,4.5,low,2026-11-20,0527,D,noaa21,1,Lembata,Nusa Tenggara Timur
+-8.28857,138.46913,4.49,31,2026-11-20,1132,N,terra_aqua,1,Semangga,Papua Selatan
+-7.33766,131.64371,4.47,30,2026-11-21,0705,D,terra_aqua,1,Kepulauan Tanimbar,Maluku
+-9.1565,125.10064,4.47,nominal,2026-11-21,0505,D,noaa21,1,Belu,Nusa Tenggara Timur
+-8.40635,140.42429,4.46,nominal,2026-11-20,0344,D,noaa21,1,Semangga,Papua Selatan
+-0.84784,128.24083,4.45,nominal,2026-11-20,0444,D,noaa20,2,Halmahera Selatan,Maluku Utara
+-8.96433,125.77807,4.44,nominal,2026-11-20,0527,D,noaa20+noaa21,4,Fatu-Berliu,Manufahi
+-8.34149,140.302,4.44,nominal,2026-11-20,1545,N,noaa20+noaa21,4,Semangga,Papua Selatan
+-4.63619,120.2017,4.44,nominal,2026-11-20,0527,D,noaa21,1,Bone,Sulawesi Selatan
+-8.42212,140.33246,4.43,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-5.43255,120.39637,4.43,nominal,2026-11-21,0508,D,noaa21,1,Bulukumba,Sulawesi Selatan
+-9.43951,124.9558,4.41,nominal,2026-11-21,0505,D,noaa21,2,Malaka,Nusa Tenggara Timur
+-7.32507,120.99815,4.4,low,2026-11-20,0527,D,noaa21,1,Kepulauan Selayar,Sulawesi Selatan
+-1.7878,121.76292,4.38,nominal,2026-11-20,0529,D,noaa21,1,Morowali Utara,Sulawesi Tengah
+-1.34495,122.35303,4.38,nominal,2026-11-20,0529,D,noaa21,1,,Sulawesi Tengah
+-4.68943,120.34008,4.36,nominal,2026-11-20,0527,D,noaa21,1,Watampone,Sulawesi Selatan
+-1.49502,121.59212,4.35,nominal,2026-11-20,0529,D,noaa21,1,Morowali Utara,Sulawesi Tengah
+-8.98697,125.63968,4.35,nominal,2026-11-21,0505,D,noaa21,1,Same,Manufahi
+-8.52355,140.86383,4.34,nominal,2026-11-20,1630,N,noaa20+noaa21,4,Semangga,Papua Selatan
+-8.91479,126.0563,4.33,nominal,2026-11-20,0527,D,noaa21,4,Barike,Manatuto
+-7.70383,126.77979,4.31,nominal,2026-11-21,0508,D,noaa21,1,Maluku Barat Daya,Maluku
+-4.78352,119.99237,4.3,nominal,2026-11-20,0527,D,noaa21,1,Bone,Sulawesi Selatan
+-5.33869,123.14642,4.3,nominal,2026-11-21,0508,D,noaa21,1,Buton,Sulawesi Tenggara
+-0.96414,123.23612,4.3,nominal,2026-11-21,0508,D,noaa21,1,,Sulawesi Tengah
+-9.51961,124.41545,4.28,nominal,2026-11-21,0505,D,noaa21,1,Timor Tengah Utara,Nusa Tenggara Timur
+-4.52488,119.94804,4.27,nominal,2026-11-20,0529,D,noaa21,1,Soppeng,Sulawesi Selatan
+-0.99143,123.34715,4.27,nominal,2026-11-21,0508,D,noaa21,1,,Sulawesi Tengah
+-8.08263,139.86145,4.25,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-1.3802,122.44973,4.25,nominal,2026-11-20,0529,D,noaa21,1,,Sulawesi Tengah
+-8.95012,140.85124,4.25,nominal,2026-11-21,0325,D,noaa21,1,Semangga,Papua Selatan
+-7.72756,139.52554,4.24,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-9.09995,125.85629,4.24,nominal,2026-11-21,0505,D,noaa21,1,Alas,Manufahi
+-8.50929,140.49065,4.23,nominal,2026-11-20,0344,D,noaa21,1,Semangga,Papua Selatan
+-4.00287,103.87385,4.23,nominal,2026-11-20,1810,N,noaa21,3,Ogan Komering Ulu,Sumatera Selatan
+-4.0695,119.82545,4.21,nominal,2026-11-21,0508,D,noaa21,1,Sidenreng Rappang,Sulawesi Selatan
+-3.89046,121.84731,4.2,nominal,2026-11-20,0529,D,noaa21,1,Kolaka Timur,Sulawesi Tenggara
+-8.7259,126.69784,4.19,nominal,2026-11-21,0505,D,noaa21,1,Watucarbau,Viqueque
+-9.11706,125.92518,4.18,nominal,2026-11-20,0527,D,noaa21,1,Alas,Manufahi
+-7.83181,139.93034,4.16,nominal,2026-11-20,0442,D,noaa20,3,Semangga,Papua Selatan
+-8.25467,124.95714,4.16,low,2026-11-20,0527,D,noaa21,1,Alor,Nusa Tenggara Timur
+-3.176,122.43475,4.16,nominal,2026-11-20,0529,D,noaa21,1,Morowali,Sulawesi Tengah
+0.68259,117.56023,4.15,nominal,2026-11-20,1808,N,noaa20+noaa21,2,Kutai Timur,Kalimantan Timur
+-1.53025,122.93188,4.14,nominal,2026-11-20,0444,D,noaa20,2,,Sulawesi Tengah
+-5.38002,123.01556,4.13,nominal,2026-11-20,0527,D,noaa21,1,Buton,Sulawesi Tenggara
+-5.55733,122.81302,4.12,low,2026-11-20,0527,D,noaa21,1,Buton,Sulawesi Tenggara
+-8.77909,125.86566,4.12,nominal,2026-11-21,0505,D,noaa21,1,Laklubar,Manatuto
+-3.85987,121.76614,4.12,nominal,2026-11-21,0508,D,noaa21,1,Kolaka Timur,Sulawesi Tenggara
+-8.83821,126.14578,4.11,nominal,2026-11-21,0505,D,noaa21,1,Lakluta,Viqueque
+-8.76574,126.12752,4.1,nominal,2026-11-20,0527,D,noaa21,1,Lakluta,Viqueque
+-8.76458,126.03521,4.08,nominal,2026-11-20,0527,D,noaa21,1,Lakluta,Viqueque
+-9.2885,125.23837,4.07,nominal,2026-11-20,0527,D,noaa21,1,Maukatar,Cova-Lima
+-2.93823,104.28325,4.05,nominal,2026-11-20,0707,D,noaa21,1,Banyuasin,Sumatera Selatan
+-8.36549,124.90252,4.0,nominal,2026-11-20,0442,D,noaa20,2,Alor,Nusa Tenggara Timur
+-10.17886,124.0494,3.99,nominal,2026-11-20,0442,D,noaa20,1,Kupang,Nusa Tenggara Timur
+-3.55953,122.10669,3.99,nominal,2026-11-20,0529,D,noaa21,2,Konawe Utara,Sulawesi Tenggara
+-0.63419,123.17008,3.98,nominal,2026-11-21,0510,D,noaa21,1,,Sulawesi Tengah
+-8.34225,140.4525,3.97,nominal,2026-11-20,0344,D,noaa21,1,Semangga,Papua Selatan
+-5.32223,123.15405,3.97,nominal,2026-11-20,0527,D,noaa21,2,Buton,Sulawesi Tenggara
+-1.34894,123.32685,3.97,nominal,2026-11-20,0529,D,noaa21,1,,Sulawesi Tengah
+-10.08659,123.98143,3.96,nominal,2026-11-20,0442,D,noaa20,1,Kupang,Nusa Tenggara Timur
+-7.66792,131.06577,3.96,nominal,2026-11-20,0442,D,noaa20,1,Kepulauan Tanimbar,Maluku
+-2.61398,121.46658,3.95,nominal,2026-11-20,0444,D,noaa20,1,Luwu Timur,Sulawesi Selatan
+-8.14239,138.20683,3.92,19,2026-11-20,1132,N,terra_aqua,1,Semangga,Papua Selatan
+-6.7484,134.66165,3.92,nominal,2026-11-21,0508,D,noaa21,2,Kepulauan Aru,Maluku
+-6.76152,111.95831,3.91,nominal,2026-11-20,1728,N,noaa20+noaa21,3,Tuban,Jawa Timur
+1.67148,101.4754,3.91,nominal,2026-11-20,1810,N,noaa21,2,Dumai,Riau
+-3.38603,116.10633,3.9,44,2026-11-20,0805,D,terra_aqua,1,Kotabaru,Kalimantan Selatan
+-4.76407,120.00449,3.9,nominal,2026-11-21,0508,D,noaa21,1,Bone,Sulawesi Selatan
+-4.50416,121.66381,3.88,nominal,2026-11-20,0527,D,noaa21,1,Kolaka,Sulawesi Tenggara
+-7.41101,140.65742,3.88,nominal,2026-11-20,1630,N,noaa21,1,Semangga,Papua Selatan
+-0.28911,115.79422,3.87,nominal,2026-11-20,0626,D,noaa20,1,Kutai Barat,Kalimantan Timur
+-8.76198,126.25072,3.87,nominal,2026-11-20,0527,D,noaa21,1,Vikeke,Viqueque
+-4.08138,122.46861,3.86,low,2026-11-20,0529,D,noaa21,1,Konawe Selatan,Sulawesi Tenggara
+2.21514,116.92316,3.85,nominal,2026-11-21,0510,D,noaa21,1,Berau,Kalimantan Timur
+-7.12896,131.65588,3.83,nominal,2026-11-20,1630,N,noaa21,1,Kepulauan Tanimbar,Maluku
+-4.47761,120.1825,3.82,low,2026-11-21,0508,D,noaa21,1,Watampone,Sulawesi Selatan
+-1.09887,122.66214,3.82,nominal,2026-11-21,0508,D,noaa21,1,,Sulawesi Tengah
+-8.32772,120.50748,3.81,nominal,2026-11-20,0527,D,noaa21,2,Manggarai Timur,Nusa Tenggara Timur
+-8.05169,129.7574,3.81,nominal,2026-11-21,0505,D,noaa21,1,Maluku Barat Daya,Maluku
+-8.75957,140.85831,3.79,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-9.57733,124.67101,3.79,nominal,2026-11-20,0527,D,noaa21,1,Malaka,Nusa Tenggara Timur
+-8.33205,120.65771,3.78,nominal,2026-11-20,0527,D,noaa21,1,Manggarai Timur,Nusa Tenggara Timur
+-2.76279,116.34853,3.77,nominal,2026-11-20,0624,D,noaa20,1,Kotabaru,Kalimantan Selatan
+-0.73287,117.04076,3.74,nominal,2026-11-20,1726,N,noaa20+noaa21,2,Kutai Kartanegara,Kalimantan Timur
+-4.94938,122.83089,3.73,nominal,2026-11-20,0444,D,noaa20,1,Muna,Sulawesi Tenggara
+-10.02709,124.39522,3.73,nominal,2026-11-20,0527,D,noaa21,1,Timor Tengah Selatan,Nusa Tenggara Timur
+-4.23115,122.50266,3.73,nominal,2026-11-20,0527,D,noaa21,1,Konawe Selatan,Sulawesi Tenggara
+-1.89634,115.86768,3.72,nominal,2026-11-20,1726,N,noaa20,1,Paser,Kalimantan Timur
+-3.9597,122.19518,3.72,nominal,2026-11-20,0529,D,noaa21,2,Konawe,Sulawesi Tenggara
+-8.03389,139.01291,3.69,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-3.76981,102.83607,3.68,nominal,2026-11-20,0707,D,noaa21,2,Empat Lawang,Sumatera Selatan
+-8.81123,126.20855,3.67,nominal,2026-11-20,0527,D,noaa21,1,Lakluta,Viqueque
+-4.70295,119.94072,3.67,nominal,2026-11-20,0527,D,noaa21,1,Bone,Sulawesi Selatan
+-3.62545,115.80685,3.65,56,2026-11-20,0805,D,terra_aqua,1,Tanah Bumbu,Kalimantan Selatan
+-8.80039,126.49702,3.65,nominal,2026-11-20,0527,D,noaa21,1,Ossu,Viqueque
+-7.07596,112.62956,3.65,nominal,2026-11-20,1813,N,noaa21,1,Gresik,Jawa Timur
+-7.44368,131.65865,3.64,low,2026-11-20,0442,D,noaa20,2,Kepulauan Tanimbar,Maluku
+0.09535,117.46519,3.64,nominal,2026-11-20,1726,N,noaa20,1,Bontang,Kalimantan Timur
+-1.45911,123.42298,3.63,nominal,2026-11-21,0508,D,noaa21,1,,Sulawesi Tengah
+-1.47393,122.34045,3.62,nominal,2026-11-21,0508,D,noaa21,1,,Sulawesi Tengah
+-8.95882,140.92386,3.61,nominal,2026-11-20,0344,D,noaa21,2,Semangga,Papua Selatan
+-8.21942,138.58383,3.61,nominal,2026-11-20,1630,N,noaa21,6,Semangga,Papua Selatan
+-1.88907,115.86504,3.6,nominal,2026-11-20,1726,N,noaa20,4,Paser,Kalimantan Timur
+-2.1305,121.47445,3.6,nominal,2026-11-20,0529,D,noaa21,1,Morowali Utara,Sulawesi Tengah
+-8.21072,128.87982,3.59,nominal,2026-11-20,0442,D,noaa20,1,Maluku Barat Daya,Maluku
+-8.44087,140.99207,3.59,nominal,2026-11-20,1545,N,noaa20+noaa21,5,Semangga,Papua Selatan
+-7.82954,131.38341,3.59,nominal,2026-11-21,0505,D,noaa21,1,Kepulauan Tanimbar,Maluku
+1.27523,117.22677,3.59,nominal,2026-11-21,0510,D,noaa21,1,Kutai Timur,Kalimantan Timur
+-9.64639,124.77842,3.58,low,2026-11-20,0527,D,noaa21,2,Malaka,Nusa Tenggara Timur
+-8.16889,124.79337,3.57,nominal,2026-11-20,0527,D,noaa21,1,Alor,Nusa Tenggara Timur
+-8.82557,126.17261,3.55,nominal,2026-11-20,0527,D,noaa21,1,Lakluta,Viqueque
+-4.35153,120.2164,3.53,nominal,2026-11-20,0529,D,noaa21,1,Bone,Sulawesi Selatan
+-1.66894,127.97309,3.51,nominal,2026-11-20,0444,D,noaa20,1,Halmahera Selatan,Maluku Utara
+-7.78644,131.44189,3.5,low,2026-11-20,0442,D,noaa20,1,Kepulauan Tanimbar,Maluku
+0.64398,122.37176,3.5,nominal,2026-11-21,0510,D,noaa21,1,Boalemo,Gorontalo
+-3.97946,102.51286,3.5,nominal,2026-11-21,0650,D,noaa21,1,Seluma,Bengkulu
+-8.04845,140.66635,3.47,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-1.4297,122.35641,3.46,nominal,2026-11-21,0508,D,noaa21,1,,Sulawesi Tengah
+-4.95177,122.82529,3.45,low,2026-11-21,0508,D,noaa21,2,Muna,Sulawesi Tenggara
+0.55254,122.46201,3.44,nominal,2026-11-21,0510,D,noaa21,1,Boalemo,Gorontalo
+-9.41972,124.53503,3.41,low,2026-11-20,0527,D,noaa21,1,Timor Tengah Utara,Nusa Tenggara Timur
+-3.94391,119.74747,3.41,nominal,2026-11-20,0529,D,noaa21,1,Sidenreng Rappang,Sulawesi Selatan
+-9.78479,124.51173,3.4,nominal,2026-11-21,0505,D,noaa21,1,Timor Tengah Selatan,Nusa Tenggara Timur
+-1.51757,122.88261,3.4,nominal,2026-11-21,0508,D,noaa21,1,,Sulawesi Tengah
+0.50906,121.50013,3.4,low,2026-11-21,0510,D,noaa21,1,Pohuwato,Gorontalo
+-8.51249,123.41303,3.38,nominal,2026-11-20,0527,D,noaa20+noaa21,2,Lembata,Nusa Tenggara Timur
+-5.36663,134.56351,3.38,nominal,2026-11-20,1630,N,noaa21,1,Kepulauan Aru,Maluku
+-4.97687,120.05804,3.37,nominal,2026-11-21,0508,D,noaa21,1,Bone,Sulawesi Selatan
+-4.92181,119.94824,3.37,nominal,2026-11-21,0508,D,noaa21,1,Bone,Sulawesi Selatan
+-3.09932,126.67554,3.36,nominal,2026-11-21,0508,D,noaa21,1,Buru,Maluku
+0.76547,117.75858,3.35,nominal,2026-11-20,1726,N,noaa20,1,Kutai Timur,Kalimantan Timur
+-1.94458,115.8601,3.35,nominal,2026-11-20,1810,N,noaa20+noaa21,4,Paser,Kalimantan Timur
+0.50543,121.05008,3.35,nominal,2026-11-20,0529,D,noaa21,1,Parigi Moutong,Sulawesi Tengah
+-9.79838,124.7625,3.34,nominal,2026-11-20,0442,D,noaa20,1,Timor Tengah Selatan,Nusa Tenggara Timur
+-4.18753,122.50756,3.33,nominal,2026-11-20,0527,D,noaa21,1,Konawe Selatan,Sulawesi Tenggara
+-4.56222,120.01719,3.33,nominal,2026-11-20,0527,D,noaa21,1,Bone,Sulawesi Selatan
+-8.19326,128.94444,3.32,nominal,2026-11-20,0442,D,noaa20,1,Maluku Barat Daya,Maluku
+-4.60988,119.99272,3.32,nominal,2026-11-20,0527,D,noaa21,1,Bone,Sulawesi Selatan
+-8.96009,140.81039,3.3,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-10.11935,124.22715,3.27,nominal,2026-11-20,0527,D,noaa21,1,Timor Tengah Selatan,Nusa Tenggara Timur
+-9.24311,125.31445,3.27,nominal,2026-11-21,0505,D,noaa21,1,Maukatar,Cova-Lima
+-8.82318,126.11137,3.27,nominal,2026-11-21,0505,D,noaa21,1,Lakluta,Viqueque
+-1.56222,127.4279,3.26,nominal,2026-11-20,0444,D,noaa20,1,Halmahera Selatan,Maluku Utara
+-3.82107,121.75042,3.26,nominal,2026-11-20,0529,D,noaa21,1,Kolaka Timur,Sulawesi Tenggara
+-2.58405,102.66591,3.23,nominal,2026-11-20,0707,D,noaa21,1,Sarolangun,Jambi
+-5.99423,106.32473,3.22,nominal,2026-11-20,0624,D,noaa20,1,Kab Serang,Banten
+-7.82738,131.38097,3.2,nominal,2026-11-20,0442,D,noaa20,1,Kepulauan Tanimbar,Maluku
+-3.01907,115.93388,3.18,nominal,2026-11-20,0529,D,noaa21,1,Kotabaru,Kalimantan Selatan
+-9.25256,125.32016,3.16,nominal,2026-11-21,0505,D,noaa21,1,Maukatar,Cova-Lima
+-9.02686,126.06918,3.16,nominal,2026-11-21,0505,D,noaa21,1,Barike,Manatuto
+-4.1535,102.67128,3.16,nominal,2026-11-21,0650,D,noaa21,1,Seluma,Bengkulu
+-7.93633,140.76047,3.15,nominal,2026-11-20,1545,N,noaa20+noaa21,4,Semangga,Papua Selatan
+-1.48851,122.89317,3.15,nominal,2026-11-21,0508,D,noaa21,1,,Sulawesi Tengah
+-9.73494,124.70759,3.13,nominal,2026-11-21,0505,D,noaa21,1,Timor Tengah Selatan,Nusa Tenggara Timur
+-3.31398,126.99234,3.13,nominal,2026-11-21,0508,D,noaa21,1,Buru,Maluku
+0.4652,121.82822,3.13,nominal,2026-11-21,0510,D,noaa21,1,Pohuwato,Gorontalo
+-8.95802,125.78378,3.11,nominal,2026-11-20,0442,D,noaa20,2,Fatu-Berliu,Manufahi
+-3.72535,103.71626,3.11,nominal,2026-11-20,1810,N,noaa20+noaa21,2,Lahat,Sumatera Selatan
+-2.16383,102.20231,3.1,nominal,2026-11-20,0626,D,noaa20,1,Merangin,Jambi
+-5.56431,120.08697,3.09,nominal,2026-11-20,0527,D,noaa21,2,Bantaeng,Sulawesi Selatan
+-3.30156,103.96076,3.09,nominal,2026-11-21,0650,D,noaa21,1,Penukal Abab Lematang Ilir,Sumatera Selatan
+-7.88378,131.29755,3.08,low,2026-11-20,0442,D,noaa20,2,Kepulauan Tanimbar,Maluku
+-1.30792,123.0252,3.08,nominal,2026-11-20,0444,D,noaa20,2,,Sulawesi Tengah
+-8.43124,140.97238,3.08,nominal,2026-11-20,1630,N,noaa20+noaa21,3,Semangga,Papua Selatan
+-8.29278,120.33338,3.08,nominal,2026-11-20,0527,D,noaa21,1,Manggarai,Nusa Tenggara Timur
+-8.96744,125.94601,3.07,nominal,2026-11-21,0505,D,noaa21,2,Fatu-Berliu,Manufahi
+-8.25251,138.76024,3.06,nominal,2026-11-20,1630,N,noaa20+noaa21,4,Semangga,Papua Selatan
+-3.87019,122.39207,3.05,nominal,2026-11-20,1726,N,noaa20+noaa21,3,Konawe,Sulawesi Tenggara
+-9.2457,125.32527,3.02,nominal,2026-11-20,0442,D,noaa20,1,Suai,Cova-Lima
+-9.24165,125.31556,3.02,nominal,2026-11-20,0442,D,noaa20,2,Maukatar,Cova-Lima
+-9.28955,125.16413,3.01,nominal,2026-11-21,0505,D,noaa21,1,Tilomár,Cova-Lima
+-2.85176,104.08477,2.99,nominal,2026-11-21,0650,D,noaa21,1,Musi Banyuasin,Sumatera Selatan
+-9.79408,124.67991,2.97,nominal,2026-11-20,0527,D,noaa21,2,Timor Tengah Selatan,Nusa Tenggara Timur
+-3.07327,126.77196,2.96,nominal,2026-11-20,0444,D,noaa20,1,Buru,Maluku
+-1.20975,127.42327,2.96,nominal,2026-11-20,0444,D,noaa20,2,Halmahera Selatan,Maluku Utara
+5.22453,97.07201,2.96,nominal,2026-11-20,0709,D,noaa21,1,Lhokseumawe,Aceh
+-0.13772,116.11402,2.96,nominal,2026-11-20,1810,N,noaa21,1,Kutai Kartanegara,Kalimantan Timur
+-8.49518,124.0835,2.93,nominal,2026-11-20,0527,D,noaa21,1,Alor,Nusa Tenggara Timur
+-2.3134,119.13647,2.93,nominal,2026-11-20,0529,D,noaa21,1,,Sulawesi Barat
+-4.90601,120.25774,2.92,nominal,2026-11-20,0527,D,noaa21,1,Bone,Sulawesi Selatan
+-1.61481,121.91264,2.91,nominal,2026-11-20,0529,D,noaa21,1,Morowali Utara,Sulawesi Tengah
+-4.35477,122.20214,2.89,nominal,2026-11-20,0527,D,noaa21,1,Konawe Selatan,Sulawesi Tenggara
+-8.93509,126.06909,2.89,nominal,2026-11-21,0505,D,noaa21,1,Barike,Manatuto
+-8.27086,123.7446,2.88,nominal,2026-11-20,0442,D,noaa20,2,Lembata,Nusa Tenggara Timur
+-3.43629,126.88264,2.88,nominal,2026-11-20,0444,D,noaa20,1,Buru,Maluku
+4.74011,113.72714,2.88,nominal,2026-11-20,1808,N,noaa21,1,,(Laut / tanpa alamat)
+-3.93859,102.46831,2.88,nominal,2026-11-21,0650,D,noaa21,1,Seluma,Bengkulu
+-1.76328,115.21828,2.87,nominal,2026-11-20,0529,D,noaa21,1,Barito Timur,Kalimantan Tengah
+-1.93905,115.85584,2.87,nominal,2026-11-20,1810,N,noaa21,2,Paser,Kalimantan Timur
+-2.20424,115.50052,2.85,nominal,2026-11-20,1726,N,noaa20,3,Balangan,Kalimantan Selatan
+-9.25072,125.44515,2.84,nominal,2026-11-21,0505,D,noaa21,1,Suai,Cova-Lima
+-9.30112,124.48077,2.83,low,2026-11-20,0527,D,noaa21,1,Timor Tengah Utara,Nusa Tenggara Timur
+0.42969,116.27781,2.82,nominal,2026-11-20,0626,D,noaa20,1,Kutai Kartanegara,Kalimantan Timur
+-9.65284,124.46296,2.81,low,2026-11-20,0527,D,noaa20+noaa21,2,Timor Tengah Selatan,Nusa Tenggara Timur
+-1.51949,122.91902,2.81,nominal,2026-11-20,0444,D,noaa20,1,,Sulawesi Tengah
+-1.22111,123.06504,2.81,nominal,2026-11-21,0508,D,noaa21,1,,Sulawesi Tengah
+-9.6095,124.61501,2.8,nominal,2026-11-20,0442,D,noaa20,1,Timor Tengah Utara,Nusa Tenggara Timur
+-9.24205,125.32146,2.8,nominal,2026-11-21,0505,D,noaa21,1,Maukatar,Cova-Lima
+-1.00271,122.76051,2.8,low,2026-11-21,0510,D,noaa21,1,Luwuk,Sulawesi Tengah
+-8.54425,140.8802,2.78,nominal,2026-11-20,1630,N,noaa20+noaa21,6,Semangga,Papua Selatan
+-4.00002,122.09341,2.77,nominal,2026-11-20,0529,D,noaa21,1,Konawe,Sulawesi Tenggara
+-9.50331,124.38423,2.76,low,2026-11-20,0527,D,noaa21,1,Timor Tengah Utara,Nusa Tenggara Timur
+-5.91823,120.53088,2.76,nominal,2026-11-20,0527,D,noaa21,1,Kepulauan Selayar,Sulawesi Selatan
+-3.06557,128.49609,2.76,nominal,2026-11-20,0529,D,noaa21,1,Seram Bagian Barat,Maluku
+-8.7617,126.51214,2.75,nominal,2026-11-20,0442,D,noaa20+noaa21,2,Ossu,Viqueque
+1.08171,124.97395,2.74,nominal,2026-11-21,0510,D,noaa21,1,,Sulawesi Utara
+-8.30708,123.72091,2.73,nominal,2026-11-20,0527,D,noaa21,1,Lembata,Nusa Tenggara Timur
+-8.51263,126.13713,2.71,nominal,2026-11-20,1630,N,noaa21,2,Laleia,Manatuto
+-9.05418,125.82072,2.7,nominal,2026-11-21,0505,D,noaa21,1,Alas,Manufahi
+-8.87097,126.19727,2.69,nominal,2026-11-21,0505,D,noaa21,1,Lakluta,Viqueque
+0.68866,117.55499,2.68,nominal,2026-11-20,1808,N,noaa20+noaa21,3,Kutai Timur,Kalimantan Timur
+-4.42422,122.32466,2.68,nominal,2026-11-21,0508,D,noaa21,1,Konawe Selatan,Sulawesi Tenggara
+-10.21169,120.49329,2.67,nominal,2026-11-20,0527,D,noaa21,1,Desa Laipandak,Nusa Tenggara Timur
+-3.55086,122.11717,2.66,nominal,2026-11-20,0529,D,noaa21,1,Konawe Utara,Sulawesi Tenggara
+-3.09745,126.67448,2.66,nominal,2026-11-20,1628,N,noaa21,1,Buru,Maluku
+-8.87128,126.15092,2.66,nominal,2026-11-21,0505,D,noaa21,1,Lakluta,Viqueque
+3.22204,102.84943,2.64,nominal,2026-11-21,0652,D,noaa21,1,,Pahang
+-2.75101,116.35355,2.63,nominal,2026-11-20,0624,D,noaa20,1,Kotabaru,Kalimantan Selatan
+-8.25715,138.76228,2.62,nominal,2026-11-20,1630,N,noaa20+noaa21,2,Semangga,Papua Selatan
+-9.33038,124.89468,2.62,low,2026-11-20,0527,D,noaa21,2,Belu,Nusa Tenggara Timur
+-4.72074,123.19514,2.62,nominal,2026-11-20,0527,D,noaa21,1,Buton Utara,Sulawesi Tenggara
+-0.86019,128.36584,2.61,nominal,2026-11-20,0444,D,noaa20,1,Halmahera Selatan,Maluku Utara
+0.36783,116.33435,2.61,nominal,2026-11-20,0529,D,noaa20+noaa21,2,Kutai Kartanegara,Kalimantan Timur
+-4.33103,122.62945,2.61,nominal,2026-11-20,0527,D,noaa21,1,Konawe Selatan,Sulawesi Tenggara
+-5.35878,134.55733,2.6,nominal,2026-11-20,1630,N,noaa21,1,Kepulauan Aru,Maluku
+-8.21351,138.58224,2.6,nominal,2026-11-20,1630,N,noaa21,3,Semangga,Papua Selatan
+-7.85777,139.90892,2.59,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-9.77063,120.49001,2.59,nominal,2026-11-20,0527,D,noaa21,1,Desa Kotak Kawau,Nusa Tenggara Timur
+-8.41102,140.34406,2.58,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-3.64612,104.88377,2.58,nominal,2026-11-20,1810,N,noaa21,1,Ogan Komering Ilir,Sumatera Selatan
+-10.01244,123.76229,2.57,nominal,2026-11-20,0527,D,noaa21,1,Kupang,Nusa Tenggara Timur
+0.59508,123.11732,2.57,nominal,2026-11-21,0510,D,noaa21,1,Bone Bolango,Gorontalo
+-1.69018,127.85688,2.56,nominal,2026-11-20,0444,D,noaa20,1,Halmahera Selatan,Maluku Utara
+-0.39338,128.02467,2.56,nominal,2026-11-20,0444,D,noaa20,1,Halmahera Selatan,Maluku Utara
+-1.53575,122.20987,2.56,nominal,2026-11-21,0508,D,noaa21,1,,Sulawesi Tengah
+-0.69015,117.2569,2.55,nominal,2026-11-20,1726,N,noaa20,1,Kutai Kartanegara,Kalimantan Timur
+-6.8751,110.09153,2.55,nominal,2026-11-20,1728,N,noaa20,2,,Jawa Tengah
+-6.88072,110.09048,2.55,nominal,2026-11-20,1728,N,noaa20,1,,Jawa Tengah
+-8.8323,125.76942,2.54,nominal,2026-11-20,0442,D,noaa20,1,Turiskai,Manufahi
+-8.79895,126.1347,2.54,nominal,2026-11-20,0527,D,noaa21,1,Lakluta,Viqueque
+-4.79239,120.06158,2.53,nominal,2026-11-21,0508,D,noaa21,1,Bone,Sulawesi Selatan
+-0.87164,122.90633,2.53,nominal,2026-11-21,0510,D,noaa21,1,Luwuk,Sulawesi Tengah
+-9.37081,124.85658,2.51,nominal,2026-11-20,0527,D,noaa21,1,Malaka,Nusa Tenggara Timur
+-8.87554,126.17029,2.51,nominal,2026-11-20,0527,D,noaa21,1,Lakluta,Viqueque
+-9.03058,124.77856,2.51,nominal,2026-11-20,0527,D,noaa21,1,Timor Tengah Utara,Nusa Tenggara Timur
+-9.48792,124.95192,2.51,nominal,2026-11-21,0505,D,noaa21,1,Malaka,Nusa Tenggara Timur
+-1.06524,121.4213,2.5,nominal,2026-11-20,0529,D,noaa21,1,Tojo Una-Una,Sulawesi Tengah
+-4.49008,120.22081,2.48,nominal,2026-11-20,0527,D,noaa21,1,Watampone,Sulawesi Selatan
+-7.9964,139.18797,2.47,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-0.2505,117.34489,2.47,nominal,2026-11-20,1726,N,noaa20+noaa21,2,Kutai Kartanegara,Kalimantan Timur
+-3.72995,103.72042,2.46,nominal,2026-11-20,1810,N,noaa20+noaa21,2,Lahat,Sumatera Selatan
+-8.20599,138.2001,2.44,nominal,2026-11-20,1630,N,noaa20+noaa21,2,Semangga,Papua Selatan
+-1.47931,123.37971,2.44,nominal,2026-11-21,0508,D,noaa21,1,,Sulawesi Tengah
+1.06029,117.66563,2.42,nominal,2026-11-20,1808,N,noaa20+noaa21,3,Kutai Timur,Kalimantan Timur
+-3.7921,122.05401,2.42,nominal,2026-11-20,0529,D,noaa21,1,Konawe,Sulawesi Tenggara
+-1.24088,116.82342,2.42,nominal,2026-11-20,1810,N,noaa21,2,Balikpapan,Kalimantan Timur
+-1.30291,123.08812,2.42,nominal,2026-11-21,0508,D,noaa21,1,,Sulawesi Tengah
+-4.5645,121.93104,2.41,nominal,2026-11-20,1630,N,noaa20+noaa21,2,Bombana,Sulawesi Tenggara
+0.52464,122.83379,2.41,nominal,2026-11-21,0510,D,noaa21,1,Gorontalo,Gorontalo
+-8.77613,126.51561,2.39,nominal,2026-11-20,0527,D,noaa21,1,Ossu,Viqueque
+-1.99825,121.24114,2.39,nominal,2026-11-20,0529,D,noaa21,1,Morowali Utara,Sulawesi Tengah
+-5.15222,122.90537,2.36,nominal,2026-11-20,0444,D,noaa20,1,Buton,Sulawesi Tenggara
+-8.16827,138.29793,2.36,nominal,2026-11-20,1630,N,noaa20+noaa21,3,Semangga,Papua Selatan
+-9.08541,125.4576,2.36,nominal,2026-11-20,0527,D,noaa21,1,Zumalai,Cova-Lima
+-4.47539,120.31721,2.34,nominal,2026-11-20,0527,D,noaa21,1,Watampone,Sulawesi Selatan
+-7.76663,138.89578,2.32,nominal,2026-11-20,1545,N,noaa20,3,Semangga,Papua Selatan
+-3.87132,122.39931,2.32,nominal,2026-11-20,1726,N,noaa20+noaa21,2,Konawe,Sulawesi Tenggara
+-0.58944,123.17388,2.32,nominal,2026-11-21,0510,D,noaa21,1,,Sulawesi Tengah
+-1.94431,115.85368,2.29,nominal,2026-11-20,1810,N,noaa21,1,Paser,Kalimantan Timur
+-10.05085,123.9877,2.28,nominal,2026-11-20,0442,D,noaa20,2,Kupang,Nusa Tenggara Timur
+-8.25656,138.75793,2.24,nominal,2026-11-20,1630,N,noaa20+noaa21,2,Semangga,Papua Selatan
+-6.54736,108.09506,2.24,nominal,2026-11-20,1813,N,noaa21,1,Indramayu,Jawa Barat
+-9.97722,124.54641,2.22,nominal,2026-11-20,0442,D,noaa20,1,Timor Tengah Selatan,Nusa Tenggara Timur
+-4.47489,120.09885,2.22,nominal,2026-11-20,0529,D,noaa21,1,Bone,Sulawesi Selatan
+-2.56406,120.94339,2.22,nominal,2026-11-20,0529,D,noaa21,1,Luwu Timur,Sulawesi Selatan
+-3.90214,122.4164,2.18,nominal,2026-11-20,1630,N,noaa20+noaa21,3,Konawe,Sulawesi Tenggara
+-9.99157,124.4106,2.17,nominal,2026-11-20,0527,D,noaa21,1,Timor Tengah Selatan,Nusa Tenggara Timur
+-9.70733,124.7281,2.16,nominal,2026-11-20,0442,D,noaa20,1,Timor Tengah Selatan,Nusa Tenggara Timur
+-8.17197,138.29327,2.16,nominal,2026-11-20,1630,N,noaa20+noaa21,2,Semangga,Papua Selatan
+-5.01123,120.08079,2.16,nominal,2026-11-20,0527,D,noaa21,1,Bone,Sulawesi Selatan
+-8.70287,125.24763,2.15,nominal,2026-11-21,0505,D,noaa21,1,Maubara,Liquiçá
+-8.11714,139.53023,2.13,nominal,2026-11-20,0442,D,noaa20,1,Semangga,Papua Selatan
+-0.36809,116.11852,2.13,nominal,2026-11-20,0626,D,noaa20,1,Kutai Barat,Kalimantan Timur
+-0.24327,117.32945,2.13,nominal,2026-11-20,1810,N,noaa20+noaa21,3,Kutai Kartanegara,Kalimantan Timur
+-8.36356,140.33539,2.1,nominal,2026-11-20,1545,N,noaa20,1,Semangga,Papua Selatan
+-2.87308,122.16217,2.1,nominal,2026-11-20,1726,N,noaa20,1,Morowali,Sulawesi Tengah
+-8.69079,119.16756,2.09,nominal,2026-11-21,0508,D,noaa21,1,Bima,Nusa Tenggara Barat
+-3.86928,122.40372,2.08,nominal,2026-11-20,1630,N,noaa20+noaa21,5,Konawe,Sulawesi Tenggara
+-5.33041,123.10178,2.08,nominal,2026-11-20,0527,D,noaa21,1,Buton,Sulawesi Tenggara
+0.44131,101.89248,2.07,nominal,2026-11-20,1810,N,noaa20+noaa21,4,Pelalawan,Riau
+-1.37811,122.41591,2.07,nominal,2026-11-20,0529,D,noaa21,1,,Sulawesi Tengah
+0.48567,122.2647,2.03,low,2026-11-21,0510,D,noaa21,1,Boalemo,Gorontalo
+-3.11194,126.64848,2.01,nominal,2026-11-20,1628,N,noaa21,2,Buru,Maluku
+-8.16846,125.09303,2.0,nominal,2026-11-20,1728,N,noaa20,1,Alor,Nusa Tenggara Timur
+-3.11843,115.94652,1.99,nominal,2026-11-20,0624,D,noaa20,1,Kotabaru,Kalimantan Selatan
+-4.14805,119.99107,1.99,nominal,2026-11-20,0529,D,noaa21,1,Sengkang,Sulawesi Selatan
+-8.18973,138.38617,1.99,nominal,2026-11-20,1630,N,noaa21,1,Semangga,Papua Selatan
+-9.6891,124.64546,1.99,nominal,2026-11-21,0505,D,noaa21,1,Timor Tengah Selatan,Nusa Tenggara Timur
+-9.65614,124.62557,1.98,low,2026-11-20,0527,D,noaa21,1,Timor Tengah Selatan,Nusa Tenggara Timur
+-1.58188,122.15911,1.98,low,2026-11-21,0508,D,noaa21,1,,Sulawesi Tengah
+-5.35988,134.56454,1.96,nominal,2026-11-20,1630,N,noaa21,2,Kepulauan Aru,Maluku
+-4.90453,119.55389,1.94,nominal,2026-11-21,0508,D,noaa21,1,Maros,Sulawesi Selatan
+0.54694,122.89073,1.93,nominal,2026-11-21,0510,D,noaa21,1,Gorontalo,Gorontalo
+-2.86474,122.1526,1.92,nominal,2026-11-20,1726,N,noaa20,2,Morowali,Sulawesi Tengah
+-7.22808,131.61514,1.9,nominal,2026-11-20,1630,N,noaa21,5,Kepulauan Tanimbar,Maluku
+-9.66624,124.54017,1.88,low,2026-11-20,0527,D,noaa21,1,Timor Tengah Utara,Nusa Tenggara Timur
+-4.6952,120.28223,1.86,low,2026-11-21,0508,D,noaa21,1,Watampone,Sulawesi Selatan
+-10.09581,124.14766,1.85,nominal,2026-11-20,0527,D,noaa21,1,Kupang,Nusa Tenggara Timur
+1.06462,117.67408,1.83,nominal,2026-11-20,1726,N,noaa20,3,Kutai Timur,Kalimantan Timur
+-9.10088,125.82796,1.81,nominal,2026-11-21,0505,D,noaa21,1,Alas,Manufahi
+-7.54038,110.42452,1.79,nominal,2026-11-20,1728,N,noaa20,1,Magelang,Jawa Tengah
+-3.98732,104.8834,1.79,nominal,2026-11-20,1810,N,noaa21,1,Ogan Komering Ulu Timur,Sumatera Selatan
+-4.17553,119.98819,1.78,nominal,2026-11-20,0529,D,noaa21,1,Sengkang,Sulawesi Selatan
+-9.67206,124.69105,1.78,nominal,2026-11-21,0505,D,noaa21,1,Timor Tengah Selatan,Nusa Tenggara Timur
+-2.88582,116.15712,1.77,nominal,2026-11-20,0624,D,noaa20,1,Kotabaru,Kalimantan Selatan
+-1.97238,115.86699,1.76,nominal,2026-11-20,1726,N,noaa20,1,Paser,Kalimantan Timur
+-8.16443,138.24103,1.76,nominal,2026-11-20,1630,N,noaa21,2,Semangga,Papua Selatan
+-3.58817,105.36136,1.75,nominal,2026-11-20,1810,N,noaa21,2,Ogan Komering Ilir,Sumatera Selatan
+-9.04797,125.79486,1.74,nominal,2026-11-21,0505,D,noaa21,1,Alas,Manufahi
+-9.16318,125.41683,1.73,nominal,2026-11-21,0505,D,noaa21,1,Zumalai,Cova-Lima
+-2.06331,115.57137,1.71,nominal,2026-11-20,1810,N,noaa21,1,Tabalong,Kalimantan Selatan
+-3.74059,104.2396,1.7,nominal,2026-11-21,0650,D,noaa21,1,Muara Enim,Sumatera Selatan
+3.35221,102.91335,1.7,nominal,2026-11-21,0652,D,noaa21,1,,Pahang
+-8.74264,126.52408,1.69,nominal,2026-11-21,0505,D,noaa21,1,Ossu,Viqueque
+-7.23677,111.7321,1.68,nominal,2026-11-20,1728,N,noaa20,1,Bojonegoro,Jawa Timur
+-4.86107,119.99355,1.68,nominal,2026-11-20,0527,D,noaa21,1,Bone,Sulawesi Selatan
+1.37956,104.15972,1.68,nominal,2026-11-20,1810,N,noaa21,2,,Johor
+-1.3611,122.41299,1.67,nominal,2026-11-21,0508,D,noaa21,1,,Sulawesi Tengah
+-8.13939,138.20543,1.64,nominal,2026-11-20,1545,N,noaa20+noaa21,2,Semangga,Papua Selatan
+-3.11135,104.47303,1.63,nominal,2026-11-20,1810,N,noaa21,1,Muara Enim,Sumatera Selatan
+-1.89926,115.85968,1.61,nominal,2026-11-20,1726,N,noaa20,6,Paser,Kalimantan Timur
+2.2635,102.12659,1.61,nominal,2026-11-20,1906,N,noaa20+noaa21,2,Bandaraya Melaka,Melaka
+-10.1436,124.29316,1.6,nominal,2026-11-20,1632,N,noaa20+noaa21,2,Timor Tengah Selatan,Nusa Tenggara Timur
+-3.9012,122.41321,1.57,nominal,2026-11-20,1726,N,noaa20,1,Konawe,Sulawesi Tenggara
+0.45974,116.18148,1.56,nominal,2026-11-20,1726,N,noaa20,4,Kutai Kartanegara,Kalimantan Timur
+-8.2565,140.70685,1.56,nominal,2026-11-20,1630,N,noaa21,1,Semangga,Papua Selatan
+-8.36395,140.30154,1.54,nominal,2026-11-20,1630,N,noaa20+noaa21,2,Semangga,Papua Selatan
+-8.18466,138.38542,1.54,nominal,2026-11-20,1545,N,noaa20,1,Semangga,Papua Selatan
+-8.93432,140.85638,1.52,nominal,2026-11-20,1545,N,noaa20+noaa21,3,Semangga,Papua Selatan
+0.45717,116.62933,1.51,nominal,2026-11-20,1726,N,noaa20,1,Kutai Timur,Kalimantan Timur
+-8.12869,138.23401,1.5,nominal,2026-11-20,1630,N,noaa21,1,Semangga,Papua Selatan
+-8.34673,140.54366,1.49,nominal,2026-11-20,1545,N,noaa20+noaa21,3,Semangga,Papua Selatan
+-8.84059,140.89955,1.49,nominal,2026-11-20,1545,N,noaa20,2,Semangga,Papua Selatan
+-3.2543,120.23376,1.47,nominal,2026-11-20,0529,D,noaa21,1,Luwu,Sulawesi Selatan
+-2.22045,115.49393,1.45,nominal,2026-11-20,1726,N,noaa20,1,Balangan,Kalimantan Selatan
+-4.00849,104.90102,1.45,nominal,2026-11-20,1810,N,noaa21,1,Ogan Komering Ulu Timur,Sumatera Selatan
+6.05004,125.02006,1.44,nominal,2026-11-20,1724,N,noaa20,1,General Santos,Soccsksargen
+-6.87645,110.09919,1.43,nominal,2026-11-20,1728,N,noaa20,2,,Jawa Tengah
+-6.88206,110.09814,1.43,nominal,2026-11-20,1728,N,noaa20,1,,Jawa Tengah
+-8.20622,140.37643,1.38,nominal,2026-11-20,1545,N,noaa20,1,Merauke,Papua Selatan
+-1.92636,115.84396,1.38,nominal,2026-11-20,1726,N,noaa20,1,Paser,Kalimantan Timur
+-7.20925,131.64691,1.38,nominal,2026-11-20,1630,N,noaa21,2,Kepulauan Tanimbar,Maluku
+2.7377,102.39317,1.37,nominal,2026-11-20,1808,N,noaa20+noaa21,3,,Negeri Sembilan
+-8.40687,140.42267,1.36,nominal,2026-11-20,1545,N,noaa20,2,Semangga,Papua Selatan
+-2.21265,115.49908,1.36,nominal,2026-11-20,1726,N,noaa20,2,Balangan,Kalimantan Selatan
+-0.16435,116.09957,1.36,nominal,2026-11-20,1810,N,noaa21,2,Kutai Kartanegara,Kalimantan Timur
+-8.40457,140.40245,1.34,nominal,2026-11-20,1630,N,noaa20+noaa21,2,Semangga,Papua Selatan
+-8.80036,118.5562,1.34,nominal,2026-11-20,1728,N,noaa20,1,Bima,Nusa Tenggara Barat
+-1.85371,115.85571,1.33,nominal,2026-11-20,1726,N,noaa20,2,Paser,Kalimantan Timur
+-4.06723,122.55357,1.32,nominal,2026-11-20,1630,N,noaa20+noaa21,2,Kendari,Sulawesi Tenggara
+-3.55884,104.17912,1.3,nominal,2026-11-20,1810,N,noaa20+noaa21,2,Muara Enim,Sumatera Selatan
+-8.35623,140.55232,1.29,nominal,2026-11-20,1545,N,noaa20+noaa21,2,Semangga,Papua Selatan
+-8.35931,140.54665,1.29,nominal,2026-11-20,1545,N,noaa20,1,Semangga,Papua Selatan
+-8.40257,140.39722,1.29,nominal,2026-11-20,1545,N,noaa20,1,Semangga,Papua Selatan
+-7.18301,131.54639,1.27,nominal,2026-11-20,1630,N,noaa21,1,Kepulauan Tanimbar,Maluku
+-7.93326,131.23407,1.27,nominal,2026-11-20,1630,N,noaa21,1,Kepulauan Tanimbar,Maluku
+-6.74371,134.64915,1.25,nominal,2026-11-20,1630,N,noaa21,1,Kepulauan Aru,Maluku
+-8.2923,138.47034,1.23,nominal,2026-11-20,1630,N,noaa21,1,Semangga,Papua Selatan
+-3.12444,122.18748,1.21,nominal,2026-11-20,1726,N,noaa20,3,Morowali,Sulawesi Tengah
+-2.95702,104.13269,1.21,nominal,2026-11-20,1810,N,noaa21,2,Banyuasin,Sumatera Selatan
+-8.07829,139.84103,1.2,nominal,2026-11-20,1545,N,noaa20,2,Semangga,Papua Selatan
+-1.88202,115.84714,1.19,nominal,2026-11-20,1726,N,noaa20,2,Paser,Kalimantan Timur
+-6.86632,111.90882,1.17,nominal,2026-11-20,1728,N,noaa20,2,Tuban,Jawa Timur
+-7.17579,131.54393,1.17,nominal,2026-11-20,1630,N,noaa21,3,Kepulauan Tanimbar,Maluku
+-6.00422,105.98139,1.17,nominal,2026-11-20,1813,N,noaa21,1,Cilegon,Banten
+-8.22379,138.58319,1.14,nominal,2026-11-20,1630,N,noaa21,1,Semangga,Papua Selatan
+1.0389,116.82559,1.12,nominal,2026-11-20,1726,N,noaa20+noaa21,2,Kutai Timur,Kalimantan Timur
+0.57012,117.45607,1.12,nominal,2026-11-20,1808,N,noaa21,1,Kutai Timur,Kalimantan Timur
+-7.21421,131.61371,1.11,nominal,2026-11-20,1630,N,noaa21,2,Kepulauan Tanimbar,Maluku
+0.48244,116.59972,1.1,nominal,2026-11-20,1726,N,noaa20,1,Kutai Timur,Kalimantan Timur
+-8.34058,140.55504,1.07,nominal,2026-11-20,1545,N,noaa20+noaa21,2,Semangga,Papua Selatan
+-3.6081,105.39117,1.06,nominal,2026-11-20,1810,N,noaa21,1,Ogan Komering Ilir,Sumatera Selatan
+-7.68154,138.90198,1.05,nominal,2026-11-20,1545,N,noaa20,1,Semangga,Papua Selatan
+0.30134,117.38461,1.04,nominal,2026-11-20,1726,N,noaa20,1,Kutai Timur,Kalimantan Timur
+0.6657,117.46677,1.04,nominal,2026-11-20,1808,N,noaa21,2,Kutai Timur,Kalimantan Timur
+0.56878,117.60004,1.04,nominal,2026-11-20,1808,N,noaa21,1,Kutai Timur,Kalimantan Timur
+-7.23362,131.60706,1.03,nominal,2026-11-20,1630,N,noaa21,2,Kepulauan Tanimbar,Maluku
+-0.94602,116.09193,1.01,nominal,2026-11-20,1726,N,noaa20,1,Kutai Barat,Kalimantan Timur
+2.12058,117.58849,1.0,nominal,2026-11-20,1808,N,noaa21,1,Berau,Kalimantan Timur
+-2.87976,122.1611,0.99,nominal,2026-11-20,1726,N,noaa20,1,Morowali,Sulawesi Tengah
+-5.45493,120.32108,0.99,nominal,2026-11-20,1728,N,noaa20,1,Bulukumba,Sulawesi Selatan
+-3.72229,104.82944,0.98,nominal,2026-11-20,1810,N,noaa21,2,Ogan Komering Ilir,Sumatera Selatan
+-9.28101,125.35669,0.98,nominal,2026-11-21,0505,D,noaa21,1,Suai,Cova-Lima
+-2.1004,103.7973,0.97,nominal,2026-11-20,1810,N,noaa21,1,Bayung Lencir,Sumatera Selatan
+-4.80155,120.0276,0.97,low,2026-11-21,0508,D,noaa21,1,Bone,Sulawesi Selatan
+-8.25901,138.23727,0.96,nominal,2026-11-20,1630,N,noaa21,1,Semangga,Papua Selatan
+-3.37757,122.13117,0.94,nominal,2026-11-20,1726,N,noaa20,3,Konawe Utara,Sulawesi Tenggara
+-8.18402,138.3163,0.94,nominal,2026-11-20,1630,N,noaa21,1,Semangga,Papua Selatan
+-8.21271,138.24815,0.94,nominal,2026-11-20,1630,N,noaa21,2,Semangga,Papua Selatan
+-0.73306,117.06011,0.93,nominal,2026-11-20,1810,N,noaa21,1,Kutai Kartanegara,Kalimantan Timur
+-8.14324,140.36806,0.92,nominal,2026-11-20,1630,N,noaa20+noaa21,2,Merauke,Papua Selatan
+-8.34328,140.31233,0.9,nominal,2026-11-20,1545,N,noaa20,1,Semangga,Papua Selatan
+-8.54938,140.8795,0.9,nominal,2026-11-20,1630,N,noaa21,2,Semangga,Papua Selatan
+-2.98817,104.18053,0.89,nominal,2026-11-20,1810,N,noaa21,1,Banyuasin,Sumatera Selatan
+-7.21533,131.62076,0.88,nominal,2026-11-20,1630,N,noaa21,2,Kepulauan Tanimbar,Maluku
+-3.67699,105.57537,0.88,nominal,2026-11-20,1810,N,noaa21,1,Ogan Komering Ilir,Sumatera Selatan
+-8.08066,127.17925,0.88,nominal,2026-11-21,0508,D,noaa21,1,Maluku Barat Daya,Maluku
+-2.87864,122.15404,0.87,nominal,2026-11-20,1726,N,noaa20,2,Morowali,Sulawesi Tengah
+-3.16195,122.12056,0.86,nominal,2026-11-20,1726,N,noaa20,1,Konawe Utara,Sulawesi Tenggara
+-6.74143,134.65714,0.86,nominal,2026-11-20,1630,N,noaa21,1,Kepulauan Aru,Maluku
+-3.53064,104.31144,0.84,nominal,2026-11-20,1810,N,noaa20+noaa21,2,Muara Enim,Sumatera Selatan
+-7.25079,131.56458,0.83,nominal,2026-11-20,1630,N,noaa21,1,Kepulauan Tanimbar,Maluku
+-3.38144,122.13404,0.82,nominal,2026-11-20,1726,N,noaa20,2,Konawe Utara,Sulawesi Tenggara
+-2.42846,104.1221,0.81,nominal,2026-11-20,1908,N,noaa20,1,Tungkal Ilir,Sumatera Selatan
+-8.96814,125.77798,0.79,nominal,2026-11-20,1728,N,noaa20,1,Fatu-Berliu,Manufahi
+-7.17133,131.53741,0.78,nominal,2026-11-20,1630,N,noaa21,2,Kepulauan Tanimbar,Maluku
+-7.40275,131.55815,0.78,nominal,2026-11-20,1630,N,noaa21,1,Kepulauan Tanimbar,Maluku
+-8.11271,138.59273,0.77,nominal,2026-11-20,1630,N,noaa21,1,Semangga,Papua Selatan
+-3.32373,122.15372,0.76,nominal,2026-11-20,1726,N,noaa20,1,Konawe Utara,Sulawesi Tenggara
+-7.08789,110.61932,0.73,nominal,2026-11-20,1728,N,noaa20,1,Grobogan,Jawa Tengah
+-7.41495,131.549,0.73,nominal,2026-11-20,1630,N,noaa21,1,Kepulauan Tanimbar,Maluku
+-1.74058,105.83253,0.72,nominal,2026-11-20,1810,N,noaa21,1,Bangka,Kepulauan Bangka Belitung
+3.35938,102.72336,0.7,nominal,2026-11-20,1906,N,noaa20,1,,Pahang
+0.67538,117.4717,0.69,nominal,2026-11-20,1808,N,noaa21,1,Kutai Timur,Kalimantan Timur
+-6.01038,105.97672,0.69,nominal,2026-11-20,1813,N,noaa21,1,Cilegon,Banten
+-7.21762,131.72107,0.68,nominal,2026-11-20,1630,N,noaa21,1,Kepulauan Tanimbar,Maluku
+0.13358,116.64489,0.64,nominal,2026-11-20,1726,N,noaa20,2,Kutai Kartanegara,Kalimantan Timur
+-8.86848,126.25818,0.64,nominal,2026-11-20,1728,N,noaa20,1,Vikeke,Viqueque
+-8.52909,140.86768,0.63,nominal,2026-11-20,1545,N,noaa20+noaa21,2,Semangga,Papua Selatan
+-8.35207,140.54449,0.62,nominal,2026-11-20,1630,N,noaa21,1,Semangga,Papua Selatan
+-2.17214,115.57228,0.6,nominal,2026-11-20,1726,N,noaa20,1,Balangan,Kalimantan Selatan
+-0.35265,117.39268,0.56,nominal,2026-11-20,1810,N,noaa20+noaa21,2,Kutai Kartanegara,Kalimantan Timur
+-3.38758,122.12948,0.56,nominal,2026-11-20,1726,N,noaa20,1,Konawe Utara,Sulawesi Tenggara
+-2.46717,106.33942,0.56,nominal,2026-11-20,1810,N,noaa21,1,Bangka Tengah,Kepulauan Bangka Belitung
+-8.02927,139.0296,0.55,nominal,2026-11-20,1545,N,noaa20,1,Semangga,Papua Selatan
+-8.53216,140.49779,0.55,nominal,2026-11-20,1545,N,noaa20,1,Merauke,Papua Selatan
+-3.90023,120.09597,0.55,nominal,2026-11-20,1726,N,noaa20,1,Wajo,Sulawesi Selatan
+0.69025,117.46842,0.52,nominal,2026-11-20,1726,N,noaa20,2,Kutai Timur,Kalimantan Timur
+-3.54836,104.32674,0.52,nominal,2026-11-20,1810,N,noaa20+noaa21,2,Ogan Ilir,Sumatera Selatan
+-7.25524,131.59277,0.51,nominal,2026-11-20,1630,N,noaa21,1,Kepulauan Tanimbar,Maluku
+-8.08406,127.18085,0.51,nominal,2026-11-20,1630,N,noaa21,1,Maluku Barat Daya,Maluku
+-2.16915,115.58058,0.46,nominal,2026-11-20,1726,N,noaa20,1,Balangan,Kalimantan Selatan
+4.02168,103.3416,0.43,nominal,2026-11-20,1906,N,noaa20,1,,Pahang
+-0.58255,117.38565,0.42,nominal,2026-11-20,1810,N,noaa21,1,Kutai Kartanegara,Kalimantan Timur
+-8.23573,140.78265,0.39,nominal,2026-11-20,1630,N,noaa21,1,Semangga,Papua Selatan
+-7.91029,140.58022,0.35,nominal,2026-11-20,1545,N,noaa20,1,Semangga,Papua Selatan
+-3.20344,126.86024,0.35,nominal,2026-11-20,1628,N,noaa21,2,Buru,Maluku
+-1.92593,115.89343,0.2,nominal,2026-11-20,1726,N,noaa20,1,Paser,Kalimantan Timur
+6.39635,125.13543,0.15,nominal,2026-11-20,1724,N,noaa20,1,Malungon,Sarangani
